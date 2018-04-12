@@ -1,5 +1,6 @@
 package com.kepu.controller;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -70,16 +71,16 @@ public class kepuController {
 
 	@Autowired
 	private RedisService redisService;
-	
+
 	@Autowired
 	private StSignMapper stSignMapper;
-	
+
 	@Autowired
-	private  SysService sysService;	
-	
+	private SysService sysService;
+
 	@Autowired
 	private UserService userService;
-	
+
 
 	/**
 	 * 测试首页
@@ -94,7 +95,6 @@ public class kepuController {
 		session.setAttribute("userId", userId);
 		
 		StUserAccount stu = userAccountMapper.selectByPrimaryKey(Integer.parseInt(userId));
-		session.setAttribute("usercore", stu.getScore());
 		List<StIntegralProduct> list = integralProductDao.findProductlist();
 		List<StSign> st= stSignMapper.selectAll(Integer.parseInt(userId));
 		if (list.size() > 0) {
@@ -105,12 +105,14 @@ public class kepuController {
 				String[] p = list.get(i).getDisplaythepicture().split(",");
 				list.get(i).setDisplaythepicture(p[0]);
 			}
+			if(stu!=null) {
+			session.setAttribute("usercore", stu.getScore());
+			}
 			mav.addObject("list", list);
 			mav.addObject("stu", stu);
 			mav.addObject("st",st);
-
 		}
-		mav.addObject("modeName", "积分商城");
+		mav.addObject("modeName", "绿币商城");
 		mav.addObject("mainPage", "/duihuan/index.jsp");
 		return mav;
 
@@ -138,7 +140,7 @@ public class kepuController {
 			}
 			mav.addObject("list", st);
 		}
-		mav.addObject("modeName", "积分商城");
+		mav.addObject("modeName", "绿币商城");
 		mav.addObject("mainPage", "duihuan/recordlist.jsp");
 		return mav;
 	}
@@ -161,36 +163,47 @@ public class kepuController {
 			mav.addObject("p", list);
 		}
 		mav.addObject("st", st);
-		mav.addObject("modeName", "积分商城");
+		mav.addObject("modeName", "绿币商城");
 		mav.addObject("mainPage", "duihuan/productdetails.jsp");
 		return mav;
 	}
 
 	/**
-	 * 积分排行
+	 * 绿币排行
 	 * @param session
 	 * @return
 	 */
 	@RequestMapping("rankinglist")
 	public ModelAndView rankinglist(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-	String l=	session.getAttribute("userId").toString();
+		String user = session.getAttribute("userId").toString();
 		List<StRecordExchange> st = new ArrayList<StRecordExchange>();
 		List<StUserAccount> stu = userAccountMapper.selectBylist();
+		StUserAccount stuy=	userAccountMapper.selectBylScoreList (Integer.parseInt(user));
 		for (int i = 0; i < stu.size(); i++) {
 			StUser kl = stUserMapper.selectByPrimaryKey(stu.get(i).getUserid());
 			StRecordExchange s = new StRecordExchange();
 			s.setRecordimg(kl.getAvatar());// 头像
 			s.setRecordname(kl.getNickname());// 昵称
-			s.setSum(kl.getUserid().toString());
+			s.setSum(stu.get(i).getUserid().toString());
 			s.setRecordid(stu.get(i).getTown());// 排名
-			s.setRecordintegral(stu.get(i).getScore());// 积分
+			s.setRecordintegral(stu.get(i).getScore());// 绿币
 			st.add(s);
 		}
+		if(stuy!=null) {
+			StUser kl = stUserMapper.selectByPrimaryKey(stuy.getUserid());
+			StRecordExchange s = new StRecordExchange();
+			s.setRecordimg(kl.getAvatar());// 头像
+			s.setRecordname(kl.getNickname());// 昵称
+			s.setSum(kl.getUserid().toString());
+			s.setRecordid(stuy.getTown());// 排名
+			s.setRecordintegral(stuy.getScore());// 绿币
+			mav.addObject("score", s);
+	}
 		if (!st.isEmpty()) {
 			mav.addObject("liststq", st);
 		}
-		mav.addObject("modeName", "积分排行");
+		mav.addObject("modeName", "绿币排行");
 		mav.addObject("mainPage", "duihuan/rankinglist.jsp");
 		return mav;
 	}
@@ -227,30 +240,30 @@ public class kepuController {
 		ModelAndView mav = new ModelAndView();
 		StIntegralProduct st = integralProductDao.selectByPrimaryKey(Integer.parseInt(proid));
 		// StUserAccount user=(StUserAccount) session.getAttribute("stuser");
-		StUserAccount user = userAccountMapper
-				.selectByPrimaryKey(Integer.parseInt(session.getAttribute("userId").toString()));
+		StUserAccount user = userAccountMapper.selectByPrimaryKey(Integer.parseInt(session.getAttribute("userId").toString()));
 		if (user != null) {
 
-			if (user.getScore() > st.getIntegral()) {
-				if (Double.valueOf(user.getBalance()) > Double.valueOf(st.getFreight())) {
+			if (user.getScore() >= st.getIntegral()) {
+				if(user.getBalance()!=null) {
+				if (Double.valueOf(user.getBalance()) >= Double.valueOf(st.getFreight())) {
 					Date now = new Date();
 					WithdrawCash w = new WithdrawCash();
 					w.setBuyUserId(user.getUserid());// 购买人id
 					w.setBuyUserPhone(phone);// 购买人手机号
-					w.setConsumeScore(st.getIntegral());// 消费积分
-					double h = user.getScore() - st.getIntegral();// 当前积分
-					w.setWcDesc("使用:" + st.getIntegral() + "积分兑换:" + st.getCommodityname() + "商品,兑换后积分为:" + h);// 兑换描述
-					w.setNowScore(h);// 当前积分
+					w.setConsumeScore(st.getIntegral());// 消费绿币
+					double h = user.getScore() - st.getIntegral();// 当前绿币
+					w.setWcDesc("使用:" + st.getIntegral() + "绿币兑换:" + st.getCommodityname() + "商品,兑换后绿币为:" + h);// 兑换描述
+					w.setNowScore(h);// 当前绿币
 					double k = Double.valueOf(user.getBalance()) - st.getMoney();
 					w.setNowBalance(k);// 当前余额
 					w.setWcTime(now);// 兑换日期
-					w.setBeforeScore(user.getScore());// 之前积分
+					w.setBeforeScore(user.getScore());// 之前绿币
 					w.setBeforeBalance(Double.valueOf(user.getBalance()));// 之前余额
 					withdrawCashMapper.insert(w);
 
 					StUserAccount u = new StUserAccount();
 					u.setUserid(user.getUserid());
-					u.setScore(h);// 当前积分
+					u.setScore(h);// 当前绿币
 					u.setUpdatetime(now);
 					u.setBalance(k);
 					userAccountMapper.updateByPrimaryKeySelective(u);
@@ -298,18 +311,19 @@ public class kepuController {
 					order.setBillTitle("无");// 发票抬头
 					order.setBillDesc("无");// 发票备注
 					order.setBalance(0.0);// 余额抵扣金额
-					order.setCredit(0.0);// 积分抵扣数额
-					order.setRatio(0.0);// 下单时后台设置的积分换算比
+					order.setCredit(0.0);// 绿币抵扣数额
+					order.setRatio(0.0);// 下单时后台设置的绿币换算比
 					order.setCreateTime(now);
 					order.setIsDelete(1);
 					orderInfoMapper.insert(order);
 					session.setAttribute("successid", order.getOrderId().toString());
 					return 3;
 				}
+				return 1;// 绿币不足
+			}
 				return 2;// 余额不足
 			}
-
-			return 1;// 积分不足
+			return 2;// 余额不足
 		}
 		return 0;// 兑换失败
 	}
@@ -357,7 +371,10 @@ public class kepuController {
 	public ModelAndView detaillist(HttpSession session) {
 		String userId = (String) session.getAttribute("userId");
 		ModelAndView mav = new ModelAndView();
-		List<StActivityRecord> stard = stActivityRecordMapper.selectBylist(Integer.parseInt(userId));
+		SimpleDateFormat fE=new SimpleDateFormat("yyyy-MM");
+
+		List<StActivityRecord> stard = stActivityRecordMapper.selectByMeitlist(Integer.parseInt(userId),	fE.format(new Date()));
+
 		StUserAccount stu =userAccountMapper.selectByPrimaryKey(Integer.parseInt(userId));
 		if (!stard.isEmpty()) {
 			mav.addObject("user", stu);
@@ -366,7 +383,7 @@ public class kepuController {
 				mav.addObject("d",df.format(j));
 			mav.addObject("list", stard);
 		}
-		mav.addObject("modeName", "积分排行");
+		mav.addObject("modeName", "绿币排行");
 		mav.addObject("mainPage", "duihuan/detaillist.jsp");
 		return mav;
 
@@ -383,7 +400,10 @@ public class kepuController {
 	public ModelAndView earnwaylist(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String userId = (String) session.getAttribute("userId");
-		List<StActivityRecord> stard = stActivityRecordMapper.selectBylist(Integer.parseInt(userId));
+		
+		SimpleDateFormat fE=new SimpleDateFormat("yyyy-MM");
+
+		List<StActivityRecord> stard = stActivityRecordMapper.selectByMeitlist(Integer.parseInt(userId),	fE.format(new Date()));
 		if (!stard.isEmpty()) {
 			mav.addObject("list", stard);
 		}
@@ -392,8 +412,7 @@ public class kepuController {
 		return mav;
 
 	}
-	
-	
+
 	/**
 	 * 广告页 杨杰
 	 * 
@@ -417,10 +436,12 @@ public class kepuController {
 	@RequestMapping("withdraw")
 	public ModelAndView withdraw(HttpSession session, @RequestParam("amount") Double amount, HttpServletRequest rs)
 			throws AlipayApiException {
-		ModelAndView mav = new ModelAndView();
-		DecimalFormat df = new DecimalFormat("#.00");
+		 ModelAndView mav = new ModelAndView();
+		 //格式化数值 保留两位小数  四舍五入
+		 BigDecimal bg = new BigDecimal(amount);
+	     double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		// 设置当前获取金额
-		session.setAttribute("amount", df.format(amount));
+		session.setAttribute("amount", f1);
 		// 根据当前登录用户Id 获取用户手机号码
 		StUser stUser = stUserMapper.selectByPrimaryKey(Integer.parseInt(session.getAttribute("userId").toString()));
 		String phone = stUser.getMobile();
@@ -451,8 +472,8 @@ public class kepuController {
 		Long outs = System.currentTimeMillis();
 		String outno = outs.toString();
 		request.setBizContent("{" + "\"out_biz_no\":\"" + outno + "\"," + "\"payee_type\":\"ALIPAY_LOGONID\","
-				+ "\"payee_account\":\"" + account + "\"," + "\"amount\":\""+amount+"\"," + "\"payee_real_name\":\"" + username
-				+ "\"," + "\"remark\":\"提现备注\"" + "}");
+				+ "\"payee_account\":\"" + account + "\"," + "\"amount\":\"" + amount + "\"," + "\"payee_real_name\":\""
+				+ username + "\"," + "\"remark\":\"提现备注\"" + "}");
 		AlipayFundTransToaccountTransferResponse response = alipayClient.execute(request);
 		if (response.isSuccess()) {
 			System.out.println("调用成功");
@@ -473,11 +494,11 @@ public class kepuController {
 	@RequestMapping("withOk")
 	public ModelAndView withOk(HttpSession session, HttpServletRequest rs) throws AlipayApiException {
 		ModelAndView mav = new ModelAndView();
-		String userId=session.getAttribute("userId").toString();
+		String userId = session.getAttribute("userId").toString();
 		StUserAccount user = userAccountMapper.selectByPrimaryKey(Integer.parseInt(userId));
 		StUserAccount u = new StUserAccount();
 		u.setUserid(user.getUserid());
-		u.setScore(0.0);// 当前积分
+		u.setScore(0.0);// 当前绿币
 		userAccountMapper.updateByPrimaryKey(u);
 		mav.addObject("modeName", "提现成功");
 		mav.addObject("mainPage", "duihuan/withOk.jsp");
@@ -493,24 +514,30 @@ public class kepuController {
 	public List<StSign> signCheck(HttpSession session) {
 		String userId = session.getAttribute("userId").toString();
 		List<StSign> st = stSignMapper.selectAll(Integer.parseInt(userId));
-		System.out.println(st.size());
-		for (int i = 0; i < st.size(); i++) {
+		if (st.size() != 0) {
+			for (int i = 0; i < st.size(); i++) {
 
-			SimpleDateFormat f = new SimpleDateFormat("yyyy-MM");
-			String g = f.format(new Date());
-			String g1 = f.format(st.get(i).getSigndate());
-			if (g.equals(g1)) {
-				SimpleDateFormat f1 = new SimpleDateFormat("dd");
-				String sql = f1.format(st.get(i).getSigndate());
-				st.get(i).setSqlsigndate(Integer.parseInt(sql));
+				SimpleDateFormat f = new SimpleDateFormat("yyyy-MM");
+				String g = f.format(new Date());
+				if (st.get(i) != null) {
+					String g1 = f.format(st.get(i).getSigndate());
+					if (g.equals(g1)) {
+						SimpleDateFormat f1 = new SimpleDateFormat("dd");
+						String sql = f1.format(st.get(i).getSigndate());
+						st.get(i).setSqlsigndate(Integer.parseInt(sql));
+					}
+				}
 			}
+			return st;
+		} else {
+			return null;
 		}
-		return st;
+
 	}
-	
+
 	/**
-	 * 杨杰
-	 * 签到 
+	 * 杨杰 签到
+	 * 
 	 * @param keys
 	 * @param session
 	 * @return
@@ -518,19 +545,23 @@ public class kepuController {
 	@RequestMapping("sign")
 	@ResponseBody
 	public int sign(@RequestParam("keysta") int keys, HttpSession session) {
+		//定义变量
 		int i = 0;
 		String userId = session.getAttribute("userId").toString();
-		
 		List<StSign> st = stSignMapper.selectAll(Integer.parseInt(userId));
 		for (int a = 0; a < st.size(); a++) {
 			SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-			String g = f.format(st.get(a).getSigndate());
-			String g1 = f.format(new Date());
-			if (g.equals(g1)) {
-				return i;
+			//判断是否存在
+			if (st.get(a) != null) {
+				String g = f.format(st.get(a).getSigndate());
+				String g1 = f.format(new Date());
+				if (g.equals(g1)) {
+					return i;
+				}
 			}
 
 		}
+
 		// 添加签到记录
 		StSign sign = new StSign();
 		sign.setUserid(Integer.parseInt(userId));
@@ -539,13 +570,19 @@ public class kepuController {
 		sign.setSigndate(new Date());
 		int insert = stSignMapper.insert(sign);
 		StUserAccount user = userAccountMapper.selectByPrimaryKey(Integer.parseInt(userId));
-		double h = user.getScore() + 4;
-		StUserAccount u = new StUserAccount();
-		u.setUserid(user.getUserid());
-		u.setScore(h);// 当前积分
-		userAccountMapper.updateByPrimaryKey(u);
-		
+		if (user != null) {
+
+			double h = user.getScore() + 4;
+			StUserAccount u = new StUserAccount();
+			u.setUserid(user.getUserid());
+			u.setScore(h);// 当前绿币
+			userAccountMapper.updateByPrimaryKey(u);
+
+		}
 		return insert;
 
 	}
+
+  
+	
 }

@@ -254,6 +254,21 @@
     	from st_activity_record
     where userid = #{userid,jdbcType=INTEGER}
   </select>
+
+
+
+
+     
+     <select id="selectByMeitlist" resultMap="BaseResultMap">
+  	  select
+   			 <include refid="Base_Column_List"  />
+   	 from st_activity_record  where userId=#{0}    and  createtime like  "%"#{1}"%"     order by createtime desc
+     </select>
+  
+  
+  
+  
+  
      
      
      

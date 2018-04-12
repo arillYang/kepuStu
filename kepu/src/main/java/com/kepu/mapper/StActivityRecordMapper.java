@@ -36,6 +36,9 @@ public interface StActivityRecordMapper {
 
 	double getMyScore(@Param("param") Map param);
 	
+	
+	
+	List<StActivityRecord>  selectByMeitlist(int userId,String mtie);
 	  
 
 		

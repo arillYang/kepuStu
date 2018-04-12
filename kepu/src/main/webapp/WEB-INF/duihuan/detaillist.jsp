@@ -32,7 +32,7 @@
 <body>
 
 	<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
-	<h1 class="mui-title">积分明细</h1>
+	<h1 class="mui-title">绿币明细</h1>
 		<a href="${pageContext.request.contextPath}/duihuan/index?userId=${sessionScope.userId}">
 			<h5>
 				<img src="${pageContext.request.contextPath}/images/back@2x.png"
@@ -52,7 +52,7 @@
 				<div class="detaillist_t_inner">
 					<div class="detaillist_t_text">
 						<h1>${ user.score}</h1>
-						<p>当前积分</p>
+						<p>当前绿币</p>
 						<p>可兑换${d}现金</p>
 					</div>
 				</div>
@@ -70,7 +70,7 @@
 									</p>
 								</div>
 								<div class="mui-media-body detaillist_l_text earnway_l_inner">
-									<span><span>+${st.score}积分</span></span>
+									<span><span>+${st.score}绿币</span></span>
 								</div>
 						</a></li>
 					</c:forEach>

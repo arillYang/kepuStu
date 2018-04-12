@@ -7,13 +7,15 @@
 %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-<title>科普积分商城</title>
+<title>科普绿币商城</title>
 
 
 <link rel="stylesheet"
@@ -37,7 +39,7 @@
 
 
 	<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
-	<h1 class="mui-title">积分排行榜</h1>
+	<h1 class="mui-title">绿币排行榜</h1>
 	<a href="${pageContext.request.contextPath}/duihuan/index?userId=${sessionScope.userId}">
 			<h5>
 			<img src="${pageContext.request.contextPath}/images/back@2x.png"
@@ -53,17 +55,13 @@
 				style="background: url(../images/ranking_bg.jpg); background-size: cover;">
 
 			</div>
-
 			<div class="ranking-userinfo">
-				<c:forEach items="${liststq }" var="var">
-					<c:if test="${var.sum==userId}">
+				
 						<div class="user-img">
-							<img src="${var.recordimg }" width="100%" />
+							<img src="${score.recordimg }" width="100%" />
 						</div>
-						<div class="user-num">${var.recordintegral }</div>
-						<div class="user-title">排名：${var.recordid }</div>
-					</c:if>
-				</c:forEach>
+						<div class="user-num">${score.recordintegral }</div>
+						<div class="user-title">排名：${score.recordid }</div>
 
 			</div>
 

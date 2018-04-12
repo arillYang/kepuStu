@@ -34,6 +34,8 @@ public interface StUserAccountMapper {
     int updateByPrimaryKeySelective(StUserAccount record);
 
     int updateByPrimaryKey(StUserAccount record);
+ 
+    StUserAccount selectBylScoreList(int userId);
     
     int updateUserBalanceAndScore(Map map);
     

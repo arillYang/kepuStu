@@ -14,7 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-<title>获取积分记录</title>
+<title>获取绿币记录</title>
 <script src="${pageContext.request.contextPath}/js/mui.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/vue.js"></script>
 <script src="${pageContext.request.contextPath}/js/rem.js"></script>
@@ -31,7 +31,7 @@
 <body>
 
 	<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
-	<h1 class="mui-title">获取积分记录</h1>
+	<h1 class="mui-title">获取绿币记录</h1>
 	<a href="${pageContext.request.contextPath}/duihuan/index?userId=${sessionScope.userId}">
 		<h5>
 			<img src="${pageContext.request.contextPath}/images/back@2x.png"
@@ -56,7 +56,7 @@
 									</p>
 								</div>
 								<div class="mui-media-body detaillist_l_text earnway_l_inner">
-									<span><span>+${st.score}积分</span></span>
+									<span><span>+${st.score}绿币</span></span>
 								</div>
 						</a></li>
 					</c:forEach>

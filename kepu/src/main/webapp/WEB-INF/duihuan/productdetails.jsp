@@ -120,7 +120,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="details-price">
 				
 				<div class="details-price-left">
-					<div class="left1">	${st.integral }积分</div>
+					<div class="left1">	${st.integral }绿币</div>
 					<div class="left2">${st.money }</div>
 				</div>
 				<div class="details-price-right"> 运费：${st.freight }</div>
@@ -173,7 +173,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 <footer class="detaillist_footer">
         <div class="detaillist_f_inner" style="text-align: center;">
-        	<!--积分够时显示-->
+        	<!--绿币够时显示-->
             <div class="detaillist_d_btn" style="width: 100%;">
             	
             			<c:if test="${st.integral <= usercore }">
@@ -184,17 +184,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							 <c:if test="${st.integral > usercore }">
 										<a href="#middlePopover1">
 									<div class=detaillist_d_btn" >
-										<button style="background: #e2e2e2; border: 0px !important; color: #ffffff !important;">积分不足</button>
+										<button style="background: #e2e2e2; border: 0px !important; color: #ffffff !important;">绿币不足</button>
 										</div>
 								</a>
                    </div>
 							</c:if>
              
          
-            <!--积分不够时显示-->
+            <!--绿币不够时显示-->
             
             <!--<div class="detaillist_d_btn" style="width: 100%;">
-                <a href="#"><button style="background: #e2e2e2; border: 0px !important; color: #ffffff !important;">积分不足</button></a>
+                <a href="#"><button style="background: #e2e2e2; border: 0px !important; color: #ffffff !important;">绿币不足</button></a>
             </div>-->
             
         </div>
@@ -235,7 +235,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									location.reload();
 									}
 								else if (data == 1) {
-									alert("积分不足");
+									alert("绿币不足");
 								} else if (data == 2) {
 									alert("余额不足");
 								} else if(data==3) {

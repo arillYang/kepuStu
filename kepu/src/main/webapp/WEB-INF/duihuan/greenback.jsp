@@ -14,7 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>科普积分</title>
+    <title>科普绿币</title>
     <link href="${pageContext.request.contextPath}/css/mui.min.css" rel="stylesheet" />
     <script src="${pageContext.request.contextPath}/js/mui.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/vue.js"></script>
@@ -79,7 +79,7 @@
 <body>
 
     <header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
-        <h1 class="mui-title">科普积分</h1>
+        <h1 class="mui-title">科普绿币</h1>
         <a href="${pageContext.request.contextPath}/duihuan/index?userId=${sessionScope.userId}">
 		<h5>
 			<img src="${pageContext.request.contextPath}/images/back@2x.png"

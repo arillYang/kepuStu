@@ -13,7 +13,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-<title>科普积分商城</title>
+<title>科普绿币商城</title>
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/mui.min.css" />
@@ -73,7 +73,7 @@
 <body>
 
 	<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
-	<h1 class="mui-title">科普积分</h1>
+	<h1 class="mui-title">科普绿币</h1>
 	<h5></h5>
 	</header>
 
@@ -116,7 +116,7 @@
 									<img
 										src="${pageContext.request.contextPath}/images/icon-index-card1.png" />
 								</div>
-								<div class="title">积分${stu.score }</div>
+								<div class="title">绿币${stu.score }</div>
 						</a></li>
 					</div>
 					<div class="mui-col-sm-6 mui-col-xs-6">
@@ -140,7 +140,7 @@
 									<img
 										src="${pageContext.request.contextPath}/images/icon-index-card3.png" />
 								</div>
-								<div class="title">积分排行榜</div>
+								<div class="title">绿币排行榜</div>
 						</a></li>
 					</div>
 					<div class="mui-col-sm-6 mui-col-xs-6">
@@ -151,7 +151,7 @@
 									<img
 										src="${pageContext.request.contextPath}/images/icon-index-card1.png" />
 								</div>
-								<div class="title">获取积分明细</div>
+								<div class="title">获取绿币明细</div>
 						</a></li>
 					</div>
 				</div>
@@ -168,7 +168,7 @@
 			<div class="xian"></div>
 			<!--兑换-->
 			<div class="index-product">
-				<h3>积分兑换</h3>
+				<h3>绿币兑换</h3>
 				<ul class="mui-table-view mui-grid-view"
 					style="padding: 0px; background: none;">
 
@@ -178,7 +178,7 @@
 								<img height="100px" width="100px" src="${st.displaythepicture}">
 								<input type="hidden" value="${st.id}" name="id" id="stId">
 								<div class="mui-media-body mui-media-title">${st.commodityname}</div>
-								<div class="mui-media-body mui-media-price">${st.integral}积分</div>
+								<div class="mui-media-body mui-media-price">${st.integral}绿币</div>
 						</a> 
 						<c:if test="${st.integral <= usercore }">
 								<a href="#middlePopover" class="test001"> <input
@@ -190,7 +190,7 @@
 								<a href="#middlePopover1">
 									<div class="mui-media-body mui-media-circle"
 										style="background: #e2e2e2; color: #ffffff !important;"border: 0px !important;">
-										积分不足</div>
+										绿币不足</div>
 								</a>
 							</c:if></li>
 					</c:forEach>
@@ -286,7 +286,7 @@
 					alert("兑换失败");
 					location.reload();
 				} else if (data == 1) {
-					alert("积分不足");
+					alert("绿币不足");
 				} else if (data == 2) {
 					alert("余额不足");
 				} else if (data == 3) {
@@ -376,6 +376,9 @@
 									pop.classList.add('qiandao-zhezhao-open');
 									
 									location.reload();
+								}else{
+									
+									alert("不能重复签到哦");
 								}
 									
 							}

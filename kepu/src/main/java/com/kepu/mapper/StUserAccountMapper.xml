@@ -293,10 +293,21 @@
  SELECT *  FROM st_user_account  where userId=#{userid}
  </select>
   
+     <select id="selectBylScoreList" resultMap="BaseResultMap">
+  SELECT * FROM (SELECT (@rownum:=@rownum+1) AS town, userId,score FROM st_user_account ,(SELECT @rownum:= 0 ) r  ORDER BY score DESC )st_user_account where userId=#{userId}
+
+ </select>
   
    <select id="selectBylist" resultMap="BaseResultMap">
-   SELECT (@rownum:=@rownum+1) AS town, a.* FROM st_user_account a, (SELECT @rownum:= 0 ) r  ORDER BY a.score DESC 
+   SELECT (@rownum:=@rownum+1) AS town, a.* FROM st_user_account a, (SELECT @rownum:= 0 ) r  ORDER BY a.score DESC  limit 0,10
  </select>
 
+<!-- 
+  <select id="selectByPrimaryTimeKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_user_account
+    where userId = #{userid,jdbcType=INTEGER} and createtime   like  "%"#{time}"%"
+  </select> -->
   
 </mapper>

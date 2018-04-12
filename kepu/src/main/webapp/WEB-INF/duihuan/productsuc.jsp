@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="product-info-right">
 						<div class="product-name">${st.commodityname }</div>
 						<div class="product-price">
-							总价：<span>${st.integral }积分</span>
+							总价：<span>${st.integral }绿币</span>
 						</div>
 					</div>
 				</div>
@@ -82,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label>订单号：</label> ${orde.orderCode }
 					</div>
 					<div class="mui-input-row" style="color: #f95e60 !important;">
-						<label>总计：</label> ${st.integral }积分
+						<label>总计：</label> ${st.integral }绿币
 					</div>
 				</div>
 
