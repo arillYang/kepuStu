@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StOutchainDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StOutchainDetail" >
+    <id column="UID" property="uid" jdbcType="INTEGER" />
+    <result column="outchainId" property="outchainid" jdbcType="INTEGER" />
+    <result column="sitetitle" property="sitetitle" jdbcType="VARCHAR" />
+    <result column="sitePic" property="sitepic" jdbcType="VARCHAR" />
+    <result column="siteType" property="sitetype" jdbcType="INTEGER" />
+    <result column="androidSite" property="androidsite" jdbcType="VARCHAR" />
+    <result column="IOSSite" property="iossite" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    UID, outchainId, sitetitle, sitePic, siteType, androidSite, IOSSite
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.StOutchainDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from st_outchain_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_outchain_detail
+    where UID = #{uid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st_outchain_detail
+    where UID = #{uid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.StOutchainDetailExample" >
+    delete from st_outchain_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StOutchainDetail" >
+    insert into st_outchain_detail (UID, outchainId, sitetitle, 
+      sitePic, siteType, androidSite, 
+      IOSSite)
+    values (#{uid,jdbcType=INTEGER}, #{outchainid,jdbcType=INTEGER}, #{sitetitle,jdbcType=VARCHAR}, 
+      #{sitepic,jdbcType=VARCHAR}, #{sitetype,jdbcType=INTEGER}, #{androidsite,jdbcType=VARCHAR}, 
+      #{iossite,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StOutchainDetail" >
+    insert into st_outchain_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        UID,
+      </if>
+      <if test="outchainid != null" >
+        outchainId,
+      </if>
+      <if test="sitetitle != null" >
+        sitetitle,
+      </if>
+      <if test="sitepic != null" >
+        sitePic,
+      </if>
+      <if test="sitetype != null" >
+        siteType,
+      </if>
+      <if test="androidsite != null" >
+        androidSite,
+      </if>
+      <if test="iossite != null" >
+        IOSSite,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="outchainid != null" >
+        #{outchainid,jdbcType=INTEGER},
+      </if>
+      <if test="sitetitle != null" >
+        #{sitetitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sitepic != null" >
+        #{sitepic,jdbcType=VARCHAR},
+      </if>
+      <if test="sitetype != null" >
+        #{sitetype,jdbcType=INTEGER},
+      </if>
+      <if test="androidsite != null" >
+        #{androidsite,jdbcType=VARCHAR},
+      </if>
+      <if test="iossite != null" >
+        #{iossite,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.StOutchainDetailExample" resultType="java.lang.Integer" >
+    select count(*) from st_outchain_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_outchain_detail
+    <set >
+      <if test="record.uid != null" >
+        UID = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.outchainid != null" >
+        outchainId = #{record.outchainid,jdbcType=INTEGER},
+      </if>
+      <if test="record.sitetitle != null" >
+        sitetitle = #{record.sitetitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sitepic != null" >
+        sitePic = #{record.sitepic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sitetype != null" >
+        siteType = #{record.sitetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.androidsite != null" >
+        androidSite = #{record.androidsite,jdbcType=VARCHAR},
+      </if>
+      <if test="record.iossite != null" >
+        IOSSite = #{record.iossite,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_outchain_detail
+    set UID = #{record.uid,jdbcType=INTEGER},
+      outchainId = #{record.outchainid,jdbcType=INTEGER},
+      sitetitle = #{record.sitetitle,jdbcType=VARCHAR},
+      sitePic = #{record.sitepic,jdbcType=VARCHAR},
+      siteType = #{record.sitetype,jdbcType=INTEGER},
+      androidSite = #{record.androidsite,jdbcType=VARCHAR},
+      IOSSite = #{record.iossite,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StOutchainDetail" >
+    update st_outchain_detail
+    <set >
+      <if test="outchainid != null" >
+        outchainId = #{outchainid,jdbcType=INTEGER},
+      </if>
+      <if test="sitetitle != null" >
+        sitetitle = #{sitetitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sitepic != null" >
+        sitePic = #{sitepic,jdbcType=VARCHAR},
+      </if>
+      <if test="sitetype != null" >
+        siteType = #{sitetype,jdbcType=INTEGER},
+      </if>
+      <if test="androidsite != null" >
+        androidSite = #{androidsite,jdbcType=VARCHAR},
+      </if>
+      <if test="iossite != null" >
+        IOSSite = #{iossite,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where UID = #{uid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StOutchainDetail" >
+    update st_outchain_detail
+    set outchainId = #{outchainid,jdbcType=INTEGER},
+      sitetitle = #{sitetitle,jdbcType=VARCHAR},
+      sitePic = #{sitepic,jdbcType=VARCHAR},
+      siteType = #{sitetype,jdbcType=INTEGER},
+      androidSite = #{androidsite,jdbcType=VARCHAR},
+      IOSSite = #{iossite,jdbcType=VARCHAR}
+    where UID = #{uid,jdbcType=INTEGER}
+  </update>
+</mapper>

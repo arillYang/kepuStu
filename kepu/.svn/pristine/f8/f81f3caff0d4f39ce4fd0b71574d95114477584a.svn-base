@@ -1,0 +1,11 @@
+open=/user/register,user/login,user/requestPIN,main/launchPage,main/guidePage,main/recommend,main/getVersion,\
+admin/login,anchor/upload,news/getTopnav,news/getCarousel,news/getNews,news/getNewsDetail,news/search,\
+news/getNewsComment,news/getReply,news/getHotSearch,user/aboutUS,user/getSystemTime,user/getVersion,\
+product/getCarousel,product/getServiceKind,product/getHomeProduct,product/getClassfyProduct,\
+product/getProductDetail,product/searchProduct,product/getProductClassfy,product/getAllPublish,\
+product/getHotSearch,villages/searchTotal,villages/getPicture,villages/getCarousel,villages/getNews,\
+villages/getNewsDetail,villages/search,villages/getNewsComment,villages/getReply,villages/getHotSearch,\
+/alipay/dopay,/user/exchange,\
+notice/getCarousel,notice/getNews,notice/getNewsDetail,notice/search,notice/getNewsComment,\
+notice/getReply,villages/getVillageMessage,user/launchPage,user/setPassword,user/getAreaJson,wx-config,getProductArea,\
+getTemp

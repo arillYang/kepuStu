@@ -1,0 +1,258 @@
+package com.kepu.controller;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alipay.api.DefaultAlipayClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.kepu.apppay.alipay.util.AlipayConfig;
+import com.kepu.apppay.alipay.util.AlipayNotify;
+import com.kepu.apppay.alipay.util.AlipaySubmit;
+import com.kepu.apppay.alipay.util.StringUtil;
+import com.kepu.apppay.alipay.util.decodeValue;
+//import com.spring.web.service.BulkGoodSaleHeadService;
+//import com.spring.web.service.TbCashMemberRecordService;
+//import com.spring.web.service.TbMemberScoreService;
+//import com.spring.web.service.TbMemberService;
+
+
+@Controller
+@RequestMapping(value = "/alipay")
+@Transactional
+/**
+ * 
+ * @author Ly
+ *
+ */
+public class Alipay_Controller {
+	//入口
+	private static final String GATEWAY = "http://wap.dadaofangzhiwang.com/ialipayController/callbacks.do";
+	//appid
+	private static final String APP_ID = "2017072507895065";
+	//商家私钥
+	private static final String APP_PRIVATE_KEY = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC0eEzavxQEgcNz5Qi7en+pTYqBuq6iEFvAsAjRmt3edw7zhBpSLUenxVNAuyAyBq6WiLX4p+kjAExhiRHeY8mBZQUTgGZt+b9zPdZwKpGn7WOjK0IbGpfduH0OwVzija2aBsnSfeGIHGpook3+N7z3skXKztPpETyfKx0BEDeAK/3U/iC/hkkeJKvpa3a3eNVAo6vVAL0G5eAKQcku36cDYxqmMNGyXNOfRTsGpFYYyEgu9NLc1sHQdm8zm+xsACp7FTg1nVHBazthMwyFYg4Sfl1NbqxpM7sn7dHO6yiBeylu0JZK4g+eiqwAh75mEf/ih8uXb8hAMvh8CbjshMKVAgMBAAECggEAArnmf09vn/nN2AxXq21YTFhthTQquywAFtMR7wil3VxzD16pfyBL+s7SSSIKhHbxYDjEdvMiZHL2tGp7qJ5dRuUdxIOmCHdDWxxOBve9p4nAfZCDuSEXtjO5P+XP32RAgRklJ1bbd1DmkpoRD4wMALnisAOb0+N8xPLDx2ZVUExTT/IBNDBzwV69MihHandCYG+LmCjlt0I7L9tXAEM90jlVc1XT5jZTe843+obY9zh65ZCXTGaeq8oLnlZDJliESwcdqFEjSt4ZVO+QnH7iQRhf9EoH4mU30FQsC9oK0H8eJSLwZ4g8UtEehwQSLJMzVic1HwkJiURXFWo91OiKwQKBgQDoFtPMd3vW7UXA1hPk6RMmOExfaIamjsfpg5opxBMwKlgeOa77//kJ1jmoAxodXjyDCbFU//6aEn7w1JZEvqnfb3MBz5v5c5pNae4O0ndyZ/jC8vPR8c2s9Qjqg/UC7yWxT2nepZVPhuQFo3IXGwYsk/w6NhucVuKKVH/QjX4Q3QKBgQDHEA4a0z+6pBJ9NA9Gn61aS5fv7SAhzn+X3F56zP+kf0YHHIg9HvAFOd2aD70JIZtBQVLImJlM32XN6rB0UeJID2gcr8FRD+mzxmxpxapI7I6kAgwiPjmGTMGjiYQyXJDHLyc5VX1m3d8w7kFOLC125nP3M0JwndbN5P+AH1FBGQKBgQDkT4BvBaNHnQYfWvkbGMWDtaI7wQGk25SBfLqtF3ugyCcDJM+kivyb1qfFRbfs6AUzCtftvB7jxgomM5rXaZCGgoZqY6cWT8idGvXakuR6IRmv/XwpLWudFzd8K+9cwZEcyfhl1BH7t8CcY1saq7T5KWLYiN3EgBw+5D0QFgDL6QKBgHcHrqdzsiPUgAnF22yLhoj7srqQvCn65GjWKNidRDAEusb91KlXmoZFd7DrwEl5gvCeMvYn6WMCIknjD+g+HmSgcczVe28RaNlKyQDmZVB9wz1mzAKd2p/nvdIgJKBIoXm5RGcQK5AbE56amQo5eGYknystx4i3mP489FqUX23hAoGARmvmeduVM+cGYVD5bosLvxx3Bvjqu3BwQ91jME43K5C5l/ghC7nmtAQIzwQySfCBWi467CJCBRxDuuADIHnFqGoZhNVtv2FaLn81GMKGpBAWMQk1IQQKZAGEDlbPI6mYar3ty4/DamSGhx6ZWV2puUF9nZFWGhHn/R3NtnanT5o=";
+	//格式
+	private static final String FORMAT = "json";
+	//编码
+	private static final String CHARSET = "utf-8";
+	//阿里公钥
+	private static final String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs1ubaWnelCgqB/YqvsiOobJH4gwRsm1Z8fsln0rm02tnbjR0MzKT6wFC3Qh2FfrMeY2JWlWZeHDsU7vIt9o2yX5rynSnryZdfk/UL/YwY9O3PzBbcSYgFAQkOkyCkfdTVp+mNMxvf9Dd90KNzorfykvHgHo6NgoxmCKJlvZ+T3BoiqDsW5Ku/yVYPJitqQFdxEEfucL202Ug88WiO1nwAQJ6cp+RKMp5GpQE3Vz+sTaRN4yYQAYWiMmZez3muka7ilFYbUB/YfRxCv3GyAroUVambp5n7zR4V12IdhvngeJVJWtCiE+IGL0YO1Uw2e7kvB2FFWuuPx27Sa4yYPxs0wIDAQAB";
+	//加密类型
+	private static final String SIGN_TYPE = "RSA2";
+
+	
+//	@Resource  TbMemberScoreService tbMemberScoreService;
+//	@Resource  TbCashMemberRecordService tbCashMemberRecordService;
+//	@Resource  BulkGoodSaleHeadService bulkGoodSaleHeadService;
+//	@Resource  TbMemberService tbMemberService; 
+	/**
+	 * 预支付获取用户权限code
+	 * 
+	 * @param fee1 金额,
+	 * @return ModelAndView
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/dopay")
+	@ResponseBody
+	public static String getCode(HttpServletRequest request,
+			HttpServletResponse response, Model model) throws IOException {
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		new DefaultAlipayClient(GATEWAY, APP_ID, APP_PRIVATE_KEY, FORMAT,
+				CHARSET, ALIPAY_PUBLIC_KEY, SIGN_TYPE);
+		String return_url = "http://www.91lxg.com/LeXiangGou-wx/index.html";
+		String out_trade_no = "LXG"
+				+ df.format(new Timestamp(new Date().getTime()));
+		String subject = "iphone 7 Puls";
+		String total_fee2 = request.getParameter("fee1");
+	//	System.out.println("加密完金额为："+total_fee2);
+//		String total_fee =decodeValue.decodeValue(total_fee2);
+		String total_fee =total_fee2;
+		//System.out.println("解密后金额为："+total_fee);
+		String notify_url = "http://www.91lxg.com/LeXiangGou-wx/member/tgje?tmTg='"+total_fee+"'";
+		String body = "充值";
+		// 把请求参数打包成数组
+		Map<String, String> sParaTemp = new HashMap<String, String>();
+		sParaTemp.put("service", AlipayConfig.service);// 接口服务----即时到账
+		sParaTemp.put("partner", AlipayConfig.partner);// 支付宝PID
+		sParaTemp.put("seller_id", AlipayConfig.seller_id);// 卖家支付宝用户号
+		sParaTemp.put("_input_charset", AlipayConfig.input_charset);// 统一编码
+		sParaTemp.put("payment_type", AlipayConfig.payment_type);// 支付类型
+		sParaTemp.put("notify_url", notify_url);// 异步通知页面
+		sParaTemp.put("return_url", return_url);// 页面跳转同步通知页面
+		sParaTemp.put("out_trade_no", out_trade_no);// 商品订单编号
+		sParaTemp.put("subject", subject);// 商品名称
+		sParaTemp.put("total_fee", total_fee);// 付款金额
+		sParaTemp.put("body", body);// 订单描述
+
+		// 建立请求
+		String result = "";
+		try {
+			String sHtmlText = AlipaySubmit.buildRequest(sParaTemp, "post",
+					"确认");
+			System.out.println(sHtmlText);
+
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss")
+					.create();
+			String s = gson.toJson(sHtmlText);
+			model.addAttribute("sHtmlText", s);
+			request.setAttribute("sHtmlText", s);
+			result = "{\"success\":true,\"msg\":\"跳转成功\"}";
+			StringUtil.writeToWeb(sHtmlText, "html", response);
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "{\"success\":false,\"msg\":\"跳转失败，请稍候再试！\"}";
+			StringUtil.writeToWeb(result, "html", response);
+			return null;
+		}
+
+	}
+
+	  @SuppressWarnings("rawtypes")
+
+	  @RequestMapping(value="/async",method = RequestMethod.POST)
+
+	  public String async(HttpServletRequest request,HttpServletResponse response){
+
+	  Map params = new HashMap();  
+
+	         Map requestParams = request.getParameterMap();  
+
+	         for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {  
+
+	             String name = (String) iter.next();  
+
+	             String[] values = (String[]) requestParams.get(name);  
+
+	             String valueStr = "";  
+
+	             for (int i = 0; i < values.length; i++) {  
+
+	                 valueStr = (i == values.length - 1) ? valueStr + values[i]: valueStr + values[i] + ",";  
+
+	             }  
+
+	             params.put(name, valueStr);  
+
+	         }  
+
+	         //获取返回数据
+
+	         String orderTitle = request.getParameter("subject");//订单名称
+
+	         String payType = request.getParameter("payment_type");//支付类型
+
+	         String outTradeNo = request.getParameter("out_trade_no");//订单号
+
+	         String tradeNo = request.getParameter("trade_no");//支付宝交易号
+
+	         String notifyId = request.getParameter("notify_id");//支付校验id
+
+	         String amount = request.getParameter("total_fee");//交易金额
+
+	         String notifyTime = request.getParameter("notify_time");//通知时间       
+
+	         String tradeStatus = request.getParameter("trade_status");//交易状态
+
+	         String returnId = request.getParameter("extra_common_param");//项目id
+
+	         String payer = request.getParameter("buyer_email");//支付者账号              
+
+	                  //
+
+	         if(AlipayNotify.verify(params)){//验证成功  
+
+	             if(tradeStatus.equals("TRADE_FINISHED") || tradeStatus.equals("TRADE_SUCCESS")) {  
+
+	             //要写的逻辑。自己按自己的要求写
+
+	             
+
+	             //封装交易信息实体，存入数据库之类的                                               
+
+	                  System.out.println(">>>>>异步返回:" + tradeNo);  
+
+	             }  
+
+	             return "success/alipay-success";  
+
+	         }else{//验证失败  
+
+	             return "success/alipay-fail";  
+
+	         }  
+
+	  }
+
+	
+
+	@RequestMapping(value = "/return_url", method = RequestMethod.GET)
+	public String Return_url(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		Map params = new HashMap();
+
+		Map requestParams = request.getParameterMap();
+
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+
+			String name = (String) iter.next();
+
+			String[] values = (String[]) requestParams.get(name);
+
+			String valueStr = "";
+
+			for (int i = 0; i < values.length; i++) {
+
+				valueStr = (i == values.length - 1) ? valueStr + values[i]
+						: valueStr + values[i] + ",";
+
+			}
+
+			params.put(name, valueStr);
+
+		}
+
+		String tradeNo = request.getParameter("trade_no");// 支付宝交易号
+
+		String tradeStatus = request.getParameter("trade_status");// 交易状态
+
+		if (AlipayNotify.verify(params)) {// 验证成功
+
+			if (tradeStatus.equals("TRADE_FINISHED")
+					|| tradeStatus.equals("TRADE_SUCCESS")) {
+
+				// 要写的逻辑。自己按自己的要求写
+
+				System.out.println(">>>>>充值成功" + tradeNo);
+
+			}
+
+			return "...";
+
+		} else {// 验证失败
+
+			return "success/fail";
+
+		}
+
+	}
+
+}

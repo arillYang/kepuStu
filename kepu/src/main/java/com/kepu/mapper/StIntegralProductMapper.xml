@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StIntegralProductMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StIntegralProduct" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="commodityname" property="commodityname" jdbcType="VARCHAR" />
+    <result column="freight" property="freight" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="integral" property="integral" jdbcType="DOUBLE" />
+    <result column="displaythepicture" property="displaythepicture" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, commodityname, freight, money, integral, displaythepicture, details, userid, 
+    title
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_integral_product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st_integral_product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StIntegralProduct" >
+    insert into st_integral_product (id, commodityname, freight, 
+      money, integral, displaythepicture, 
+      details, userid, title
+      )
+    values (#{id,jdbcType=INTEGER}, #{commodityname,jdbcType=VARCHAR}, #{freight,jdbcType=VARCHAR}, 
+      #{money,jdbcType=DOUBLE}, #{integral,jdbcType=DOUBLE}, #{displaythepicture,jdbcType=VARCHAR}, 
+      #{details,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StIntegralProduct" >
+    insert into st_integral_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="commodityname != null" >
+        commodityname,
+      </if>
+      <if test="freight != null" >
+        freight,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="integral != null" >
+        integral,
+      </if>
+      <if test="displaythepicture != null" >
+        displaythepicture,
+      </if>
+      <if test="details != null" >
+        details,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="commodityname != null" >
+        #{commodityname,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null" >
+        #{freight,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="integral != null" >
+        #{integral,jdbcType=DOUBLE},
+      </if>
+      <if test="displaythepicture != null" >
+        #{displaythepicture,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null" >
+        #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StIntegralProduct" >
+    update st_integral_product
+    <set >
+      <if test="commodityname != null" >
+        commodityname = #{commodityname,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null" >
+        freight = #{freight,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="integral != null" >
+        integral = #{integral,jdbcType=DOUBLE},
+      </if>
+      <if test="displaythepicture != null" >
+        displaythepicture = #{displaythepicture,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null" >
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StIntegralProduct" >
+    update st_integral_product
+    set commodityname = #{commodityname,jdbcType=VARCHAR},
+      freight = #{freight,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE},
+      integral = #{integral,jdbcType=DOUBLE},
+      displaythepicture = #{displaythepicture,jdbcType=VARCHAR},
+      details = #{details,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+    <select id="findIntegralProductlist" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_integral_product
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+     <select id="findProductlist" resultMap="BaseResultMap"  >
+  select <include refid="Base_Column_List" /> from st_integral_product 
+  </select> 
+</mapper>

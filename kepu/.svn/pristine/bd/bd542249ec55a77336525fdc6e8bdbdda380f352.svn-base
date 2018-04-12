@@ -1,0 +1,326 @@
+package com.kepu.pojo;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class OrderInfo {
+    private String orderId;
+
+    private String sysAreaId;
+
+    private String orderAddress;
+
+    private String orderPhone;
+
+    private String orderZipcode;
+
+    private String orderUser;
+
+    private Integer orderType;
+
+    private Integer orderStatu;
+
+    private String orderSubjctId;
+
+    private BigDecimal orderPay;
+
+    private String orderDes;
+
+    private Date orderDate;
+
+    private String orderCode;
+
+    private String productId;
+
+    private BigDecimal billPrice;
+
+    private Integer billNum;
+
+    private String orderLogisticsCode;
+
+    private Date orderLogisticsDate;
+
+    private String orderLogiscompanyCode;
+
+    private BigDecimal orderLogiscompanyPrice;
+
+    private Integer buyUserId;
+
+    private Integer payType;
+
+    private Date payEndTime;
+
+    private Date endTime;
+
+    private String orderNote;
+
+    private String billTitle;
+
+    private String billDesc;
+
+    private BigDecimal balance;
+
+    private Integer credit;
+
+    private BigDecimal ratio;
+
+    private Date createTime;
+
+    private Integer isDelete;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
+    public String getSysAreaId() {
+        return sysAreaId;
+    }
+
+    public void setSysAreaId(String sysAreaId) {
+        this.sysAreaId = sysAreaId == null ? null : sysAreaId.trim();
+    }
+
+    public String getOrderAddress() {
+        return orderAddress;
+    }
+
+    public void setOrderAddress(String orderAddress) {
+        this.orderAddress = orderAddress == null ? null : orderAddress.trim();
+    }
+
+    public String getOrderPhone() {
+        return orderPhone;
+    }
+
+    public void setOrderPhone(String orderPhone) {
+        this.orderPhone = orderPhone == null ? null : orderPhone.trim();
+    }
+
+    public String getOrderZipcode() {
+        return orderZipcode;
+    }
+
+    public void setOrderZipcode(String orderZipcode) {
+        this.orderZipcode = orderZipcode == null ? null : orderZipcode.trim();
+    }
+
+    public String getOrderUser() {
+        return orderUser;
+    }
+
+    public void setOrderUser(String orderUser) {
+        this.orderUser = orderUser == null ? null : orderUser.trim();
+    }
+
+    public Integer getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
+    }
+
+    public Integer getOrderStatu() {
+        return orderStatu;
+    }
+
+    public void setOrderStatu(Integer orderStatu) {
+        this.orderStatu = orderStatu;
+    }
+
+    public String getOrderSubjctId() {
+        return orderSubjctId;
+    }
+
+    public void setOrderSubjctId(String orderSubjctId) {
+        this.orderSubjctId = orderSubjctId == null ? null : orderSubjctId.trim();
+    }
+
+    public BigDecimal getOrderPay() {
+        return orderPay;
+    }
+
+    public void setOrderPay(BigDecimal orderPay) {
+        this.orderPay = orderPay;
+    }
+
+    public String getOrderDes() {
+        return orderDes;
+    }
+
+    public void setOrderDes(String orderDes) {
+        this.orderDes = orderDes == null ? null : orderDes.trim();
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode == null ? null : orderCode.trim();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId == null ? null : productId.trim();
+    }
+
+    public BigDecimal getBillPrice() {
+        return billPrice;
+    }
+
+    public void setBillPrice(BigDecimal billPrice) {
+        this.billPrice = billPrice;
+    }
+
+    public Integer getBillNum() {
+        return billNum;
+    }
+
+    public void setBillNum(Integer billNum) {
+        this.billNum = billNum;
+    }
+
+    public String getOrderLogisticsCode() {
+        return orderLogisticsCode;
+    }
+
+    public void setOrderLogisticsCode(String orderLogisticsCode) {
+        this.orderLogisticsCode = orderLogisticsCode == null ? null : orderLogisticsCode.trim();
+    }
+
+    public Date getOrderLogisticsDate() {
+        return orderLogisticsDate;
+    }
+
+    public void setOrderLogisticsDate(Date orderLogisticsDate) {
+        this.orderLogisticsDate = orderLogisticsDate;
+    }
+
+    public String getOrderLogiscompanyCode() {
+        return orderLogiscompanyCode;
+    }
+
+    public void setOrderLogiscompanyCode(String orderLogiscompanyCode) {
+        this.orderLogiscompanyCode = orderLogiscompanyCode == null ? null : orderLogiscompanyCode.trim();
+    }
+
+    public BigDecimal getOrderLogiscompanyPrice() {
+        return orderLogiscompanyPrice;
+    }
+
+    public void setOrderLogiscompanyPrice(BigDecimal orderLogiscompanyPrice) {
+        this.orderLogiscompanyPrice = orderLogiscompanyPrice;
+    }
+
+    public Integer getBuyUserId() {
+        return buyUserId;
+    }
+
+    public void setBuyUserId(Integer buyUserId) {
+        this.buyUserId = buyUserId;
+    }
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
+
+    public Date getPayEndTime() {
+        return payEndTime;
+    }
+
+    public void setPayEndTime(Date payEndTime) {
+        this.payEndTime = payEndTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getOrderNote() {
+        return orderNote;
+    }
+
+    public void setOrderNote(String orderNote) {
+        this.orderNote = orderNote == null ? null : orderNote.trim();
+    }
+
+    public String getBillTitle() {
+        return billTitle;
+    }
+
+    public void setBillTitle(String billTitle) {
+        this.billTitle = billTitle == null ? null : billTitle.trim();
+    }
+
+    public String getBillDesc() {
+        return billDesc;
+    }
+
+    public void setBillDesc(String billDesc) {
+        this.billDesc = billDesc == null ? null : billDesc.trim();
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public Integer getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Integer credit) {
+        this.credit = credit;
+    }
+
+    public BigDecimal getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(BigDecimal ratio) {
+        this.ratio = ratio;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+}

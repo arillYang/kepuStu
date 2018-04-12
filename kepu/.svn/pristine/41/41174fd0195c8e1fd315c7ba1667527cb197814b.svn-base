@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StVillageNewsVoteMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StVillageNewsVote" >
+    <id column="UID" property="uid" jdbcType="BIGINT" />
+    <result column="voteTime" property="votetime" jdbcType="TIMESTAMP" />
+    <result column="newsId" property="newsid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="liked" property="liked" jdbcType="INTEGER" />
+    <result column="dislike" property="dislike" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    UID, voteTime, newsId, userId, liked, dislike
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.StVillageNewsVoteExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from st_village_news_vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_village_news_vote
+    where UID = #{uid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from st_village_news_vote
+    where UID = #{uid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.StVillageNewsVoteExample" >
+    delete from st_village_news_vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StVillageNewsVote" >
+    insert into st_village_news_vote (UID, voteTime, newsId, 
+      userId, liked, dislike
+      )
+    values (#{uid,jdbcType=BIGINT}, #{votetime,jdbcType=TIMESTAMP}, #{newsid,jdbcType=INTEGER}, 
+      #{userid,jdbcType=INTEGER}, #{liked,jdbcType=INTEGER}, #{dislike,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StVillageNewsVote" >
+    insert into st_village_news_vote
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        UID,
+      </if>
+      <if test="votetime != null" >
+        voteTime,
+      </if>
+      <if test="newsid != null" >
+        newsId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="liked != null" >
+        liked,
+      </if>
+      <if test="dislike != null" >
+        dislike,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="votetime != null" >
+        #{votetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsid != null" >
+        #{newsid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="liked != null" >
+        #{liked,jdbcType=INTEGER},
+      </if>
+      <if test="dislike != null" >
+        #{dislike,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.StVillageNewsVoteExample" resultType="java.lang.Integer" >
+    select count(*) from st_village_news_vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_village_news_vote
+    <set >
+      <if test="record.uid != null" >
+        UID = #{record.uid,jdbcType=BIGINT},
+      </if>
+      <if test="record.votetime != null" >
+        voteTime = #{record.votetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.newsid != null" >
+        newsId = #{record.newsid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.liked != null" >
+        liked = #{record.liked,jdbcType=INTEGER},
+      </if>
+      <if test="record.dislike != null" >
+        dislike = #{record.dislike,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_village_news_vote
+    set UID = #{record.uid,jdbcType=BIGINT},
+      voteTime = #{record.votetime,jdbcType=TIMESTAMP},
+      newsId = #{record.newsid,jdbcType=INTEGER},
+      userId = #{record.userid,jdbcType=INTEGER},
+      liked = #{record.liked,jdbcType=INTEGER},
+      dislike = #{record.dislike,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StVillageNewsVote" >
+    update st_village_news_vote
+    <set >
+      <if test="votetime != null" >
+        voteTime = #{votetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newsid != null" >
+        newsId = #{newsid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="liked != null" >
+        liked = #{liked,jdbcType=INTEGER},
+      </if>
+      <if test="dislike != null" >
+        dislike = #{dislike,jdbcType=INTEGER},
+      </if>
+    </set>
+    where UID = #{uid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StVillageNewsVote" >
+    update st_village_news_vote
+    set voteTime = #{votetime,jdbcType=TIMESTAMP},
+      newsId = #{newsid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      liked = #{liked,jdbcType=INTEGER},
+      dislike = #{dislike,jdbcType=INTEGER}
+    where UID = #{uid,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,8 @@
+#header_url_base=http://127.0.0.1:8080/header/
+header_url_base=http://115.159.104.80:80/header/
+Android_Version=1
+Android_Version_url=http://123.207.124.233:8089/apk/iknow.apk
+tabUrl_1=https://www.guahao.com/
+tabUrl_2=https://m.huabaike.com
+tabUrl_3=http://m.meishichina.com/
+tabUrl_4=https://m.changtu.com/

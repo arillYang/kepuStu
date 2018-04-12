@@ -1,0 +1,71 @@
+package com.kepu.apppay.alipay.util;
+
+/* *
+ *类名：AlipayConfig
+ *功能：基础配置类
+ *详细：设置帐户有关信息及返回路径
+ *版本：3.3
+ *日期：2012-08-10
+ *说明：
+ *以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
+ *该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
+	
+ *提示：如何获取安全校验码和合作身份者ID
+ *1.用您的签约支付宝账号登录支付宝网站(www.alipay.com)
+ *2.点击“商家服务”(https://b.alipay.com/order/myOrder.htm)
+ *3.点击“查询合作者身份(PID)”、“查询安全校验码(Key)”
+
+ *安全校验码查看时，输入支付密码后，页面呈灰色的现象，怎么办？
+ *解决方法：
+ *1、检查浏览器配置，不让浏览器做弹框屏蔽设置
+ *2、更换浏览器或电脑，重新登录查询。
+ */
+
+public class AlipayConfig {
+	
+	//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+	
+	// 合作身份者ID，以2088开头由16位纯数字组成的字符串
+	public static String partner = "2088521250928891";//
+	
+	// 卖家支付宝用户号，以2088开头由16位纯数字组成的字符串
+	public static String seller_id = partner;
+	
+	//卖家支付宝账号,一般情况下收款账号就是签约账号
+	public static String seller_email = "2147620158@qq.com";
+	
+	// MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
+    public static String key = "qmn7kbw89077eh3drfkujhxt7pvgn4v2";
+			
+	// 签名方式
+	public static String sign_type = "MD5";
+	
+	// 调试用，创建TXT日志文件夹路径，见AlipayCore.java类中的logResult(String sWord)打印方法。
+	public static String log_path = "D:\\";
+		
+	// 字符编码格式 目前支持 gbk 或 utf-8
+	public static String input_charset = "utf-8";
+		
+	// 支付类型 ，无需修改
+	public static String payment_type = "1";
+		
+	// 调用的接口名，无需修改
+	public static String  service = "http://kp.appwzd.cn/order/async";
+		
+	//入口
+	public static final String GATEWAY = "https://openapi.alipay.com/gateway.do";
+	//appid
+	public static final String APP_ID = "2018022702283534";
+	//商家私钥
+	public static final String APP_PRIVATE_KEY = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC0eEzavxQEgcNz5Qi7en+pTYqBuq6iEFvAsAjRmt3edw7zhBpSLUenxVNAuyAyBq6WiLX4p+kjAExhiRHeY8mBZQUTgGZt+b9zPdZwKpGn7WOjK0IbGpfduH0OwVzija2aBsnSfeGIHGpook3+N7z3skXKztPpETyfKx0BEDeAK/3U/iC/hkkeJKvpa3a3eNVAo6vVAL0G5eAKQcku36cDYxqmMNGyXNOfRTsGpFYYyEgu9NLc1sHQdm8zm+xsACp7FTg1nVHBazthMwyFYg4Sfl1NbqxpM7sn7dHO6yiBeylu0JZK4g+eiqwAh75mEf/ih8uXb8hAMvh8CbjshMKVAgMBAAECggEAArnmf09vn/nN2AxXq21YTFhthTQquywAFtMR7wil3VxzD16pfyBL+s7SSSIKhHbxYDjEdvMiZHL2tGp7qJ5dRuUdxIOmCHdDWxxOBve9p4nAfZCDuSEXtjO5P+XP32RAgRklJ1bbd1DmkpoRD4wMALnisAOb0+N8xPLDx2ZVUExTT/IBNDBzwV69MihHandCYG+LmCjlt0I7L9tXAEM90jlVc1XT5jZTe843+obY9zh65ZCXTGaeq8oLnlZDJliESwcdqFEjSt4ZVO+QnH7iQRhf9EoH4mU30FQsC9oK0H8eJSLwZ4g8UtEehwQSLJMzVic1HwkJiURXFWo91OiKwQKBgQDoFtPMd3vW7UXA1hPk6RMmOExfaIamjsfpg5opxBMwKlgeOa77//kJ1jmoAxodXjyDCbFU//6aEn7w1JZEvqnfb3MBz5v5c5pNae4O0ndyZ/jC8vPR8c2s9Qjqg/UC7yWxT2nepZVPhuQFo3IXGwYsk/w6NhucVuKKVH/QjX4Q3QKBgQDHEA4a0z+6pBJ9NA9Gn61aS5fv7SAhzn+X3F56zP+kf0YHHIg9HvAFOd2aD70JIZtBQVLImJlM32XN6rB0UeJID2gcr8FRD+mzxmxpxapI7I6kAgwiPjmGTMGjiYQyXJDHLyc5VX1m3d8w7kFOLC125nP3M0JwndbN5P+AH1FBGQKBgQDkT4BvBaNHnQYfWvkbGMWDtaI7wQGk25SBfLqtF3ugyCcDJM+kivyb1qfFRbfs6AUzCtftvB7jxgomM5rXaZCGgoZqY6cWT8idGvXakuR6IRmv/XwpLWudFzd8K+9cwZEcyfhl1BH7t8CcY1saq7T5KWLYiN3EgBw+5D0QFgDL6QKBgHcHrqdzsiPUgAnF22yLhoj7srqQvCn65GjWKNidRDAEusb91KlXmoZFd7DrwEl5gvCeMvYn6WMCIknjD+g+HmSgcczVe28RaNlKyQDmZVB9wz1mzAKd2p/nvdIgJKBIoXm5RGcQK5AbE56amQo5eGYknystx4i3mP489FqUX23hAoGARmvmeduVM+cGYVD5bosLvxx3Bvjqu3BwQ91jME43K5C5l/ghC7nmtAQIzwQySfCBWi467CJCBRxDuuADIHnFqGoZhNVtv2FaLn81GMKGpBAWMQk1IQQKZAGEDlbPI6mYar3ty4/DamSGhx6ZWV2puUF9nZFWGhHn/R3NtnanT5o=";
+	//格式
+	public static final String FORMAT = "json";
+	//编码
+	public static final String CHARSET = "utf-8";
+	//阿里公钥
+	public static final String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiXhpOHu1qCMsQRutfsaxhDjOkgnk3bzryU5cBSuLfPBFmnuGDb57WeZTdF6r/q3iO4STbzSd5bqW+rA/3Z0FJMQ6qXqR69lxj2lCngULLv9VMmSCPchJU8eYyi6r20ZxL3HMX/XfxFqIwFq924vn394p2TcOhNbbBOzcYX8tqNDoCfEQGmxEjzvmBBAw4j+CLWD61YBsxfR1jrl71XZAaARh+/TOSWA+zMqt8aO4tZaTKBr4z5NsXiIarKgX810F8Oj2rC/kFIEpgX3YknQYGl7zxlJ5zi9viA2ZigEekis1WKPB2GURmQrqkhwSt/dZxd8DyExat7DCt0qNr1UPjwIDAQAB";
+	//加密类型
+	public static final String SIGN_TYPE = "RSA2";
+	//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+}
