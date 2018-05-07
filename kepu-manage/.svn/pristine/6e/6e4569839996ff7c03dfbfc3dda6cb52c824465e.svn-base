@@ -1,0 +1,4 @@
+#header_url_base=http://127.0.0.1:8080/header/
+header_url_base=http://115.159.104.80:8080/header/
+Android_Version=1
+Android_Version_url=http://115.159.104.80:8089/apk/kepu.apk

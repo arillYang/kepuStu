@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StLogMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StLog" >
+    <id column="UID" property="uid" jdbcType="BIGINT" />
+    <result column="requestUrl" property="requesturl" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="countyId" property="countyid" jdbcType="INTEGER" />
+    <result column="townId" property="townid" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="style" property="style" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    UID, requestUrl, userId, countyId, townId, createTime, IP, type, style
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.StLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from st_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_log
+    where UID = #{uid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from st_log
+    where UID = #{uid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.StLogExample" >
+    delete from st_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StLog" >
+    insert into st_log (UID, requestUrl, userId, 
+      countyId, townId, createTime, 
+      IP, type, style)
+    values (#{uid,jdbcType=BIGINT}, #{requesturl,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{countyid,jdbcType=INTEGER}, #{townid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{ip,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{style,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StLog" >
+    insert into st_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        UID,
+      </if>
+      <if test="requesturl != null" >
+        requestUrl,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="countyid != null" >
+        countyId,
+      </if>
+      <if test="townid != null" >
+        townId,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="ip != null" >
+        IP,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="style != null" >
+        style,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="requesturl != null" >
+        #{requesturl,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="countyid != null" >
+        #{countyid,jdbcType=INTEGER},
+      </if>
+      <if test="townid != null" >
+        #{townid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="style != null" >
+        #{style,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.StLogExample" resultType="java.lang.Integer" >
+    select count(*) from st_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_log
+    <set >
+      <if test="record.uid != null" >
+        UID = #{record.uid,jdbcType=BIGINT},
+      </if>
+      <if test="record.requesturl != null" >
+        requestUrl = #{record.requesturl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.countyid != null" >
+        countyId = #{record.countyid,jdbcType=INTEGER},
+      </if>
+      <if test="record.townid != null" >
+        townId = #{record.townid,jdbcType=INTEGER},
+      </if>
+      <if test="record.createtime != null" >
+        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ip != null" >
+        IP = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.style != null" >
+        style = #{record.style,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_log
+    set UID = #{record.uid,jdbcType=BIGINT},
+      requestUrl = #{record.requesturl,jdbcType=VARCHAR},
+      userId = #{record.userid,jdbcType=INTEGER},
+      countyId = #{record.countyid,jdbcType=INTEGER},
+      townId = #{record.townid,jdbcType=INTEGER},
+      createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      IP = #{record.ip,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=INTEGER},
+      style = #{record.style,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StLog" >
+    update st_log
+    <set >
+      <if test="requesturl != null" >
+        requestUrl = #{requesturl,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="countyid != null" >
+        countyId = #{countyid,jdbcType=INTEGER},
+      </if>
+      <if test="townid != null" >
+        townId = #{townid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null" >
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="style != null" >
+        style = #{style,jdbcType=INTEGER},
+      </if>
+    </set>
+    where UID = #{uid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StLog" >
+    update st_log
+    set requestUrl = #{requesturl,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=INTEGER},
+      countyId = #{countyid,jdbcType=INTEGER},
+      townId = #{townid,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      IP = #{ip,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      style = #{style,jdbcType=INTEGER}
+    where UID = #{uid,jdbcType=BIGINT}
+  </update>
+</mapper>

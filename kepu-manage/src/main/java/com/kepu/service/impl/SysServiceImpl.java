@@ -1,0 +1,370 @@
+package com.kepu.service.impl;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.kepu.constant.ResultConstant;
+import com.kepu.dao.JedisClient;
+import com.kepu.mapper.ProportionSettingMapper;
+import com.kepu.mapper.StCommentMapper;
+import com.kepu.mapper.StDeviceMapper;
+import com.kepu.mapper.StDictionaryMapper;
+import com.kepu.mapper.StReportMapper;
+import com.kepu.mapper.StUserMapper;
+import com.kepu.mapper.StVillageMapper;
+import com.kepu.pojo.KePuResult;
+import com.kepu.pojo.ProportionSetting;
+import com.kepu.pojo.StComment;
+import com.kepu.pojo.StCommentExample;
+import com.kepu.pojo.StDevice;
+import com.kepu.pojo.StDictionary;
+import com.kepu.pojo.StDictionaryExample;
+import com.kepu.pojo.StReport;
+import com.kepu.pojo.StReportExample;
+import com.kepu.pojo.StVillage;
+import com.kepu.pojo.StVillageExample;
+import com.kepu.pojo.activity.CoefficientSet;
+import com.kepu.pojo.news.VillageResult;
+import com.kepu.service.ActivityService;
+import com.kepu.service.SysService;
+import com.kepu.util.JsonUtils;
+import com.kepu.util.MD5Util;
+import com.kepu.util.StringUtil;
+
+@Service
+public class SysServiceImpl implements SysService{
+
+	
+	@Autowired
+	private StDictionaryMapper stDictionaryMapper;
+	@Autowired
+	private StUserMapper stUserMapper;
+	@Autowired
+	private StCommentMapper commentMapper;
+	@Autowired
+	private JedisClient jedisClient;
+	@Autowired
+	private StDeviceMapper deviceMapper;
+	@Autowired
+	private StReportMapper reportMapper;
+	@Autowired
+	private StVillageMapper villageMapper;
+	@Autowired
+	private ActivityService activityService;
+	@Autowired
+	private ProportionSettingMapper proportionSetting;
+	
+	@Override
+	public String getLaunchPage() {
+		StDictionaryExample example=new StDictionaryExample();
+		StDictionaryExample.Criteria criteria=example.createCriteria();
+		criteria.andDicKeyEqualTo("launchPage");
+		List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+		if(list.size()==0)
+			return "";
+		return list.get(0).getDicValue();
+	}
+
+	
+
+	@Override
+	public String getAboutUs() {
+		StDictionaryExample example=new StDictionaryExample();
+		StDictionaryExample.Criteria criteria=example.createCriteria();
+		criteria.andDicKeyEqualTo("about_us");
+		List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+		if(list.size()==0)
+			return "";
+		return list.get(0).getDicValue();
+	}
+
+
+
+	@Override
+	public void insertDeviceMessage(StDevice stDevice) {
+		stDevice.setCreatetime(new Date());
+		deviceMapper.insertSelective(stDevice);
+	}
+
+
+
+	@Override
+	public KePuResult reportNewsComment(Integer userId,Long commentId) {
+		StComment comment = commentMapper.selectByPrimaryKey(commentId);
+		if(comment==null)
+			return KePuResult.ok(ResultConstant.code_yewu, "�������ѱ�ɾ��򲻴���", "");
+		StReportExample example=new StReportExample();
+		StReportExample.Criteria criteria=example.createCriteria();
+		criteria.andCommentidEqualTo(commentId);
+		List<StReport> reportList = reportMapper.selectByExample(example);
+		if(reportList.size()!=0)
+			return KePuResult.ok(ResultConstant.code_yewu, "��ľٱ��ѱ������û��ύ���л���֧��", "");
+		StReport report=new StReport();
+		report.setCommentid(commentId);
+		report.setReportuser(userId);
+		report.setCreatetime(new Date());
+		reportMapper.insertSelective(report);
+		return KePuResult.ok(ResultConstant.code_ok, "�ٱ��ɹ�","");
+	}
+
+
+
+	@Override
+	public StVillage getVillageById(Integer villageId) {
+		return villageMapper.selectByPrimaryKey(villageId);
+	}
+
+
+
+	@Override
+	public List<StVillage> getTowns() {
+		StVillageExample example=new StVillageExample();
+		StVillageExample.Criteria criteria=example.createCriteria();
+		criteria.andParentEqualTo(-1);
+		return villageMapper.selectByExample(example);
+	}
+
+
+
+	@Override
+	public Integer getTownIdByVillageId(Integer villageId) {
+		 StVillage v = villageMapper.selectByPrimaryKey(villageId);
+		 if(v!=null)
+			 return v.getParent();
+		 return -1;
+	}
+
+
+
+	@Override
+	public Map<Integer, String> getAddressName() {
+		Map<Integer, String> map=new HashMap<Integer, String>();
+		List<VillageResult> list = villageMapper.getAddressName();
+		for (VillageResult villageResult : list) {
+			map.put(villageResult.getId(), villageResult.getParentName()+" "+villageResult.getName());
+		}
+		return map;
+	}
+
+	@Override
+	public Map<String, List<String>> getAddressName2() {
+		Map<String, List<String>> map=new HashMap<String, List<String>>();
+		StVillageExample example=new StVillageExample();
+		StVillageExample.Criteria criteria=example.createCriteria();
+		List<StVillage> list = villageMapper.selectByExample(example);
+		LinkedList<String> temp=new LinkedList<String>();
+		for (StVillage stVillage : list) {
+			temp=new LinkedList<String>();
+			temp.add(stVillage.getName());
+			map.put(stVillage.getId()+"", temp);
+		}
+		return map;
+	}
+	
+	@Override
+	public Map<String, List<String>> getR() {
+		Map<String, List<String>> map=new HashMap<String, List<String>>();
+		LinkedList<String> temp=new LinkedList<String>();
+		for (int i = 1; i <= 21; i++) {
+			StVillageExample example=new StVillageExample();
+			StVillageExample.Criteria criteria=example.createCriteria();
+			criteria.andParentEqualTo(i);
+			List<StVillage> list = villageMapper.selectByExample(example);
+			temp=new LinkedList<String>();
+			for (StVillage stVillage : list) {
+				 temp.add(stVillage.getId()+"");
+			}
+			map.put(i+"", temp);
+		}
+		return map;
+	}
+
+
+	@Override
+	public String getVillageNameById(Integer villageId) {
+		StVillage l = villageMapper.selectByPrimaryKey(villageId);
+		if(l!=null)
+			return l.getName();
+		return "";
+	}
+
+
+
+	@Override
+	public void SaveSystemParams(String launchPage, String guides,String about_us,
+			String temp,String need_approve,CoefficientSet set) {
+		if(StringUtil.isNotEmpty(launchPage)){
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo("launchPage");
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(launchPage);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+			}
+		}
+		if(StringUtil.isNotEmpty(guides)){
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo("guidePage");
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(guides);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+			}
+		}
+		if(StringUtil.isNotEmpty(about_us)){
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo("content");
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(about_us);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+			}
+		}
+		if(StringUtil.isNotEmpty(temp)){
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo("temp");
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(temp);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+			}
+		}
+		if(StringUtil.isNotEmpty(need_approve)){
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo("need_approve");
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(need_approve);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+			}
+		}
+		if(set!=null){
+			String result=set.getCoefficient_1()+",";
+			result+=set.getCoefficient_2()+",";
+			result+=set.getCoefficient_3()+",";
+			result+=set.getCoefficient_4()+",";
+			result+=set.getCoefficient_5()+",";
+			result+=set.getCoefficient_6()+",";
+			result+=set.getCoefficient_7();
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo("coefficient");
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(result);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+				// 更新系数
+				activityService.setCoefficient(1, Double.valueOf(set.getCoefficient_1()));
+				activityService.setCoefficient(11, Double.valueOf(set.getCoefficient_1()));
+				activityService.setCoefficient(2, Double.valueOf(set.getCoefficient_2()));
+				activityService.setCoefficient(21, Double.valueOf(set.getCoefficient_2()));
+				activityService.setCoefficient(3, Double.valueOf(set.getCoefficient_3()));
+				activityService.setCoefficient(31, Double.valueOf(set.getCoefficient_3()));
+				activityService.setCoefficient(4, Double.valueOf(set.getCoefficient_4()));
+				activityService.setCoefficient(5, Double.valueOf(set.getCoefficient_5()));
+				activityService.setCoefficient(51, Double.valueOf(set.getCoefficient_5()));
+				activityService.setCoefficient(6, Double.valueOf(set.getCoefficient_6()));
+				activityService.setCoefficient(7, Double.valueOf(set.getCoefficient_7()));
+			}
+		}
+	}
+
+
+
+	@Override
+	public String getParameter(String key) {
+		StDictionaryExample example=new StDictionaryExample();
+		StDictionaryExample.Criteria criteria=example.createCriteria();
+		criteria.andDicKeyEqualTo(key);
+		List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+		if(list.size()==0)
+			return "";
+		return list.get(0).getDicValue();
+	}
+
+
+
+	@Override
+	public List<String> getGuidePage() {
+		StDictionaryExample example=new StDictionaryExample();
+		StDictionaryExample.Criteria criteria=example.createCriteria();
+		criteria.andDicKeyEqualTo("guidePage");
+		List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+		if(list.size()==0)
+			return null;
+		String value=list.get(0).getDicValue();
+		return Arrays.asList(value.split(","));
+	}
+
+
+
+	@Override
+	public List<StVillage> getVillages(Integer townId) {
+		StVillageExample example=new StVillageExample();
+		StVillageExample.Criteria criteria=example.createCriteria();
+		criteria.andParentEqualTo(townId);
+		return villageMapper.selectByExample(example);
+	}
+
+
+
+	@Override
+	public void saveParameter(String key, String value) {
+		if(StringUtil.isNotEmpty(key)){
+			StDictionaryExample example=new StDictionaryExample();
+			StDictionaryExample.Criteria criteria=example.createCriteria();
+			criteria.andDicKeyEqualTo(key);
+			List<StDictionary> list = stDictionaryMapper.selectByExample(example);
+			if(list.size()!=0){
+				StDictionary dic=list.get(0);
+				dic.setDicValue(value);
+				dic.setUpdatetime(new Date());
+				stDictionaryMapper.updateByExampleSelective(dic, example);
+			}
+		}
+	}
+
+
+
+	@Override
+	public ProportionSetting findProportionSetting(int setting_id) {
+		// TODO Auto-generated method stub
+		return proportionSetting.selectByPrimaryKey(setting_id);
+	}
+
+
+
+	@Override
+	public int updateProportionSetting(ProportionSetting proport) {
+		// TODO Auto-generated method stub
+		return proportionSetting.updateByPrimaryKeySelective(proport);
+	}
+
+
+}

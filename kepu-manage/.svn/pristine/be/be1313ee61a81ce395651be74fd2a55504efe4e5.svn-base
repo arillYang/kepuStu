@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StTabMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StTab" >
+    <id column="tabId" property="tabid" jdbcType="INTEGER" />
+    <result column="tabName" property="tabname" jdbcType="VARCHAR" />
+    <result column="tabPic" property="tabpic" jdbcType="VARCHAR" />
+    <result column="tabType" property="tabtype" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="tabUrl" property="taburl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    tabId, tabName, tabPic, tabType, createtime, state, tabUrl
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.StTabExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from st_tab
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_tab
+    where tabId = #{tabid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st_tab
+    where tabId = #{tabid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.StTabExample" >
+    delete from st_tab
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StTab" >
+    insert into st_tab (tabId, tabName, tabPic, 
+      tabType, createtime, state, 
+      tabUrl)
+    values (#{tabid,jdbcType=INTEGER}, #{tabname,jdbcType=VARCHAR}, #{tabpic,jdbcType=VARCHAR}, 
+      #{tabtype,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
+      #{taburl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StTab" >
+    insert into st_tab
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tabid != null" >
+        tabId,
+      </if>
+      <if test="tabname != null" >
+        tabName,
+      </if>
+      <if test="tabpic != null" >
+        tabPic,
+      </if>
+      <if test="tabtype != null" >
+        tabType,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="taburl != null" >
+        tabUrl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tabid != null" >
+        #{tabid,jdbcType=INTEGER},
+      </if>
+      <if test="tabname != null" >
+        #{tabname,jdbcType=VARCHAR},
+      </if>
+      <if test="tabpic != null" >
+        #{tabpic,jdbcType=VARCHAR},
+      </if>
+      <if test="tabtype != null" >
+        #{tabtype,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="taburl != null" >
+        #{taburl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.StTabExample" resultType="java.lang.Integer" >
+    select count(*) from st_tab
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_tab
+    <set >
+      <if test="record.tabid != null" >
+        tabId = #{record.tabid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tabname != null" >
+        tabName = #{record.tabname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tabpic != null" >
+        tabPic = #{record.tabpic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tabtype != null" >
+        tabType = #{record.tabtype,jdbcType=INTEGER},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.taburl != null" >
+        tabUrl = #{record.taburl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_tab
+    set tabId = #{record.tabid,jdbcType=INTEGER},
+      tabName = #{record.tabname,jdbcType=VARCHAR},
+      tabPic = #{record.tabpic,jdbcType=VARCHAR},
+      tabType = #{record.tabtype,jdbcType=INTEGER},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=INTEGER},
+      tabUrl = #{record.taburl,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StTab" >
+    update st_tab
+    <set >
+      <if test="tabname != null" >
+        tabName = #{tabname,jdbcType=VARCHAR},
+      </if>
+      <if test="tabpic != null" >
+        tabPic = #{tabpic,jdbcType=VARCHAR},
+      </if>
+      <if test="tabtype != null" >
+        tabType = #{tabtype,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="taburl != null" >
+        tabUrl = #{taburl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tabId = #{tabid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StTab" >
+    update st_tab
+    set tabName = #{tabname,jdbcType=VARCHAR},
+      tabPic = #{tabpic,jdbcType=VARCHAR},
+      tabType = #{tabtype,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      tabUrl = #{taburl,jdbcType=VARCHAR}
+    where tabId = #{tabid,jdbcType=INTEGER}
+  </update>
+</mapper>

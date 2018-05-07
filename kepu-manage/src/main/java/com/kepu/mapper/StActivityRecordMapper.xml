@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StActivityRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StActivityRecord" >
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="showName" property="showname" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="DOUBLE" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="town" property="town" jdbcType="INTEGER" />
+    <result column="village" property="village" jdbcType="INTEGER" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="rest" property="rest" jdbcType="DOUBLE" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userId, showName, score, createtime, town, village, message, rest, mobile, type
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.StActivityRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from st_activity_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.StActivityRecordExample" >
+    delete from st_activity_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StActivityRecord" >
+    insert into st_activity_record (userId, showName, score, 
+      createtime, town, village, 
+      message, rest, mobile, 
+      type)
+    values (#{userid,jdbcType=INTEGER}, #{showname,jdbcType=VARCHAR}, #{score,jdbcType=DOUBLE}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{town,jdbcType=INTEGER}, #{village,jdbcType=INTEGER}, 
+      #{message,jdbcType=VARCHAR}, #{rest,jdbcType=DOUBLE}, #{mobile,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StActivityRecord" >
+    insert into st_activity_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="showname != null" >
+        showName,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="town != null" >
+        town,
+      </if>
+      <if test="village != null" >
+        village,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="rest != null" >
+        rest,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="showname != null" >
+        #{showname,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="town != null" >
+        #{town,jdbcType=INTEGER},
+      </if>
+      <if test="village != null" >
+        #{village,jdbcType=INTEGER},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="rest != null" >
+        #{rest,jdbcType=DOUBLE},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.StActivityRecordExample" resultType="java.lang.Integer" >
+    select count(*) from st_activity_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_activity_record
+    <set >
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.showname != null" >
+        showName = #{record.showname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.score != null" >
+        score = #{record.score,jdbcType=DOUBLE},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.town != null" >
+        town = #{record.town,jdbcType=INTEGER},
+      </if>
+      <if test="record.village != null" >
+        village = #{record.village,jdbcType=INTEGER},
+      </if>
+      <if test="record.message != null" >
+        message = #{record.message,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rest != null" >
+        rest = #{record.rest,jdbcType=DOUBLE},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_activity_record
+    set userId = #{record.userid,jdbcType=INTEGER},
+      showName = #{record.showname,jdbcType=VARCHAR},
+      score = #{record.score,jdbcType=DOUBLE},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      town = #{record.town,jdbcType=INTEGER},
+      village = #{record.village,jdbcType=INTEGER},
+      message = #{record.message,jdbcType=VARCHAR},
+      rest = #{record.rest,jdbcType=DOUBLE},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+   <select id="getActivityResult" parameterType="map"  resultType="com.kepu.pojo.activity.ActivityResult" >  
+     select  showName,userId,mobile,town,village,total,rowNum
+       from (SELECT  
+       <!-- (@rowNum:=@rowNum+1)  --> -1
+       AS rowNum,t.* FROM 
+	   (SELECT showName,userId,mobile,town,village,SUM(score*rest) AS total,createtime
+	   FROM st_activity_record 
+	   <where>
+			<if test="param.town!=null">
+			   and   town = #{param.town,jdbcType=INTEGER}
+			</if>
+			<if test="param.d1!=null">
+			    and createtime &gt;= #{param.d1,jdbcType=TIMESTAMP}  
+			</if>
+			<if test="param.d2!=null">
+			    and createtime &lt;= #{param.d2,jdbcType=TIMESTAMP} 
+			</if>
+	   </where>
+	   GROUP BY userId 
+	   ORDER BY total DESC
+	   )AS t
+	   <if test="param.paiming!=null">
+	       limit 0,#{param.paiming,jdbcType=INTEGER}  
+	   </if>
+	   <!-- ,(SELECT (@rowNum:=0)) b -->
+	   )as temp 
+	   <where>
+	   		<!-- <if test="param.paiming!=null">
+			    and rowNum &lt;= #{param.paiming,jdbcType=INTEGER}  
+			</if> -->
+			<if test="param.mobile!=null">
+			   and   mobile like #{param.mobile,jdbcType=INTEGER}
+			</if>
+	   </where>
+  </select>
+  <select id="getPaiming" parameterType="map"  resultType="java.lang.Integer" >  
+     select  COUNT(*)
+       from (SELECT  -1
+       AS rowNum,t.* FROM 
+	   (SELECT showName,userId,mobile,town,village,SUM(score*rest) AS total,createtime
+	   FROM st_activity_record 
+	   <where>
+			<if test="param.town!=null">
+			   and   town = #{param.town,jdbcType=INTEGER}
+			</if>
+			<if test="param.d1!=null">
+			    and createtime &gt;= #{param.d1,jdbcType=TIMESTAMP}  
+			</if>
+			<if test="param.d2!=null">
+			    and createtime &lt;= #{param.d2,jdbcType=TIMESTAMP} 
+			</if>
+	   </where>
+	   GROUP BY userId 
+	   ORDER BY total DESC
+	   )AS t WHERE t.total> #{param.score,jdbcType=DOUBLE}
+	   <if test="param.paiming!=null">
+	       limit 0,#{param.paiming,jdbcType=INTEGER}  
+	   </if>
+	   )as temp 
+  </select>
+  <update id="updateShowName" >
+    	UPDATE st_activity_record 
+			SET st_activity_record.showName=
+			(	
+				SELECT st_user.nickName
+				FROM st_user 
+				WHERE st_user.userId=st_activity_record.userId
+			)
+  </update>
+  
+  <select id="selectStActivityRecord" resultMap="BaseResultMap">
+    select sta.userId,sta.score,sta.createtime,sta.message from st_activity_record as sta LEFT JOIN st_user as stu on sta.userId=stu.userId where stu.userId='11125'
+  </select>
+  
+</mapper>

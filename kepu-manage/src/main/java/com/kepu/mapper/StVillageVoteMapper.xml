@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StVillageVoteMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StVillageVote" >
+    <id column="UID" property="uid" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="voteTime" property="votetime" jdbcType="TIMESTAMP" />
+    <result column="typeId" property="typeid" jdbcType="BIGINT" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    UID, type, voteTime, typeId, userId, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.StVillageVoteExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from st_village_vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_village_vote
+    where UID = #{uid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from st_village_vote
+    where UID = #{uid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.StVillageVoteExample" >
+    delete from st_village_vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StVillageVote" >
+    insert into st_village_vote (UID, type, voteTime, 
+      typeId, userId, status
+      )
+    values (#{uid,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{votetime,jdbcType=TIMESTAMP}, 
+      #{typeid,jdbcType=BIGINT}, #{userid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StVillageVote" >
+    insert into st_village_vote
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        UID,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="votetime != null" >
+        voteTime,
+      </if>
+      <if test="typeid != null" >
+        typeId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="votetime != null" >
+        #{votetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typeid != null" >
+        #{typeid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.StVillageVoteExample" resultType="java.lang.Integer" >
+    select count(*) from st_village_vote
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_village_vote
+    <set >
+      <if test="record.uid != null" >
+        UID = #{record.uid,jdbcType=BIGINT},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.votetime != null" >
+        voteTime = #{record.votetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.typeid != null" >
+        typeId = #{record.typeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_village_vote
+    set UID = #{record.uid,jdbcType=BIGINT},
+      type = #{record.type,jdbcType=INTEGER},
+      voteTime = #{record.votetime,jdbcType=TIMESTAMP},
+      typeId = #{record.typeid,jdbcType=BIGINT},
+      userId = #{record.userid,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StVillageVote" >
+    update st_village_vote
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="votetime != null" >
+        voteTime = #{votetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typeid != null" >
+        typeId = #{typeid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where UID = #{uid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StVillageVote" >
+    update st_village_vote
+    set type = #{type,jdbcType=INTEGER},
+      voteTime = #{votetime,jdbcType=TIMESTAMP},
+      typeId = #{typeid,jdbcType=BIGINT},
+      userId = #{userid,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER}
+    where UID = #{uid,jdbcType=BIGINT}
+  </update>
+</mapper>

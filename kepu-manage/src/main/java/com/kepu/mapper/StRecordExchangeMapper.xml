@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.StRecordExchangeMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.StRecordExchange" >
+    <id column="recordid" property="recordid" jdbcType="INTEGER" />
+    <result column="recordname" property="recordname" jdbcType="VARCHAR" />
+    <result column="recordtime" property="recordtime" jdbcType="TIMESTAMP" />
+    <result column="recordintegral" property="recordintegral" jdbcType="DOUBLE" />
+    <result column="recordimg" property="recordimg" jdbcType="VARCHAR" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    recordid, recordname, recordtime, recordintegral, recordimg, userid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_record_exchange
+    where recordid = #{recordid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st_record_exchange
+    where recordid = #{recordid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.StRecordExchange" >
+    insert into st_record_exchange (recordid, recordname, recordtime, 
+      recordintegral, recordimg, userid
+      )
+    values (#{recordid,jdbcType=INTEGER}, #{recordname,jdbcType=VARCHAR}, #{recordtime,jdbcType=TIMESTAMP}, 
+      #{recordintegral,jdbcType=DOUBLE}, #{recordimg,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.StRecordExchange" >
+    insert into st_record_exchange
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordid != null" >
+        recordid,
+      </if>
+      <if test="recordname != null" >
+        recordname,
+      </if>
+      <if test="recordtime != null" >
+        recordtime,
+      </if>
+      <if test="recordintegral != null" >
+        recordintegral,
+      </if>
+      <if test="recordimg != null" >
+        recordimg,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordid != null" >
+        #{recordid,jdbcType=INTEGER},
+      </if>
+      <if test="recordname != null" >
+        #{recordname,jdbcType=VARCHAR},
+      </if>
+      <if test="recordtime != null" >
+        #{recordtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordintegral != null" >
+        #{recordintegral,jdbcType=DOUBLE},
+      </if>
+      <if test="recordimg != null" >
+        #{recordimg,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StRecordExchange" >
+    update st_record_exchange
+    <set >
+      <if test="recordname != null" >
+        recordname = #{recordname,jdbcType=VARCHAR},
+      </if>
+      <if test="recordtime != null" >
+        recordtime = #{recordtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordintegral != null" >
+        recordintegral = #{recordintegral,jdbcType=DOUBLE},
+      </if>
+      <if test="recordimg != null" >
+        recordimg = #{recordimg,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where recordid = #{recordid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.StRecordExchange" >
+    update st_record_exchange
+    set recordname = #{recordname,jdbcType=VARCHAR},
+      recordtime = #{recordtime,jdbcType=TIMESTAMP},
+      recordintegral = #{recordintegral,jdbcType=DOUBLE},
+      recordimg = #{recordimg,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER}
+    where recordid = #{recordid,jdbcType=INTEGER}
+  </update>
+  
+  
+   <select id="selectByPrimaryKeylist" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_record_exchange
+  </select>
+  
+  
+     <select id="selectPrimaryKeydesclist" resultMap="BaseResultMap" >
+   SELECT (@rownum:=@rownum+1) AS recordid, a.* FROM st_record_exchange a, (SELECT @rownum:= 0 ) r  ORDER BY a.recordintegral DESC 
+
+  </select>
+  
+  
+ 
+</mapper>
