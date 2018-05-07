@@ -24,8 +24,6 @@ import com.kepu.pojo.community.TeachResult;
 import com.kepu.service.CommunityService;
 import com.kepu.service.UserService;
 import com.kepu.util.ExceptionUtil;
-import com.kepu.util.JsonUtils;
-import com.kepu.util.LotteryUtil;
 import com.kepu.util.StringUtil;
 
 
@@ -41,7 +39,7 @@ public class TeamController {
 	@Autowired
 	private JedisClient jedisClient;
 	/**
-	 * »ñÈ¡ÍÆ¼öÉçÍÅ 
+	 * è·å–æ¨èç¤¾å›¢ 
 	 * @return
 	 */
 	@RequestMapping(value="getCarousel")
@@ -50,7 +48,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.getCarousel(stUser2.getUserid(),10);
 		} catch (Exception e) {
@@ -59,17 +57,17 @@ public class TeamController {
 	}
 	
 	/**
-	 * »ñÈ¡ËùÓĞÉçÍÅ
+	 * è·å–æ‰€æœ‰ç¤¾å›¢
 	 * @return
 	 */
 	@RequestMapping(value="getAllCommunity/{page}")
 	public @ResponseBody Object getAllCommunity(@PathVariable Integer page,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.getAllCommunity(stUser2.getUserid(), page, 10,null);
 		} catch (Exception e) {
@@ -78,7 +76,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ËÑË÷ÉçÍÅ
+	 * æœç´¢ç¤¾å›¢
 	 * @return
 	 */
 	@RequestMapping(value="search/{page}")
@@ -86,13 +84,13 @@ public class TeamController {
 		try {
 			String query=request.getParameter("q");
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(StringUtil.isEmpty(query))
-				return KePuResult.build(ResultConstant.code_param, "ËÑË÷´Ê²»ÄÜÎª¿Õ","");	
+				return KePuResult.build(ResultConstant.code_param, "æœç´¢è¯ä¸èƒ½ä¸ºç©º","");	
 			if(page==1)
 				communityService.addHotSearch(query);
 			return communityService.getAllCommunity(stUser2.getUserid(), page, 10,query);
@@ -102,7 +100,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * »ñÈ¡ÉçÍÅÈÈËÑ´Ê»ã
+	 * è·å–ç¤¾å›¢çƒ­æœè¯æ±‡
 	 * @return
 	 */
 	@RequestMapping(value="getHotSearch")
@@ -115,7 +113,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * »ñÈ¡ÎÒµÄÉçÍÅ
+	 * è·å–æˆ‘çš„ç¤¾å›¢
 	 * @return
 	 */
 	@RequestMapping(value="MyCommunity")
@@ -124,7 +122,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.getMyCommunity(stUser2.getUserid(),timestamp==null?715363200000L
 					:timestamp);
@@ -134,7 +132,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ¼ÓÈëÆÕÍ¨ÉçÍÅ
+	 * åŠ å…¥æ™®é€šç¤¾å›¢
 	 * @return
 	 */
 	@RequestMapping(value="joinCommunity/{communityId}")
@@ -143,7 +141,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.joinCommunity(stUser2.getUserid(),communityId);
 		} catch (Exception e) {
@@ -152,7 +150,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ÉêÇëÕı¹æÉçÍÅ
+	 * ç”³è¯·æ­£è§„ç¤¾å›¢
 	 * @return
 	 */
 	@RequestMapping(value="applyCommunity/{communityId}")
@@ -161,7 +159,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String userName="";
 			String mobile="";
@@ -213,7 +211,7 @@ public class TeamController {
 			}
 			
 			/*if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}*/
 			return communityService.applyCommunity(stUser2.getUserid(),communityId, 
 					 userName, mobile, IDcardZ,IDcardF, position, credential,
@@ -224,7 +222,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ÍË³öÉçÍÅ
+	 * é€€å‡ºç¤¾å›¢
 	 * @return
 	 */
 	@RequestMapping(value="quit/{communityId}")
@@ -233,7 +231,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.quitCommunity(stUser2.getUserid(),communityId);
 		} catch (Exception e) {
@@ -241,7 +239,7 @@ public class TeamController {
 		}
 	}
 	/**
-	 * ·¢²¼ÉçÍÅÌû×Ó
+	 * å‘å¸ƒç¤¾å›¢å¸–å­
 	 * @return
 	 */
 	@RequestMapping(value="publishArticle/{communityId}")
@@ -250,25 +248,25 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			String temp=jedisClient.get("QPS_Article"+token);
 			if(StringUtil.isNotEmpty(temp)){
-				return KePuResult.build(ResultConstant.code_yewu, "ÇëÇóÌ«Æµ·±,ÇëÉÔºóÔÙÊÔ", "");
+				return KePuResult.build(ResultConstant.code_yewu, "è¯·æ±‚å¤ªé¢‘ç¹,è¯·ç¨åå†è¯•", "");
 			}
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(communityId<10000){
 				if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-					return KePuResult.build(ResultConstant.code_yewu, "·ÇÉçÍÅ³ÉÔ±²»ÄÜ·¢±íÌû×Ó", "");
+					return KePuResult.build(ResultConstant.code_yewu, "éç¤¾å›¢æˆå‘˜ä¸èƒ½å‘è¡¨å¸–å­", "");
 				}
 			}else{
 				int area=stUser2.getArea();
 				if(area!=communityId)
-					return KePuResult.build(ResultConstant.code_yewu, "Ö»ÄÜ·ÃÎÊ×¢²á±¾µØÈ¦×Ó", "");
+					return KePuResult.build(ResultConstant.code_yewu, "åªèƒ½è®¿é—®æ³¨å†Œæœ¬åœ°åœˆå­", "");
 			}
 			String content=map.get("content")==null?"":map.get("content");
 			String detailPics=map.get("detailPics")==null?"":map.get("detailPics");
 			if(StringUtil.isEmpty(content)&&StringUtil.isEmpty(detailPics))
-				return KePuResult.build(ResultConstant.code_param, "ÄÚÈİºÍÅäÍ¼²»ÄÜÍ¬Ê±Îª¿Õ", "");	
+				return KePuResult.build(ResultConstant.code_param, "å†…å®¹å’Œé…å›¾ä¸èƒ½åŒæ—¶ä¸ºç©º", "");	
 			jedisClient.set("QPS_Article"+token,"1");
 			jedisClient.expire("QPS_Article"+token, 10);
 			return communityService.publishArticle(stUser2.getUserid(),communityId, 
@@ -285,12 +283,12 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String content=map.get("content")==null?"":map.get("content");
 			String detailPics=map.get("detailPics")==null?"":map.get("detailPics");
 			if(StringUtil.isEmpty(content)&&StringUtil.isEmpty(detailPics))
-				return KePuResult.build(ResultConstant.code_param, "ÄÚÈİºÍÅäÍ¼²»ÄÜÍ¬Ê±Îª¿Õ", "");	
+				return KePuResult.build(ResultConstant.code_param, "å†…å®¹å’Œé…å›¾ä¸èƒ½åŒæ—¶ä¸ºç©º", "");	
 			return communityService.editArticle(stUser2.getUserid(), articleId, content, detailPics);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -303,7 +301,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.deleteArticle(stUser2.getUserid(), articleId);
 		} catch (Exception e) {
@@ -311,7 +309,7 @@ public class TeamController {
 		}
 	}
 	/**
-	 * ÉçÍÅÌû×ÓÁĞ±í
+	 * ç¤¾å›¢å¸–å­åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getArticle/{communityId}/{page}")
@@ -321,16 +319,16 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(communityId<10000){
 				if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-					return KePuResult.build(ResultConstant.code_yewu, "·ÇÉçÍÅ³ÉÔ±²»ÄÜä¯ÀÀÌû×Ó", "");
+					return KePuResult.build(ResultConstant.code_yewu, "éç¤¾å›¢æˆå‘˜ä¸èƒ½æµè§ˆå¸–å­", "");
 				}
 			}else{
 				int area=stUser2.getArea();
 				if(area!=communityId)
-					return KePuResult.build(ResultConstant.code_yewu, "·Ç±¾ÏçÕò³ÉÔ±²»ÄÜä¯ÀÀÌû×Ó", "");
+					return KePuResult.build(ResultConstant.code_yewu, "éæœ¬ä¹¡é•‡æˆå‘˜ä¸èƒ½æµè§ˆå¸–å­", "");
 			}
 			return communityService.getArticle(stUser2.getUserid(),communityId,page,10);
 		} catch (Exception e) {
@@ -338,7 +336,7 @@ public class TeamController {
 		}
 	}
 	/**
-	 * ÎÒ·¢²¼µÄÉçÍÅÌû×Ó/ÉçÍÅÌû×Ó
+	 * æˆ‘å‘å¸ƒçš„ç¤¾å›¢å¸–å­/ç¤¾å›¢å¸–å­
 	 * @return
 	 */
 	@RequestMapping(value="getMyArticle/{page}")
@@ -348,7 +346,7 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return communityService.getMyArticle(stUser2.getUserid(), page, 10, type==null?1:type);
 		} catch (Exception e) {
@@ -356,18 +354,18 @@ public class TeamController {
 		}
 	}
 	/**
-	 * Ìû×ÓµãÔŞ/È¡Ïû
+	 * å¸–å­ç‚¹èµ/å–æ¶ˆ
 	 * @return
 	 */
 	@RequestMapping(value="dp/{articleId}/{operate}")
 	public @ResponseBody Object dp(@PathVariable Integer articleId,
 			@PathVariable Integer operate,HttpServletRequest request){
 		try {
-			// operate=1 µã»÷  operate=0 È¡Ïû
+			// operate=1 ç‚¹å‡»  operate=0 å–æ¶ˆ
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser user=userService.getUserByToken(token);
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			return communityService.dpArticle(articleId,user.getUserid(), operate);
 		} catch (Exception e) {
@@ -376,7 +374,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ÉçÍÅÏêÇé
+	 * ç¤¾å›¢è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="communityDetail/{communityId}")
@@ -386,11 +384,11 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			Integer userId=stUser2.getUserid();
 			if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-				//return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+				//return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 				userId=null;
 			}
 			return communityService.getCommunityDetail(userId, communityId,timestamp==null?new Date(715363200000L):new Date(timestamp));
@@ -400,7 +398,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * Ìû×ÓÏêÇé
+	 * å¸–å­è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="articleDetail/{articleId}")
@@ -408,22 +406,22 @@ public class TeamController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			//StCommunity sc=communityService.getCommunityByArticleId(articleId);
 			//Integer communityId=sc==null?-1:sc.getUid();
 			Integer communityId=communityService.getCommunityIdByArticleId(articleId);
 			if(communityId<10000){
 				if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 				}
 			}else{
 				int area=stUser2.getArea();
 				if(area!=communityId)
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÏçÕò³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éä¹¡é•‡æˆå‘˜)", "");
 			}
 			return communityService.getArticleDetail(articleId,stUser2.getUserid());
 		} catch (Exception e) {
@@ -432,7 +430,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ·¢±íÌû×ÓÆÀÂÛ
+	 * å‘è¡¨å¸–å­è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="sentArticleComment")
@@ -442,7 +440,7 @@ public class TeamController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String comment=map.get("comment");
 			String articleId=map.get("articleId");
@@ -457,19 +455,19 @@ public class TeamController {
 				sb.append("articleId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");
 			}
 			//StCommunity sc=communityService.getCommunityByArticleId(Integer.valueOf(articleId));
 			//Integer communityId=sc==null?-1:sc.getUid();
 			Integer communityId=communityService.getCommunityIdByArticleId(Integer.valueOf(articleId));
 			if(communityId<10000){
 				if(!communityService.whetherMyJoin(user.getUserid(), communityId)){
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 				}
 			}else{
 				int area=user.getArea();
 				if(area!=communityId)
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÏçÕò³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éä¹¡é•‡æˆå‘˜)", "");
 			}
 			return communityService.sentComment(user,Integer.valueOf(articleId),comment);
 		} catch (Exception e) {
@@ -478,7 +476,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * »Ø¸´ÆÀÂÛ
+	 * å›å¤è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="sentArticleReply")
@@ -488,7 +486,7 @@ public class TeamController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String comment=map.get("comment");
 			String commentId=map.get("commentId");
@@ -503,19 +501,19 @@ public class TeamController {
 				sb.append("commentId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");
 			}
 			//StCommunity sc=communityService.getCommunityByCommentId(Integer.valueOf(commentId)); 
 			//Integer communityId=sc==null?-1:sc.getUid();
 			Integer communityId=communityService.getCommunityIdByCommentId(Integer.valueOf(commentId));
 			if(communityId<10000){
 				if(!communityService.whetherMyJoin(user.getUserid(), communityId)){
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 				}
 			}else{
 				int area=user.getArea();
 				if(area!=communityId)
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÏçÕò³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éä¹¡é•‡æˆå‘˜)", "");
 			}
 			return communityService.replyComment(user, Integer.valueOf(commentId), comment);
 		} catch (Exception e) {
@@ -523,22 +521,22 @@ public class TeamController {
 		}
 	}
 	
-	//  ¹«¸æ²¿·Ö
+	//  å…¬å‘Šéƒ¨åˆ†
 	/**
-	 * »ñÈ¡¹«¸æÁĞ±í
+	 * è·å–å…¬å‘Šåˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getNotice/{communityId}/{page}")
 	public @ResponseBody Object getNotice(@PathVariable Integer communityId,@PathVariable Integer page,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-				return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+				return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 			}
 			return communityService.getNoticeList(communityId,page,10);
 		} catch (Exception e) {
@@ -547,7 +545,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ·¢²¼ÉçÍÅ¹«¸æ
+	 * å‘å¸ƒç¤¾å›¢å…¬å‘Š
 	 * @param map
 	 * @param communityId
 	 * @param request
@@ -559,20 +557,20 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(!communityService.whetherAdmin(stUser2.getUserid(), communityId)){
-				return KePuResult.build(ResultConstant.code_yewu, "·ÇÉçÍÅ¹ÜÀíÔ±²»ÄÜ·¢²¼¹«¸æ", "");
+				return KePuResult.build(ResultConstant.code_yewu, "éç¤¾å›¢ç®¡ç†å‘˜ä¸èƒ½å‘å¸ƒå…¬å‘Š", "");
 			}
 			String content=map.get("content")==null?"":map.get("content");
 			String title=map.get("title")==null?"":map.get("title");
 			String auchor=map.get("author")==null?"":map.get("author");
 			if(StringUtil.isEmpty(content))
-				return KePuResult.build(ResultConstant.code_param, "content²»ÄÜÎª¿Õ", "");	
+				return KePuResult.build(ResultConstant.code_param, "contentä¸èƒ½ä¸ºç©º", "");	
 			if(StringUtil.isEmpty(title))
-				return KePuResult.build(ResultConstant.code_param, "title²»ÄÜÎª¿Õ", "");
+				return KePuResult.build(ResultConstant.code_param, "titleä¸èƒ½ä¸ºç©º", "");
 			if(StringUtil.isEmpty(auchor))
-				return KePuResult.build(ResultConstant.code_param, "author²»ÄÜÎª¿Õ", "");
+				return KePuResult.build(ResultConstant.code_param, "authorä¸èƒ½ä¸ºç©º", "");
 			return communityService.publishNotice(stUser2.getUserid(),communityId, 
 					title,auchor,content);
 		} catch (Exception e) {
@@ -581,7 +579,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ¹«¸æÏêÇé
+	 * å…¬å‘Šè¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="noticeDetail/{noticeId}")
@@ -589,14 +587,14 @@ public class TeamController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StCommunity community = communityService.getCommunityByNoticeId(noticeId);
 			if(!communityService.whetherMyJoin(stUser2.getUserid(), community.getUid())){
-				return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+				return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 			}
 			return communityService.getNoticeDetail(noticeId);
 		} catch (Exception e) {
@@ -604,22 +602,22 @@ public class TeamController {
 		}
 	}
 	
-	//  ½ÌÑ§²¿·Ö
+	//  æ•™å­¦éƒ¨åˆ†
 	/**
-	 * »ñÈ¡½ÌÑ§ÁĞ±í
+	 * è·å–æ•™å­¦åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getTeach/{communityId}/{page}")
 	public @ResponseBody Object getTeach(@PathVariable Integer communityId,@PathVariable Integer page,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-				return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+				return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 			}
 			return communityService.getTeachList(communityId,page,10);
 		} catch (Exception e) {
@@ -628,7 +626,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ·¢²¼½ÌÑ§
+	 * å‘å¸ƒæ•™å­¦
 	 * @param map
 	 * @param communityId
 	 * @param request
@@ -640,15 +638,15 @@ public class TeamController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(!communityService.whetherAdmin(stUser2.getUserid(), communityId)){
-				return KePuResult.build(ResultConstant.code_yewu, "·ÇÉçÍÅ¹ÜÀíÔ±²»ÄÜ·¢²¼½ÌÑ§", "");
+				return KePuResult.build(ResultConstant.code_yewu, "éç¤¾å›¢ç®¡ç†å‘˜ä¸èƒ½å‘å¸ƒæ•™å­¦", "");
 			}
 			String title=(String) (map.get("title")==null?"":map.get("title"));
 			List<TeachResult> teachList=(List<TeachResult>) map.get("contentList");
 			if(StringUtil.isEmpty(title))
-				return KePuResult.build(ResultConstant.code_param, "title²»ÄÜÎª¿Õ", "");
+				return KePuResult.build(ResultConstant.code_param, "titleä¸èƒ½ä¸ºç©º", "");
 			return communityService.publishTeach(stUser2.getUserid(),communityId, 
 					title,teachList);
 		} catch (Exception e) {
@@ -657,7 +655,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ½ÌÑ§ÏêÇé
+	 * æ•™å­¦è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="teachDetail/{teachId}")
@@ -665,14 +663,14 @@ public class TeamController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StCommunity community = communityService.getCommunityByTeachId(teachId);
 			if(!communityService.whetherMyJoin(stUser2.getUserid(), community.getUid())){
-				return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+				return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 			}
 			return communityService.getTeachDetail(teachId);
 		} catch (Exception e) {
@@ -681,7 +679,7 @@ public class TeamController {
 	}
 	
 	/**
-	 * ÆÀÂÛÍ¨ÖªÁĞ±í
+	 * è¯„è®ºé€šçŸ¥åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getMyRemind/{communityId}")
@@ -689,19 +687,19 @@ public class TeamController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(communityId<10000){
 				if(!communityService.whetherMyJoin(stUser2.getUserid(), communityId)){
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÉçÍÅ³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éç¤¾å›¢æˆå‘˜)", "");
 				}
 			}else{
 				int area=stUser2.getArea();
 				if(area!=communityId)
-					return KePuResult.build(ResultConstant.code_yewu, "È¨ÏŞ²»×ã(·ÇÏçÕò³ÉÔ±)", "");
+					return KePuResult.build(ResultConstant.code_yewu, "æƒé™ä¸è¶³(éä¹¡é•‡æˆå‘˜)", "");
 			}
 			return communityService.getMyRemind(stUser2.getUserid(),communityId,timestamp==null?new Date(715363200000L
 					):new Date(timestamp));

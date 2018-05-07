@@ -185,7 +185,7 @@ public class OrderController {
 			product_id = map2.get("product_id");
 		}
 		// // 判断是否登录
-		// String token = request.getHeader("baseParams") == null ? "" :
+		// String token = request.getHeader("baseParams") == null ? "" : 
 		// request.getHeader("baseParams");
 		// StUser user = userService.getUserByToken(token);
 		// if (user == null) {
@@ -209,14 +209,29 @@ public class OrderController {
 			return KePuResult.ok(ResultConstant.code_exception, "查找地址失败", "");
 		}
 		List<UserAddress> ua2 = userAddressMapper.selectByExample(example);
-		UserAddress ua = ua2.get(0);
+		UserAddress ua = null;//默认联系人信息
+		for (UserAddress userAddress : ua2) {
+			if("1".equals(userAddress.getStatus())){
+				ua = userAddress;
+				break;
+			}
+		}
+		if(ua==null){
+			ua = ua2.get(0);
+		}
 		String address2 = ua.getProvince() + ua.getCity() + ua.getArea() + ua.getStreet() + ua.getAddressDetail();
 		// 获取默认地址
 		// 获得商家商品内容开始
+		if(StringUtil.isEmpty(product_id)){
+			return KePuResult.ok(ResultConstant.code_yewu, "订单product_id为空", "");
+		}
 		Integer productId = Integer.valueOf(product_id);// 商品id
 		// Integer
 		// payType=Integer.valueOf(request.getParameter("pay_type"));//支付方式
 		StProduct stProduct = stProductMapper.selectByPrimaryKey(productId);// 获取该商品详情
+		if(stProduct==null){
+			return KePuResult.ok(ResultConstant.code_yewu, "商品不存在", "");
+		}
 		BigDecimal money = stProduct.getMoney();// 获取商品价格
 		Integer sellUserId = stProduct.getUserid();// sellUserId 商家id
 		String introduce = stProduct.getIntroduce();// 商家说明
@@ -224,8 +239,8 @@ public class OrderController {
 
 		// 获得用户详情开始
 		StUser stUser = stUserMapper.selectByPrimaryKey(buyUserId);
-		String nickName = stUser.getNickname();// 获取用户昵称
-		String mobile = stUser.getMobile();// 获取用户手机号
+		String nickName =  StringUtil.isNotEmpty(ua.getContactName())?ua.getContactName():stUser.getNickname();// 获取用户昵称
+		String mobile = StringUtil.isNotEmpty(ua.getContactPhone())?ua.getContactPhone():stUser.getMobile();// 获取用户手机号
 		// Integer state=stUser.getState();//获取用户状态
 		// 获得用户详情结束
 
@@ -244,10 +259,10 @@ public class OrderController {
 		orderInfo.setCredit(0.00);
 		orderInfo.setProductId(String.valueOf(productId));
 		;
-		if (null != map2.get("address")) {
-			address = map2.get("address");
+		if (StringUtil.isNotEmpty(address2)) {
+			address = address2 ;
 		} else {
-			address = address2;// 如果没有默认地址 就把传过来的地址赋值给address
+			address = map2.get("address");// 如果没有默认地址 就把传过来的地址赋值给address
 		}
 		orderInfo.setOrderAddress(address);
 		String orderCode = String.valueOf(new Date().getTime());

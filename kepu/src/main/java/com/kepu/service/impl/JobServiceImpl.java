@@ -24,8 +24,6 @@ import com.kepu.pojo.DeviceMessage;
 import com.kepu.pojo.KePuResult;
 import com.kepu.pojo.StAuthenticCompany;
 import com.kepu.pojo.StAuthenticCompanyExample;
-import com.kepu.pojo.StBuildingsellContent;
-import com.kepu.pojo.StBuildingsellContentExample;
 import com.kepu.pojo.StJob;
 import com.kepu.pojo.StJobApply;
 import com.kepu.pojo.StJobApplyExample;
@@ -89,7 +87,7 @@ public class JobServiceImpl implements JobService {
 			}
 		}
 		map.put("category", rs);
-		return KePuResult.ok(ResultConstant.code_ok, "获取成功", map);
+		return KePuResult.ok(ResultConstant.code_ok, "鑾峰彇鎴愬姛", map);
 	}
 
 	@Override
@@ -98,9 +96,9 @@ public class JobServiceImpl implements JobService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(line==1){
 			map.put("jobId", job.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "发布成功", map);
+			return KePuResult.ok(ResultConstant.code_ok, "鍙戝竷鎴愬姛", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "发布失败", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "鍙戝竷澶辫触", "");
 		}
 	}
 
@@ -111,7 +109,7 @@ public class JobServiceImpl implements JobService {
 		Map<String,String> map=new HashMap<String, String>();
 		StJob job = jobMapper.selectByPrimaryKey(jobId);
 		if(job==null||job.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "已被删除或不存在", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "宸茶鍒犻櫎鎴栦笉瀛樺湪", map);
 		}
 		map.put("title", job.getJobname());
 		map.put("createTime",DateUtil.formatDate(job.getCreatetime(), MyConstant.updatetime));
@@ -132,7 +130,7 @@ public class JobServiceImpl implements JobService {
 		DeviceMessage device = SystemSession.get();
 		String application = device.getApplication();
 		if(application.equalsIgnoreCase("ANDROID")){
-			// 安卓给areaName
+			// 瀹夊崜缁檃reaName
 			if(device!=null&&device.getAppVersion().compareTo("6.2.0")>=0){
 				StVillage v = stVillageMapper.selectByPrimaryKey(job.getCounty());
 				map.put("area", v.getName());
@@ -144,7 +142,7 @@ public class JobServiceImpl implements JobService {
 			map.put("area", job.getCounty()+"");
 		}
 		map.put("userId", job.getUserid()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "获取成功", map);
+		return KePuResult.ok(ResultConstant.code_ok, "鑾峰彇鎴愬姛", map);
 	}
 	
 	@Override
@@ -224,7 +222,7 @@ public class JobServiceImpl implements JobService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "获取成功", map);
+		return KePuResult.ok(ResultConstant.code_ok, "鑾峰彇鎴愬姛", map);
 	}
 
 	@Override
@@ -243,9 +241,9 @@ public class JobServiceImpl implements JobService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(line==1){
 			map.put("applyId", apply.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "发布成功", map);
+			return KePuResult.ok(ResultConstant.code_ok, "鍙戝竷鎴愬姛", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "发布失败", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "鍙戝竷澶辫触", "");
 		}
 	}
 
@@ -312,7 +310,7 @@ public class JobServiceImpl implements JobService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "获取成功", map);
+		return KePuResult.ok(ResultConstant.code_ok, "鑾峰彇鎴愬姛", map);
 	}
 
 	
@@ -321,7 +319,7 @@ public class JobServiceImpl implements JobService {
 		Map<String,String> map=new HashMap<String, String>();
 		StJobApply job= StJobApplyMapper.selectByPrimaryKey(applyId);
 		if(job==null||job.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "已被删除或不存在", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "宸茶鍒犻櫎鎴栦笉瀛樺湪", map);
 		}
 		map.put("position", job.getPosition());
 		map.put("createTime",DateUtil.formatDate(job.getCreatetime(), MyConstant.updatetime));
@@ -333,13 +331,13 @@ public class JobServiceImpl implements JobService {
 		DeviceMessage device = SystemSession.get();
 		String application = device.getApplication();
 		if(application.equalsIgnoreCase("ANDROID")){
-			// 安卓给areaName
+			// 瀹夊崜缁檃reaName
 			if(device!=null&&device.getAppVersion().compareTo("6.2.0")>=0){
 				map.put("areaCode", job.getCounty()+"");
 			}
 		}
 		map.put("lowPrice", job.getLowprice().intValue()==-1?"0":job.getLowprice()+"");
-		map.put("highPrice", job.getHighprice().intValue()==-1?"面议":job.getHighprice()+"");
+		map.put("highPrice", job.getHighprice().intValue()==-1?"闈㈣":job.getHighprice()+"");
 		map.put("industry", job.getHy());
 		map.put("realName", job.getRealname());
 		map.put("applyId", job.getUid()+"");
@@ -347,7 +345,7 @@ public class JobServiceImpl implements JobService {
 		map.put("title", job.getTitle());
 		map.put("introduce", job.getDescription());
 		map.put("userId", job.getUserid()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "获取成功", map);
+		return KePuResult.ok(ResultConstant.code_ok, "鑾峰彇鎴愬姛", map);
 	}
 
 	@Override
@@ -365,7 +363,7 @@ public class JobServiceImpl implements JobService {
 		String value=sysService.getParam("carousel_job");
 		value=StringUtil.isEmpty(value)?"":value;
 		/*if(StringUtil.isEmpty(value)){
-			return KePuResult.ok(ResultConstant.code_yewu, "获取失败", null);
+			return KePuResult.ok(ResultConstant.code_yewu, "鑾峰彇澶辫触", null);
 		}*/
 		String str[]=value.split(",");
 		int size=StringUtil.isEmpty(value)?0:str.length;
@@ -403,7 +401,7 @@ public class JobServiceImpl implements JobService {
 				r.add(map);
 			}
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "获取成功", r);
+		return KePuResult.ok(ResultConstant.code_ok, "鑾峰彇鎴愬姛", r);
 	}
 
 	

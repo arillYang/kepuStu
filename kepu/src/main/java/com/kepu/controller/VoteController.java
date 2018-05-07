@@ -38,8 +38,8 @@ public class VoteController {
 	
 	
 	/**
-	 * »ñÈ¡µ±Ç°±ÈÈüÖ÷Ò³ÃæĞÅÏ¢
-	 *   ¶¥²¿Í¼Æ¬£¬ ²ÎÓëÊı£¬Í¶Æ±Êı£¬·ÃÎÊÁ¿£¬»î¶¯½áÊøÊ±¼ä£¬»î¶¯¹æÔò£¬½áÊø±êÊ¶
+	 * è·å–å½“å‰æ¯”èµ›ä¸»é¡µé¢ä¿¡æ¯
+	 *   é¡¶éƒ¨å›¾ç‰‡ï¼Œ å‚ä¸æ•°ï¼ŒæŠ•ç¥¨æ•°ï¼Œè®¿é—®é‡ï¼Œæ´»åŠ¨ç»“æŸæ—¶é—´ï¼Œæ´»åŠ¨è§„åˆ™ï¼Œç»“æŸæ ‡è¯†
 	 * @return
 	 */
 	@RequestMapping(value="main/{activityId}")
@@ -51,9 +51,9 @@ public class VoteController {
 		}
 	}
 	/**
-	 * ²ÎÈüÕßÁĞ±í  °´×îĞÂµ¹Ğò
-	 * ¿ÉÒÔ°´ĞÕÃû»ò±àºÅËÑËØ
-	 * ±àºÅ,Æ±Êı,ĞÕÃû
+	 * å‚èµ›è€…åˆ—è¡¨  æŒ‰æœ€æ–°å€’åº
+	 * å¯ä»¥æŒ‰å§“åæˆ–ç¼–å·æœç´ 
+	 * ç¼–å·,ç¥¨æ•°,å§“å
 	 */
 	@RequestMapping(value="getJoinList/{activityId}")
 	public @ResponseBody Object search(@PathVariable Integer activityId,@RequestParam(required=false) String search,
@@ -67,8 +67,8 @@ public class VoteController {
 	
 	
 	/**
-	 * µ±Ç°ÅÅÃû
-	 * ÅÅÃû,ĞÕÃû,Æ±Êı
+	 * å½“å‰æ’å
+	 * æ’å,å§“å,ç¥¨æ•°
 	 */
 	@RequestMapping(value="getRanking/{activityId}")
 	public @ResponseBody Object getRanking(@PathVariable Integer activityId,HttpServletRequest request){
@@ -81,18 +81,18 @@ public class VoteController {
 	
 	
 	/**
-	 * ²Î¼Ó±ÈÈü(±¨Ãû)
-	 * ÏŞÖÆÊ±¼ä  ¿ªÊ¼-½áÊø
+	 * å‚åŠ æ¯”èµ›(æŠ¥å)
+	 * é™åˆ¶æ—¶é—´  å¼€å§‹-ç»“æŸ
 	 */
 	@RequestMapping(value="join/{activityId}")
 	public @ResponseBody Object join(@PathVariable int activityId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
-			// ÑéÖ¤±¨ÃûÊ±¼ä
+			// éªŒè¯æŠ¥åæ—¶é—´
 			StLottery vote = lotteryService.getStLotteryById(activityId);
 			if(vote==null||vote.getState()!=1){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÇëÔÚ±¨ÃûÊ±¼äÄÚ²ÎÓë!", null);
+				return KePuResult.ok(ResultConstant.code_yewu, "è¯·åœ¨æŠ¥åæ—¶é—´å†…å‚ä¸!", null);
 			}
 			String title="";
 			String description="";
@@ -105,12 +105,12 @@ public class VoteController {
 			if(map.containsKey("title")){title=map.get("title");}else{sb.append("title").append(",");}
 			if(map.containsKey("description")){description=map.get("description");}else{sb.append("description").append(",");}
 			if(map.containsKey("pics")){pics=map.get("pics");}else{sb.append("pics").append(",");}
-			if(map.containsKey("vedios")){vedios=map.get("vedios");} // ·Ç±ØĞë
+			if(map.containsKey("vedios")){vedios=map.get("vedios");} // éå¿…é¡»
 			if(map.containsKey("name")){name=map.get("name");}else{sb.append("name").append(",");}
 			if(map.containsKey("mobile")){mobile=map.get("mobile");}else{sb.append("mobile").append(",");}
 			if(map.containsKey("address")){address=map.get("address");}else{sb.append("address").append(",");}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StLotteryJoin join=new StLotteryJoin();
 			join.setAddress(address);
@@ -130,8 +130,8 @@ public class VoteController {
 	
 	
 	/**
-	 * »ñÈ¡²ÎÈüÕßÏêÇé
-	 * @return  µ±Ç°Æ±Êı,ĞÕÃû,½éÉÜ,±àºÅ,Í¼Æ¬ÁĞ±í,ÊÓÆµÁĞ±í
+	 * è·å–å‚èµ›è€…è¯¦æƒ…
+	 * @return  å½“å‰ç¥¨æ•°,å§“å,ä»‹ç»,ç¼–å·,å›¾ç‰‡åˆ—è¡¨,è§†é¢‘åˆ—è¡¨
 	 */
 	@RequestMapping(value="getDetail/{joinId}")
 	public @ResponseBody Object getDetail(@PathVariable Integer joinId,HttpServletRequest request){
@@ -145,22 +145,22 @@ public class VoteController {
 	}
 	
 	/**
-	 * Í¶Æ±
+	 * æŠ•ç¥¨
 	 * @return
 	 */
 	@RequestMapping(value="zh/{joinId}")
 	public @ResponseBody Object getProductDetail(@PathVariable Integer joinId,HttpServletRequest request){
 		try {
-			// ¼ì²âÍ¶Æ±Ê±¼ä
+			// æ£€æµ‹æŠ•ç¥¨æ—¶é—´
 			StLottery vote = lotteryService.getStLotteryByJoinId(joinId);
 			Long now=new Date().getTime();
 			if(vote.getState()==4||vote.getVotestart().getTime()>now||vote.getVoteend().getTime()<now){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÇëÔÚÍ¶Æ±Ê±¼äÄÚ²ÎÓë!", null);
+				return KePuResult.ok(ResultConstant.code_yewu, "è¯·åœ¨æŠ•ç¥¨æ—¶é—´å†…å‚ä¸!", null);
 			}
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser = userService.getUserByToken(token);
 			if(lotteryService.checkVote(joinId, stUser.getUserid()))
-				return KePuResult.ok(ResultConstant.code_yewu, "ÒÑÍ¶Æ±£¡", null);
+				return KePuResult.ok(ResultConstant.code_yewu, "å·²æŠ•ç¥¨ï¼", null);
 			return lotteryService.vote(joinId, stUser);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");

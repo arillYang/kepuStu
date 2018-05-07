@@ -44,7 +44,7 @@ public class SkillController {
 	@Autowired
 	private SysService sysService;
 	/**
-	 * ¸öÈËÈÏÖ¤
+	 * ä¸ªäººè®¤è¯
 	 * @return
 	 */
 	@RequestMapping(value="auth/personal")
@@ -53,7 +53,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String userName="";
 			String IDNo="";
@@ -99,7 +99,7 @@ public class SkillController {
 				sb.append("selfIntroduction").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StAuthenticPeople sap=new StAuthenticPeople();
 			sap.setCreatetime(new Date());
@@ -113,7 +113,7 @@ public class SkillController {
 			sap.setRealname(userName);
 			sap.setIntroduce(selfIntroduction);
 			sap.setUserid(stUser2.getUserid());
-			sap.setState(1); // 1:´ıÉóºË 0:Í¨¹ı 2:¾Ü¾ø
+			sap.setState(1); // 1:å¾…å®¡æ ¸ 0:é€šè¿‡ 2:æ‹’ç»
 			return skillService.authPersonal(sap);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -121,7 +121,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * ÆóÒµÈÏÖ¤
+	 * ä¼ä¸šè®¤è¯
 	 * @return
 	 */
 	@RequestMapping(value="auth/company")
@@ -130,7 +130,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String userName="";
 			String corporate="";
@@ -188,7 +188,7 @@ public class SkillController {
 				sb.append("mobile").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StAuthenticCompany sap=new StAuthenticCompany();
 			sap.setCreatetime(new Date());
@@ -203,7 +203,7 @@ public class SkillController {
 			sap.setSocialcode(socialCode);
 			sap.setCorporate(corporate);
 			sap.setUserid(stUser2.getUserid());
-			sap.setState(1); // 1:´ıÉóºË 0:Í¨¹ı 2:¾Ü¾ø
+			sap.setState(1); // 1:å¾…å®¡æ ¸ 0:é€šè¿‡ 2:æ‹’ç»
 			return skillService.authCompany(sap);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -212,7 +212,7 @@ public class SkillController {
 
 	
 	/**
-	 * ²éÑ¯ÓÃ»§ÊÇ·ñ½øĞĞ¸öÈËÈÏÖ¤»òÆóÒµÈÏÖ¤
+	 * æŸ¥è¯¢ç”¨æˆ·æ˜¯å¦è¿›è¡Œä¸ªäººè®¤è¯æˆ–ä¼ä¸šè®¤è¯
 	 */
 	@RequestMapping(value="getAuthStatus")
 	public @ResponseBody Object getAuthStatus(HttpServletRequest request){
@@ -220,7 +220,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return skillService.getAuthStatus(stUser2.getUserid());
 		} catch (Exception e) {
@@ -229,7 +229,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡·ÖÀà   category/menu
+	 * è·å–åˆ†ç±»   category/menu
 	 */
 	@RequestMapping(value="getClassify")
 	public @ResponseBody Object getClassify(HttpServletRequest request){
@@ -241,7 +241,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * ·¢²¼¼¼ÄÜ
+	 * å‘å¸ƒæŠ€èƒ½
 	 */
 	@RequestMapping(value="release")
 	public @ResponseBody Object release(@RequestBody Map<String, String> map,HttpServletRequest request){
@@ -249,7 +249,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String title="";
 			String introduce="";
@@ -259,7 +259,7 @@ public class SkillController {
 			String mobile="";
 			String price="";
 			String authorityType="";
-			String classifyName="";  // Ò»¼¶+¶ş¼¶
+			String classifyName="";  // ä¸€çº§+äºŒçº§
 			String address="";
 			String lon="";
 			String lat="";
@@ -332,11 +332,11 @@ public class SkillController {
 				lat=location.split(",")[1];
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
-			// ¼ì²éÊÇ·ñÈÏÖ¤
+			// æ£€æŸ¥æ˜¯å¦è®¤è¯
 			if(!skillService.checkAuth(stUser2.getUserid(), Integer.valueOf(authorityType))){
-				return KePuResult.build(ResultConstant.code_yewu, "ÇëÏÈÈÏÖ¤", "");
+				return KePuResult.build(ResultConstant.code_yewu, "è¯·å…ˆè®¤è¯", "");
 			}
 			StSkillContent sc=new StSkillContent();
 			sc.setAddress(address);
@@ -357,8 +357,8 @@ public class SkillController {
 			sc.setLon(Double.valueOf(lon));
 			sc.setLat(Double.valueOf(lat));
 			String approve=sysService.getParam("need_approve");
-			if("1".equals(approve))  // ÉóºË¿ª¹Ø
-				sc.setState(2);  //ĞèÒªÉóºË
+			if("1".equals(approve))  // å®¡æ ¸å¼€å…³
+				sc.setState(2);  //éœ€è¦å®¡æ ¸
 			return skillService.releaseSkill(sc);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -366,13 +366,13 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡ÂÖ²¥Í¼ 
+	 * è·å–è½®æ’­å›¾ 
 	 * @return
 	 */
 	@RequestMapping(value="getCarousel")
 	public @ResponseBody Object getCarousel(@RequestParam(required=false) Integer type){
 		try {
-			// 	1£º¼¼ÄÜ 2£ºÈÎÎñ
+			// 	1ï¼šæŠ€èƒ½ 2ï¼šä»»åŠ¡
 			return skillService.getCarousel(type==null?1:type);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -380,7 +380,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡¼¼ÄÜÏêÇé
+	 * è·å–æŠ€èƒ½è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getskillDetail/{skillId}")
@@ -393,7 +393,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡¼¼ÄÜÁĞ±í
+	 * è·å–æŠ€èƒ½åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getSkillList/{page}")
@@ -403,7 +403,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(!map.containsKey("lat")){
 				String location=MyConstant.getLocation(stUser2.getTownid());
@@ -423,7 +423,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * ĞŞ¸Ä¼¼ÄÜ
+	 * ä¿®æ”¹æŠ€èƒ½
 	 * @param map
 	 * @return
 	 */
@@ -431,10 +431,10 @@ public class SkillController {
 	public @ResponseBody Object editProduct(@PathVariable Integer skillId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StUser stUser=userService.getUserById(stUser2.getUserid());
 			String title="";
@@ -445,17 +445,17 @@ public class SkillController {
 			String mobile="";
 			String price="";
 			String authorityType="";
-			String classifyName="";  // Ò»¼¶+¶ş¼¶
+			String classifyName="";  // ä¸€çº§+äºŒçº§
 			String address="";
 			StringBuffer sb=new StringBuffer();
 			
 			StSkillContent content = skillService.getSkillContentById(skillId);
 			if(content==null||content.getState()==1)
-				return KePuResult.build(ResultConstant.code_param, "ÒÑ±»É¾³ı»ò²»´æÔÚ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨"+sb.toString(), "");
 			int userId=content.getUserid();
 			int real=stUser2.getUserid();
 			if(userId!=real)
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíĞŞ¸Ä"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸ä¿®æ”¹"+sb.toString(), "");
 			if(map.containsKey("title")){
 				title=map.get("title");
 				content.setTitle(title);
@@ -498,14 +498,14 @@ public class SkillController {
 			}
 			content.setCreatetime(new Date());
 			skillService.saveSkillContent(content);
-			return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ", "");
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * ·¢²¼ÈÎÎñ
+	 * å‘å¸ƒä»»åŠ¡
 	 */
 	@RequestMapping(value="taskRelease")
 	public @ResponseBody Object taskRelease(@RequestBody Map<String, String> map,HttpServletRequest request){
@@ -513,7 +513,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String title="";
 			String introduce="";
@@ -523,7 +523,7 @@ public class SkillController {
 			String mobile="";
 			String price="";
 			String authorityType="1";
-			String classifyName="";  // Ò»¼¶+¶ş¼¶
+			String classifyName="";  // ä¸€çº§+äºŒçº§
 			String address="";
 			String lon="";
 			String lat="";
@@ -595,11 +595,11 @@ public class SkillController {
 				sb.append("startTime").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
-			// ¼ì²éÊÇ·ñÈÏÖ¤
+			// æ£€æŸ¥æ˜¯å¦è®¤è¯
 			/*if(!skillService.checkAuth(stUser2.getUserid(), Integer.valueOf(authorityType))){
-				return KePuResult.build(ResultConstant.code_yewu, "ÇëÏÈÈÏÖ¤", "");
+				return KePuResult.build(ResultConstant.code_yewu, "è¯·å…ˆè®¤è¯", "");
 			}*/
 			StTaskContent  sc=new StTaskContent();
 			sc.setAddress(address);
@@ -621,8 +621,8 @@ public class SkillController {
 			sc.setLat(Double.valueOf(lat));
 			sc.setStarttime(DateUtil.formatString(startTime, "yyyy-MM-dd"));
 			String approve=sysService.getParam("need_approve");
-			if("1".equals(approve))  // ÉóºË¿ª¹Ø
-				sc.setState(2);  //ĞèÒªÉóºË
+			if("1".equals(approve))  // å®¡æ ¸å¼€å…³
+				sc.setState(2);  //éœ€è¦å®¡æ ¸
 			return skillService.releaseTask(sc);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -630,7 +630,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡ÈÎÎñÁĞ±í
+	 * è·å–ä»»åŠ¡åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getTaskList/{page}")
@@ -640,7 +640,7 @@ public class SkillController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(!map.containsKey("lat")){
 				String location=MyConstant.getLocation(stUser2.getTownid());
@@ -660,7 +660,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡ÈÎÎñÏêÇé
+	 * è·å–ä»»åŠ¡è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="gettaskDetail/{taskId}")
@@ -674,7 +674,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * ĞŞ¸ÄÈÎÎñ
+	 * ä¿®æ”¹ä»»åŠ¡
 	 * @param map
 	 * @return
 	 */
@@ -682,10 +682,10 @@ public class SkillController {
 	public @ResponseBody Object editTask(@PathVariable Integer taskId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StUser stUser=userService.getUserById(stUser2.getUserid());
 			String title="";
@@ -696,18 +696,18 @@ public class SkillController {
 			String mobile="";
 			String price="";
 			String authorityType="1";
-			String classifyName="";  // Ò»¼¶+¶ş¼¶
+			String classifyName="";  // ä¸€çº§+äºŒçº§
 			String address="";
 			String startTime="";
 			StringBuffer sb=new StringBuffer();
 			
 			StTaskContent content = skillService.getTaskContentById(taskId);
 			if(content==null||content.getState()==1)
-				return KePuResult.build(ResultConstant.code_param, "ÒÑ±»É¾³ı»ò²»´æÔÚ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨"+sb.toString(), "");
 			int userId=content.getUserid();
 			int real=stUser2.getUserid();
 			if(userId!=real)
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíĞŞ¸Ä"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸ä¿®æ”¹"+sb.toString(), "");
 			if(map.containsKey("title")){
 				title=map.get("title");
 				content.setTitle(title);
@@ -756,14 +756,14 @@ public class SkillController {
 			}
 			content.setCreatetime(new Date());
 			skillService.saveTaskContent(content);
-			return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ", "");
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * »ñÈ¡ÎÒ·¢²¼µÄ¼¼ÄÜ
+	 * è·å–æˆ‘å‘å¸ƒçš„æŠ€èƒ½
 	 * @return
 	 */
 	@RequestMapping(value="getMySkill/{page}")
@@ -778,7 +778,7 @@ public class SkillController {
 	}
 	
 	/**
-	 * »ñÈ¡ÎÒ·¢²¼µÄÈÎÎñ
+	 * è·å–æˆ‘å‘å¸ƒçš„ä»»åŠ¡
 	 * @return
 	 */
 	@RequestMapping(value="getMyTask/{page}")

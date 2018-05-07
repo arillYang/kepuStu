@@ -1,6 +1,5 @@
 package com.kepu.controller;
 
-
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,333 +22,350 @@ import com.kepu.util.StringUtil;
 @Controller
 @RequestMapping("/notice")
 public class NoticeController {
-		
+
 	@Autowired
 	private NoticeService noticeService;
 	@Autowired
 	private UserService userService;
-	
+
 	/**
-	 * »ñÈ¡¹«¸æÂÖ²¥Í¼  Çø·Ö²»Í¬ÏçÕò
+	 * è·å–å…¬å‘Šè½®æ’­å›¾ åŒºåˆ†ä¸åŒä¹¡é•‡
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getCarousel/{villageId}")
-	public @ResponseBody Object getCarousel(@PathVariable Integer villageId){
+	@RequestMapping(value = "getCarousel/{villageId}")
+	public @ResponseBody Object getCarousel(@PathVariable Integer villageId) {
 		try {
-			//  ¸ù¾İÀàĞÍ»ñÈ¡ÂÖ²¥
-			return noticeService.getCarousel(5,villageId);
+			// æ ¹æ®ç±»å‹è·å–è½®æ’­
+			return noticeService.getCarousel(5, villageId);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »ñÈ¡¹«¸æÁĞ±í
+	 * è·å–å…¬å‘Šåˆ—è¡¨
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getNews/{villageId}/{page}")
-	public @ResponseBody Object getNews(@PathVariable Integer villageId,@PathVariable Integer page){
+	@RequestMapping(value = "getNews/{villageId}/{page}")
+	public @ResponseBody Object getNews(@PathVariable Integer villageId, @PathVariable Integer page) {
 		try {
-			return noticeService.getNews(villageId,page,10);
+			return noticeService.getNews(villageId, page, 10);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »ñÈ¡¹«¸æÏêÇé
+	 * è·å–å…¬å‘Šè¯¦æƒ…
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getNewsDetail/{newsId}")
-	public @ResponseBody Object getNewsDetail(@PathVariable Integer newsId,HttpServletRequest request){
+	@RequestMapping(value = "getNewsDetail/{newsId}")
+	public @ResponseBody Object getNewsDetail(@PathVariable Integer newsId, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
-			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
-			}*/
-			int userId=stUser2==null?-1:stUser2.getUserid();
-			String appVersion=(String) request.getAttribute("appVersion");
-			return noticeService.getNewsDetail(userId,newsId,appVersion);
+			/*
+			 * if(stUser2==null){ return KePuResult.build(ResultConstant.code_yewu,
+			 * "ç”¨æˆ·idé”™è¯¯", ""); }
+			 */
+			int userId = stUser2 == null ? -1 : stUser2.getUserid();
+			String appVersion = (String) request.getAttribute("appVersion");
+			return noticeService.getNewsDetail(userId, newsId, appVersion);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »ñÈ¡¹«¸æÆÀÂÛ
+	 * è·å–å…¬å‘Šè¯„è®º
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getNewsComment/{newsId}/{page}")
-	public @ResponseBody Object getNewsComment(@PathVariable Integer newsId,@PathVariable Integer page,
-			HttpServletRequest request){
+	@RequestMapping(value = "getNewsComment/{newsId}/{page}")
+	public @ResponseBody Object getNewsComment(@PathVariable Integer newsId, @PathVariable Integer page,
+			HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
-			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
-			}*/
-			int userId=stUser2==null?-1:stUser2.getUserid();
-			return noticeService.getNewsComment(newsId,userId, page, 10);
+			/*
+			 * if(stUser2==null){ return KePuResult.build(ResultConstant.code_yewu,
+			 * "ç”¨æˆ·idé”™è¯¯", ""); }
+			 */
+			int userId = stUser2 == null ? -1 : stUser2.getUserid();
+			return noticeService.getNewsComment(newsId, userId, page, 10);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »ñÈ¡ÆÀÂÛ»Ø¸´ÁĞ±í
+	 * è·å–è¯„è®ºå›å¤åˆ—è¡¨
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getReply/{commentId}/{page}")
-	public @ResponseBody Object getNewsComment(@PathVariable Long commentId,@PathVariable Integer page,
-			HttpServletRequest request){
+	@RequestMapping(value = "getReply/{commentId}/{page}")
+	public @ResponseBody Object getNewsComment(@PathVariable Long commentId, @PathVariable Integer page,
+			HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
-			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+			if (stUser2 == null) {
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
-			int userId=stUser2==null?-1:stUser2.getUserid();
-			return noticeService.getCommentReply(commentId, userId,page, 10);
+			int userId = stUser2 == null ? -1 : stUser2.getUserid();
+			return noticeService.getCommentReply(commentId, userId, page, 10);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
-	
+
 	/**
-	 * ·¢±í¹«¸æÆÀÂÛ
+	 * å‘è¡¨å…¬å‘Šè¯„è®º
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="sentComment")
-	public @ResponseBody Object sentComment(@RequestBody Map<String, String> map,HttpServletRequest request){
+	@RequestMapping(value = "sentComment")
+	public @ResponseBody Object sentComment(@RequestBody Map<String, String> map, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			StringBuffer sb=new StringBuffer();
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			StringBuffer sb = new StringBuffer();
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
-			String comment=map.get("comment");
-			String newsId=map.get("newsId");
-			if(map.containsKey("comment"))
-				comment=map.get("comment");
-			else{
+			String comment = map.get("comment");
+			String newsId = map.get("newsId");
+			if (map.containsKey("comment"))
+				comment = map.get("comment");
+			else {
 				sb.append("comment").append(",");
 			}
-			if(map.containsKey("newsId"))
-				newsId=map.get("newsId");
-			else{
+			if (map.containsKey("newsId"))
+				newsId = map.get("newsId");
+			else {
 				sb.append("newsId").append(",");
 			}
-			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+			if (sb.length() != 0) {
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º" + sb.toString(), "");
 			}
-			return userService.noticeSentComment(user,Integer.valueOf(newsId),comment);
+			return userService.noticeSentComment(user, Integer.valueOf(newsId), comment);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »Ø¸´ÆÀÂÛ
+	 * å›å¤è¯„è®º
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="replyComment")
-	public @ResponseBody Object replyComment(@RequestBody Map<String, String> map,HttpServletRequest request){
+	@RequestMapping(value = "replyComment")
+	public @ResponseBody Object replyComment(@RequestBody Map<String, String> map, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			StringBuffer sb=new StringBuffer();
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			StringBuffer sb = new StringBuffer();
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
-			String comment=map.get("comment");
-			String commentId=map.get("commentId");
-			if(map.containsKey("comment"))
-				comment=map.get("comment");
-			else{
+			String comment = map.get("comment");
+			String commentId = map.get("commentId");
+			if (map.containsKey("comment"))
+				comment = map.get("comment");
+			else {
 				sb.append("comment").append(",");
 			}
-			if(map.containsKey("commentId"))
-				commentId=map.get("commentId");
-			else{
+			if (map.containsKey("commentId"))
+				commentId = map.get("commentId");
+			else {
 				sb.append("commentId").append(",");
 			}
-			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+			if (sb.length() != 0) {
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º" + sb.toString(), "");
 			}
 			return userService.noticeReplyComment(user, Long.valueOf(commentId), comment);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * ÊÕ²Ø¹«¸æ
+	 * æ”¶è—å…¬å‘Š
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="likeNews")
-	public @ResponseBody Object likeNews(@RequestBody Map<String, String> map,HttpServletRequest request){
+	@RequestMapping(value = "likeNews")
+	public @ResponseBody Object likeNews(@RequestBody Map<String, String> map, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			StringBuffer sb=new StringBuffer();
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			StringBuffer sb = new StringBuffer();
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
-			String newsId=map.get("newsId");
-			if(map.containsKey("newsId"))
-				newsId=map.get("newsId");
-			else{
+			String newsId = map.get("newsId");
+			if (map.containsKey("newsId"))
+				newsId = map.get("newsId");
+			else {
 				sb.append("newsId").append(",");
 			}
-			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+			if (sb.length() != 0) {
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º" + sb.toString(), "");
 			}
-			return noticeService.likeNews(Integer.valueOf(newsId),user.getUserid());
+			return noticeService.likeNews(Integer.valueOf(newsId), user.getUserid());
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »ñÈ¡ÎÒµÄÊÕ²Ø
+	 * è·å–æˆ‘çš„æ”¶è—
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getMyLikeNews/{page}")
-	public @ResponseBody Object getMyLikeNews(@PathVariable Integer page,HttpServletRequest request){
+	@RequestMapping(value = "getMyLikeNews/{page}")
+	public @ResponseBody Object getMyLikeNews(@PathVariable Integer page, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
-			
+
 			return noticeService.getMyLikeNews(user.getUserid(), page, 10);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
+
 	/**
-	 * É¾³ıÊÕ²ØµÄ¹«¸æ
+	 * åˆ é™¤æ”¶è—çš„å…¬å‘Š
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="delete/likeNews")
-	public @ResponseBody Object deletelikeNews(@RequestBody Map<String, String> map,HttpServletRequest request){
+	@RequestMapping(value = "delete/likeNews")
+	public @ResponseBody Object deletelikeNews(@RequestBody Map<String, String> map, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			StringBuffer sb=new StringBuffer();
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			StringBuffer sb = new StringBuffer();
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
-			String newsId=map.get("newsId");
-			if(map.containsKey("newsId"))
-				newsId=map.get("newsId");
-			else{
+			String newsId = map.get("newsId");
+			if (map.containsKey("newsId"))
+				newsId = map.get("newsId");
+			else {
 				sb.append("newsId").append(",");
 			}
-			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+			if (sb.length() != 0) {
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º" + sb.toString(), "");
 			}
-			String[] newsIds=newsId.split(",");
+			String[] newsIds = newsId.split(",");
 			return noticeService.deletelikeNews(newsIds, user.getUserid());
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * ¾Ù±¨¹«¸æÆÀÂÛ
+	 * ä¸¾æŠ¥å…¬å‘Šè¯„è®º
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="report/{commentId}")
-	public @ResponseBody Object reportNewsComment(@PathVariable Long commentId,HttpServletRequest request){
+	@RequestMapping(value = "report/{commentId}")
+	public @ResponseBody Object reportNewsComment(@PathVariable Long commentId, HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			StringBuffer sb=new StringBuffer();
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			StringBuffer sb = new StringBuffer();
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return noticeService.reportNewsComment(user.getUserid(), commentId);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * ÆÀÂÛ/»Ø¸´µãÔŞ
+	 * è¯„è®º/å›å¤ç‚¹èµ
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="praise/{type}/{typeId}")
-	public @ResponseBody Object praise(@PathVariable Integer type,
-			@PathVariable Long typeId,HttpServletRequest request){
+	@RequestMapping(value = "praise/{type}/{typeId}")
+	public @ResponseBody Object praise(@PathVariable Integer type, @PathVariable Long typeId,
+			HttpServletRequest request) {
 		try {
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
-			return noticeService.praise(type,typeId,user.getUserid());
+			return noticeService.praise(type, typeId, user.getUserid());
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * ¹«¸æµãÔŞ/²»Ï²»¶
+	 * å…¬å‘Šç‚¹èµ/ä¸å–œæ¬¢
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="dp/{newsId}/{type}/{operate}")
-	public @ResponseBody Object dp(@PathVariable Integer newsId,@PathVariable Integer type,
-			@PathVariable Integer operate,HttpServletRequest request){
+	@RequestMapping(value = "dp/{newsId}/{type}/{operate}")
+	public @ResponseBody Object dp(@PathVariable Integer newsId, @PathVariable Integer type,
+			@PathVariable Integer operate, HttpServletRequest request) {
 		try {
-			// type=1 µãÔŞ  type=2  ²»Ï²»¶
-			// operate=1 µã»÷  operate=0 È¡Ïû
-			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			StUser user=userService.getUserByToken(token);
-			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+			// type=1 ç‚¹èµ type=2 ä¸å–œæ¬¢
+			// operate=1 ç‚¹å‡» operate=0 å–æ¶ˆ
+			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+			StUser user = userService.getUserByToken(token);
+			if (user == null) {
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			return noticeService.dpNews(newsId, type, user.getUserid(), operate);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * ¹«¸æËÑË÷½Ó¿Ú
+	 * å…¬å‘Šæœç´¢æ¥å£
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="search/{page}")
-	public @ResponseBody Object search(@PathVariable Integer page,HttpServletRequest request){
+	@RequestMapping(value = "search/{page}")
+	public @ResponseBody Object search(@PathVariable Integer page, HttpServletRequest request) {
 		try {
-			String query=request.getParameter("q");
-			if(StringUtil.isEmpty(query))
-				return KePuResult.build(ResultConstant.code_param, "ËÑË÷´Ê²»ÄÜÎª¿Õ","");	
-			if(page==1)
+			String query = request.getParameter("q");
+			if (StringUtil.isEmpty(query))
+				return KePuResult.build(ResultConstant.code_param, "æœç´¢è¯ä¸èƒ½ä¸ºç©º", "");
+			if (page == 1)
 				noticeService.addHotSearch(query);
 			return noticeService.searchNews(query, page, 10);
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
-	
+
 	/**
-	 * »ñÈ¡¹«¸æÈÈËÑ´Ê»ã
+	 * è·å–å…¬å‘Šçƒ­æœè¯æ±‡
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="getHotSearch")
-	public @ResponseBody Object getHotSearch(HttpServletRequest request){
+	@RequestMapping(value = "getHotSearch")
+	public @ResponseBody Object getHotSearch(HttpServletRequest request) {
 		try {
 			return noticeService.getHotSearch();
 		} catch (Exception e) {
-			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
+			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e), "");
 		}
 	}
 }

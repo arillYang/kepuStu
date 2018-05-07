@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.kepu.pojo.StActivityRecord;
 import com.kepu.pojo.StActivityRecordExample;
-import com.kepu.pojo.activity.ActivityResult;
 
 public interface StActivityRecordMapper {
     int countByExample(StActivityRecordExample example);
@@ -26,25 +25,20 @@ public interface StActivityRecordMapper {
 
     int updateByExample(@Param("record") StActivityRecord record, @Param("example") StActivityRecordExample example);
     
-    List<ActivityResult> getActivityResult(@Param("param") Map param);
-    
-    int getPaiming(@Param("param") Map param);
-    
-    int updateShowName();
-    
-    List<StActivityRecord> selectStActivityRecord(@Param("userId") String userId);
 
 	double getMyScore(@Param("param") Map param);
 	
-	
-	
+	int getPaiming(@Param("param") Map param);
+	int updateShowName();
 	List<StActivityRecord>  selectByMeitlist(int userId,String mtie);
-	  
+	
+	int findTmit(@Param("userId") int userId,@Param("time") String time);
 
-		
+	List<StActivityRecord>  selectByMeitScorList(int userId,String mtie);
 		
 	StActivityRecord selectByScoreList(int userId);
 	
+	List<StActivityRecord> selectStActivityRecord(@Param("userId") String userId);
 	
 	
 	

@@ -21,4 +21,17 @@ public interface StSignMapper {
     int updateByExample(@Param("record") StSign record, @Param("example") StSignExample example);
     
     List<StSign> selectAll(@Param("userId") int userId);
+    
+    int updateByPrimaryKeySelective(StSign stSign);
+    
+    
+   int  updateByPrimaryKeyType(StSign stSign);
+    StSign findtype(int userId,int keysta);
+    
+    
+    List<StSign> selectAlltype(int userId,int type,int days);
+    
+    
+    List<StSign> selectAllUserId(int userId);
+    
 }

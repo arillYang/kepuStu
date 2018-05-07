@@ -143,19 +143,19 @@ public class SysServiceImpl implements SysService{
 	public KePuResult reportNewsComment(Integer userId,Long commentId) {
 		StComment comment = commentMapper.selectByPrimaryKey(commentId);
 		if(comment==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÆÀÂÛÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥è¯„è®ºå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		StReportExample example=new StReportExample();
 		StReportExample.Criteria criteria=example.createCriteria();
 		criteria.andCommentidEqualTo(commentId);
 		List<StReport> reportList = reportMapper.selectByExample(example);
 		if(reportList.size()!=0)
-			return KePuResult.ok(ResultConstant.code_yewu, "ÄúµÄ¾Ù±¨ÒÑ±»ÆäËûÓÃ»§Ìá½»¹ı£¬¸ĞĞ»ÄúµÄÖ§³Ö", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "æ‚¨çš„ä¸¾æŠ¥å·²è¢«å…¶ä»–ç”¨æˆ·æäº¤è¿‡ï¼Œæ„Ÿè°¢æ‚¨çš„æ”¯æŒ", "");
 		StReport report=new StReport();
 		report.setCommentid(commentId);
 		report.setReportuser(userId);
 		report.setCreatetime(new Date());
 		reportMapper.insertSelective(report);
-		return KePuResult.ok(ResultConstant.code_ok, "¾Ù±¨³É¹¦","");
+		return KePuResult.ok(ResultConstant.code_ok, "ä¸¾æŠ¥æˆåŠŸ","");
 	}
 
 
@@ -225,7 +225,7 @@ public class SysServiceImpl implements SysService{
 		}
 		map.put("hotWords", r);
 		map.put("totalcount", r.size()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 
@@ -235,54 +235,54 @@ public class SysServiceImpl implements SysService{
 		if(type==1){
 			StSkillContent r = skillContentMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			skillContentMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}else if(type==2){
 			StTaskContent r = stTaskContentMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			stTaskContentMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}else if(type==3){
 			StBuildingsellContent r = buildingsellContentMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			buildingsellContentMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}else if(type==4){
 			StBuildingrentContent r = buildingrentContentMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			buildingrentContentMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}else if(type==5){
 			StProduct r = productMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			productMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}else if(type==6){
 			StJob r = jobMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			jobMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}else if(type==7){
 			StJobApply r = jobApplyMapper.selectByPrimaryKey(typeId);
 			if(r.getUserid().intValue()!=userId.intValue()){
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíÉ¾³ı", "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸åˆ é™¤", "");
 			}
 			jobApplyMapper.deleteByPrimaryKey(typeId);
-			return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", null);
+			return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", null);
 		}
-		return KePuResult.build(ResultConstant.code_param, "type´íÎó", "");
+		return KePuResult.build(ResultConstant.code_param, "typeé”™è¯¯", "");
 	}
 
 
@@ -331,7 +331,7 @@ public class SysServiceImpl implements SysService{
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 
@@ -346,7 +346,7 @@ public class SysServiceImpl implements SysService{
 		criteria.andUseridEqualTo(userId);
 		criteria.andStatusEqualTo(0);
 		if(fromType!=-1)
-			criteria.andFromtypeEqualTo(fromType); //¿ÉÎŞ
+			criteria.andFromtypeEqualTo(fromType); //å¯æ— 
 		List< StCommonVote> list = commonVoteMapper.selectByExample(example);
 		return list.size()==0?"0":"1";
 	}
@@ -357,7 +357,7 @@ public class SysServiceImpl implements SysService{
 	public KePuResult sentComment(StUser user, Integer uid, String comment,
 			Integer fromType) {
 		if(!checkExist(fromType,uid)){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		}
 		StSkillandbuildingComment stComment=new StSkillandbuildingComment();
 		stComment.setUserid(user.getUserid());
@@ -378,7 +378,7 @@ public class SysServiceImpl implements SysService{
 			jedisClient.set("commom_commentNum_"+uid+"_type"+"_"+fromType, Integer.valueOf(v)+1+"");
 		//news.setCommentcount(news.getCommentcount()+1);
 		//newsMapper.updateByPrimaryKeySelective(news);
-		return KePuResult.ok(ResultConstant.code_ok, "·¢±í³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "å‘è¡¨æˆåŠŸ", "");
 	}
 
 
@@ -410,7 +410,7 @@ public class SysServiceImpl implements SysService{
 	public KePuResult replyComment(StUser user, Integer commentId, String comment) {
 		StSkillandbuildingComment myComment = commonCommentMapper.selectByPrimaryKey(commentId);
 		if(myComment==null||myComment.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÆÀÂÛÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥è¯„è®ºå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		}
 		StSkillandbuildingReply reply=new StSkillandbuildingReply();
 		reply.setUserid(user.getUserid());
@@ -424,7 +424,7 @@ public class SysServiceImpl implements SysService{
 		commonReplyMapper.insertSelective(reply);
 		myComment.setReplynum(myComment.getReplynum()+1);
 		commonCommentMapper.updateByPrimaryKeySelective(myComment);
-		return KePuResult.ok(ResultConstant.code_ok, "»Ø¸´³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "å›å¤æˆåŠŸ", "");
 	}
 
 
@@ -433,7 +433,7 @@ public class SysServiceImpl implements SysService{
 	public KePuResult getCommentReply(Integer commentId, Integer userId,
 			Integer page, Integer size) {
 		if(!checkComment(commentId))
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÆÀÂÛÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥è¯„è®ºå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		Map<String,Object> map=new HashMap<String, Object>();
 		StSkillandbuildingReplyExample example=new StSkillandbuildingReplyExample();
 		example.setOrderByClause("createTime desc");
@@ -473,7 +473,7 @@ public class SysServiceImpl implements SysService{
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 
@@ -493,7 +493,7 @@ public class SysServiceImpl implements SysService{
 		if(type==1){
 			StSkillandbuildingComment r = commonCommentMapper.selectByPrimaryKey(typeId);
 			if(r==null)
-				return KePuResult.ok(ResultConstant.code_yewu, "typeId²»ÕıÈ·", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "typeIdä¸æ­£ç¡®", "");
 			r.setPraisenum(r.getPraisenum()+1);
 			commonCommentMapper.updateByPrimaryKeySelective(r);
 			StCommonVote vote=new StCommonVote();
@@ -504,11 +504,11 @@ public class SysServiceImpl implements SysService{
 			jedisClient.hset("commentPraise", "commentPraise_"+typeId+
 					"_"+userId,"1");
 			commonVoteMapper.insertSelective(vote);
-			return KePuResult.ok(ResultConstant.code_ok, "µãÔŞ³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ç‚¹èµæˆåŠŸ", "");
 		}else if(type==2){
 			StSkillandbuildingReply r = commonReplyMapper.selectByPrimaryKey((long)typeId);
 			if(r==null)
-				return KePuResult.ok(ResultConstant.code_yewu, "typeId²»ÕıÈ·", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "typeIdä¸æ­£ç¡®", "");
 			r.setPraisenum(r.getPraisenum()+1);
 			commonReplyMapper.updateByPrimaryKeySelective(r);
 			StCommonVote vote=new StCommonVote();
@@ -519,9 +519,9 @@ public class SysServiceImpl implements SysService{
 			jedisClient.hset("common_replyPraise", "common_replyPraise_"+typeId+
 					"_"+userId,"1");
 			commonVoteMapper.insertSelective(vote);
-			return KePuResult.ok(ResultConstant.code_ok, "µãÔŞ³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ç‚¹èµæˆåŠŸ", "");
 		}
-		return KePuResult.ok(ResultConstant.code_yewu, "type²»ÕıÈ·", "");
+		return KePuResult.ok(ResultConstant.code_yewu, "typeä¸æ­£ç¡®", "");
 	}
 
 

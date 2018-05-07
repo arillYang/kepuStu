@@ -15,7 +15,6 @@ import com.github.pagehelper.PageInfo;
 import com.kepu.constant.MyConstant;
 import com.kepu.constant.ResultConstant;
 import com.kepu.dao.JedisClient;
-import com.kepu.mapper.StLinkMapper;
 import com.kepu.mapper.StNoticeNewsCollectionMapper;
 import com.kepu.mapper.StNoticeNewsCommentMapper;
 import com.kepu.mapper.StNoticeNewsHotSearchMapper;
@@ -47,11 +46,6 @@ import com.kepu.pojo.StNoticeVote;
 import com.kepu.pojo.StNoticeVoteExample;
 import com.kepu.pojo.StVillage;
 import com.kepu.pojo.StVillageExample;
-import com.kepu.pojo.StVillageNews;
-import com.kepu.pojo.StVillageNewsExample;
-import com.kepu.pojo.StVillageNewsRelation;
-import com.kepu.pojo.StVillageNewsRelationExample;
-import com.kepu.pojo.StVillageVote;
 import com.kepu.pojo.news.NewsContent;
 import com.kepu.pojo.news.NewsTemp;
 import com.kepu.service.NoticeService;
@@ -63,8 +57,8 @@ import com.kepu.util.StringUtil;
 import com.kepu.util.SystemSession;
 
 @Service
-public class NoticeServiceImpl implements NoticeService{
-	
+public class NoticeServiceImpl implements NoticeService {
+
 	private static final Logger LOG = Logger.getLogger(NoticeServiceImpl.class);
 	@Autowired
 	private StNoticeNewsMapper noticeNewsMapper;
@@ -84,146 +78,149 @@ public class NoticeServiceImpl implements NoticeService{
 	private StNoticeNewsReplyMapper noticeNewsReplyMapper;
 	@Autowired
 	private StNoticeNewsReportMapper noticeNewsReportMapper;
-	@Autowired   
+	@Autowired
 	StNoticeNewsHotSearchMapper noticeNewsHotSearchMapper;
 	@Autowired
 	private StVillageMapper villageMapper;
 	@Autowired
 	private SysService sysService;
+
 	@Override
 	public List<Integer> findNewsIdsByVillageId(Integer villageId) {
-		StNoticeNewsRelationExample ex=new StNoticeNewsRelationExample();
-		StNoticeNewsRelationExample.Criteria criteria1=ex.createCriteria();
-		criteria1.andVillageidEqualTo(villageId);  //  ∂˛º∂ID
+		StNoticeNewsRelationExample ex = new StNoticeNewsRelationExample();
+		StNoticeNewsRelationExample.Criteria criteria1 = ex.createCriteria();
+		criteria1.andVillageidEqualTo(villageId); // ‰∫åÁ∫ßID
 		List<StNoticeNewsRelation> n = relationMapper.selectByExample(ex);
-		List<Integer> l=new LinkedList<Integer>();
+		List<Integer> l = new LinkedList<Integer>();
 		for (StNoticeNewsRelation stNoticeNewsRelation : n) {
 			l.add(stNoticeNewsRelation.getNewsid());
 		}
 		return l;
 	}
+
 	@Override
 	public KePuResult getCarousel(Integer total, Integer type) {
-		List<Integer> l=null;
-		if(type>30)
-			 l=findNewsIdsByVillageId(type);
-			else
-			l=findNewsIdsByTownId(type);
-		if(l.size()==0){
-			LOG.info("«Î ‰»Î’˝»∑µƒœÁ’ÚID");
+		List<Integer> l = null;
+		if (type > 30)
+			l = findNewsIdsByVillageId(type);
+		else
+			l = findNewsIdsByTownId(type);
+		if (l.size() == 0) {
+			LOG.info("ËØ∑ËæìÂÖ•Ê≠£Á°ÆÁöÑ‰π°ÈïáID");
 			return KePuResult.ok(ResultConstant.code_yewu, "", null);
 		}
-		StNoticeNewsExample example=new StNoticeNewsExample();
-		StNoticeNewsExample.Criteria criteria=example.createCriteria();
+		StNoticeNewsExample example = new StNoticeNewsExample();
+		StNoticeNewsExample.Criteria criteria = example.createCriteria();
 		example.setOrderByClause("updateTime");
 		criteria.andCarouselEqualTo(1);
 		criteria.andStateEqualTo(0);
 		criteria.andUidIn(l);
-		criteria.andDraftEqualTo(0);  // ∑«≤›∏Â
+		criteria.andDraftEqualTo(0); // ÈùûËçâÁ®ø
 		PageHelper.startPage(1, total);
 		List<StNoticeNews> list = noticeNewsMapper.selectByExample(example);
-		List<Map<String,String>> data=new LinkedList<Map<String,String>>();
-		Map<String,String> temp;
-		String version=SystemSession.get().getAppVersion();
-		int isNew=1;
-		if(StringUtil.isNotEmpty(version)&&version.compareTo("6.2.0")<0)
-			isNew=0;
-		for (StNoticeNews stNews:list ) {
-			temp=new HashMap<String, String>();
-			temp.put("newsId", stNews.getUid()+"");
+		List<Map<String, String>> data = new LinkedList<Map<String, String>>();
+		Map<String, String> temp;
+		String version = SystemSession.get().getAppVersion();
+		int isNew = 1;
+		if (StringUtil.isNotEmpty(version) && version.compareTo("6.2.0") < 0)
+			isNew = 0;
+		for (StNoticeNews stNews : list) {
+			temp = new HashMap<String, String>();
+			temp.put("newsId", stNews.getUid() + "");
 			temp.put("title", stNews.getTitle());
-			String pic=stNews.getNewsimages();
-			String image="";
-			if(StringUtil.isNotEmpty(pic)){
-				image=pic.split(",")[0];
+			String pic = stNews.getNewsimages();
+			String image = "";
+			if (StringUtil.isNotEmpty(pic)) {
+				image = pic.split(",")[0];
 			}
 			temp.put("pic", image);
-			if(isNew==1)
+			if (isNew == 1)
 				temp.put("type", "1");
 			data.add(temp);
 		}
-		if(isNew==1){
+		if (isNew == 1) {
 			List<Map<String, String>> linkList = sysService.getLinkMapByType(3);
 			for (Map<String, String> map : linkList) {
 				data.add(map);
 			}
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", data);
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", data);
 	}
+
 	@Override
 	public KePuResult getNews(Integer type, Integer page, Integer size) {
-		List<Integer> l=null;
-		if(type>30)
-			l=findNewsIdsByVillageId(type);
+		List<Integer> l = null;
+		if (type > 30)
+			l = findNewsIdsByVillageId(type);
 		else
-			l=findNewsIdsByTownId(type);
-		if(l.size()==0){
-			LOG.info("«Î ‰»Î’˝»∑µƒœÁ’ÚID");
+			l = findNewsIdsByTownId(type);
+		if (l.size() == 0) {
+			LOG.info("ËØ∑ËæìÂÖ•Ê≠£Á°ÆÁöÑ‰π°ÈïáID");
 			return KePuResult.ok(ResultConstant.code_yewu, "", null);
 		}
-		List<Map<String,String>> myList=new LinkedList<Map<String,String>>();
-		Map<String,String> temp;
-		Integer stickNewsId=null;
-		// page=1  ªÒ»°÷√∂•–¬Œ≈∑≈◊Óµ⁄“ª∏ˆ
-		StNoticeNews stick=null;
-		if(type>30)
-			stick=getStickNews(type);
+		List<Map<String, String>> myList = new LinkedList<Map<String, String>>();
+		Map<String, String> temp;
+		Integer stickNewsId = null;
+		// page=1 Ëé∑ÂèñÁΩÆÈ°∂Êñ∞ÈóªÊîæÊúÄÁ¨¨‰∏Ä‰∏™
+		StNoticeNews stick = null;
+		if (type > 30)
+			stick = getStickNews(type);
 		else
-			stick=getStickTownNews(type);
-		if(page==1){
-			if(stick!=null){
-				temp=new HashMap<String, String>();
-				stickNewsId=stick.getUid();
-				temp.put("newsId", stick.getUid()+"");
-				temp.put("newsStyle", stick.getNewsstyle()+"");
+			stick = getStickTownNews(type);
+		if (page == 1) {
+			if (stick != null) {
+				temp = new HashMap<String, String>();
+				stickNewsId = stick.getUid();
+				temp.put("newsId", stick.getUid() + "");
+				temp.put("newsStyle", stick.getNewsstyle() + "");
 				temp.put("pics", stick.getNewsimages());
 				temp.put("auchor", stick.getNewsauthor());
-				temp.put("publishTime",DateUtil.formatDate(stick.getUpdatetime(), MyConstant.updatetime));
-				temp.put("view", stick.getView()+"");
+				temp.put("publishTime", DateUtil.formatDate(stick.getUpdatetime(), MyConstant.updatetime));
+				temp.put("view", stick.getView() + "");
 				temp.put("title", stick.getTitle());
 				temp.put("stick", "1");
 				myList.add(temp);
 			}
 		}
-		Map<String,Object> map=new HashMap<String, Object>();
-		StNoticeNewsExample example=new StNoticeNewsExample();
-		StNoticeNewsExample.Criteria criteria=example.createCriteria();
+		Map<String, Object> map = new HashMap<String, Object>();
+		StNoticeNewsExample example = new StNoticeNewsExample();
+		StNoticeNewsExample.Criteria criteria = example.createCriteria();
 		example.setOrderByClause("updateTime");
 		criteria.andStateEqualTo(0);
 		criteria.andUidIn(l);
-		criteria.andDraftEqualTo(0);  // ≤ª «≤›∏Â
-		if(stick!=null)
+		criteria.andDraftEqualTo(0); // ‰∏çÊòØËçâÁ®ø
+		if (stick != null)
 			criteria.andUidNotEqualTo(stick.getUid());
 		PageHelper.startPage(page, size);
-		// type=villageId  –¬Œ≈“≤ø…“‘¥”“ªº∂œÁ’ÚªÒ»°
+		// type=villageId Êñ∞Èóª‰πüÂèØ‰ª•‰ªé‰∏ÄÁ∫ß‰π°ÈïáËé∑Âèñ
 		List<StNoticeNews> list = noticeNewsMapper.selectByExample(example);
-		PageInfo<StNoticeNews> pageInfo=new PageInfo<StNoticeNews>(list);
+		PageInfo<StNoticeNews> pageInfo = new PageInfo<StNoticeNews>(list);
 		for (StNoticeNews stNews : list) {
-			temp=new HashMap<String, String>();
-			temp.put("newsId", stNews.getUid()+"");
-			temp.put("newsStyle", stNews.getNewsstyle()+"");
+			temp = new HashMap<String, String>();
+			temp.put("newsId", stNews.getUid() + "");
+			temp.put("newsStyle", stNews.getNewsstyle() + "");
 			temp.put("pics", stNews.getNewsimages());
 			temp.put("auchor", stNews.getNewsauthor());
-			temp.put("publishTime",DateUtil.formatDate(stNews.getUpdatetime(), MyConstant.updatetime));
-			temp.put("view", stNews.getView()+"");
+			temp.put("publishTime", DateUtil.formatDate(stNews.getUpdatetime(), MyConstant.updatetime));
+			temp.put("view", stNews.getView() + "");
 			temp.put("stick", "0");
 			temp.put("title", stNews.getTitle());
 			myList.add(temp);
 		}
-		long total=pageInfo.getTotal();
-		map.put("totalcount",total+"");
+		long total = pageInfo.getTotal();
+		map.put("totalcount", total + "");
 		map.put("newsList", myList);
-		map.put("pagesize", size+"");
-		map.put("totalpage", (total/size+1)+"");
-		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		map.put("pagesize", size + "");
+		map.put("totalpage", (total / size + 1) + "");
+		map.put("currentpage", page + "");
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
 
 	@Override
 	public StNoticeNews getStickNews(Integer villageId) {
-		List<Integer> l=findNewsIdsByVillageId(villageId);
-		StNoticeNewsExample example=new StNoticeNewsExample();
-		StNoticeNewsExample.Criteria criteria=example.createCriteria();
+		List<Integer> l = findNewsIdsByVillageId(villageId);
+		StNoticeNewsExample example = new StNoticeNewsExample();
+		StNoticeNewsExample.Criteria criteria = example.createCriteria();
 		example.setOrderByClause("updateTime");
 		criteria.andStateEqualTo(0);
 		criteria.andStickEqualTo(1);
@@ -231,515 +228,509 @@ public class NoticeServiceImpl implements NoticeService{
 		criteria.andDraftEqualTo(0);
 		PageHelper.startPage(1, 1);
 		List<StNoticeNews> list = noticeNewsMapper.selectByExample(example);
-		if(list.size()==0)
+		if (list.size() == 0)
 			return null;
-		return  list.get(0);
+		return list.get(0);
 	}
 
 	@Override
-	public KePuResult getNewsDetail(Integer userId, Integer newsId,
-			String appVersion) {
-		Map<String,Object> map=new HashMap<String, Object>();
+	public KePuResult getNewsDetail(Integer userId, Integer newsId, String appVersion) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		StNoticeNews news = noticeNewsMapper.selectByPrimaryKey(newsId);
-		if(news==null||news.getState()==1)
-			return KePuResult.ok(ResultConstant.code_yewu, "∏√π´∏Ê“—±ª…æ≥˝ªÚ≤ª¥Ê‘⁄", "");
-		String pic=news.getNewsimages();
-		String image="";
-		if(StringUtil.isNotEmpty(pic)){
-			image=pic.split(",")[0];
+		if (news == null || news.getState() == 1)
+			return KePuResult.ok(ResultConstant.code_yewu, "ËØ•ÂÖ¨ÂëäÂ∑≤Ë¢´Âà†Èô§Êàñ‰∏çÂ≠òÂú®", "");
+		String pic = news.getNewsimages();
+		String image = "";
+		if (StringUtil.isNotEmpty(pic)) {
+			image = pic.split(",")[0];
 		}
-		String myLike="0";
-		StNoticeNewsCollectionExample  example=new StNoticeNewsCollectionExample();
-		StNoticeNewsCollectionExample.Criteria criteria=example.createCriteria();
+		String myLike = "0";
+		StNoticeNewsCollectionExample example = new StNoticeNewsCollectionExample();
+		StNoticeNewsCollectionExample.Criteria criteria = example.createCriteria();
 		criteria.andNewsidEqualTo(newsId);
 		criteria.andUseridEqualTo(userId);
 		List<StNoticeNewsCollection> t = noticeNewsCollectionMapper.selectByExample(example);
-		if(t.size()==1){
-			myLike="1";
-			List<Integer> likeList=new LinkedList<Integer>();
+		if (t.size() == 1) {
+			myLike = "1";
+			List<Integer> likeList = new LinkedList<Integer>();
 			likeList.add(newsId);
 		}
 		map.put("myLike", myLike);
 		map.put("topPic", image);
 		map.put("title", news.getTitle());
-		map.put("publishTime",DateUtil.formatDate(news.getUpdatetime(), MyConstant.updatetime));
+		map.put("publishTime", DateUtil.formatDate(news.getUpdatetime(), MyConstant.updatetime));
 		map.put("auchor", news.getNewsauthor());
-		map.put("likeCount", news.getLikecount()+"");
-		map.put("commentCount", news.getCommentcount()+"");
-		//2017-6-26  –¬Œ≈µ◊≤ø  µ„ª˜œ≤ª∂(«¯±”Î ’≤ÿ),≤ªœ≤ª∂
-		map.put("voteNum", news.getVotenum()+"");
-		map.put("dislikeNum", news.getDislikenum()+"");
-		StNoticeNewsVoteExample ex=new StNoticeNewsVoteExample();
-		StNoticeNewsVoteExample.Criteria c=ex.createCriteria();
+		map.put("likeCount", news.getLikecount() + "");
+		map.put("commentCount", news.getCommentcount() + "");
+		// 2017-6-26 Êñ∞ÈóªÂ∫ïÈÉ® ÁÇπÂáªÂñúÊ¨¢(Âå∫Âà´‰∏éÊî∂Ëóè),‰∏çÂñúÊ¨¢
+		map.put("voteNum", news.getVotenum() + "");
+		map.put("dislikeNum", news.getDislikenum() + "");
+		StNoticeNewsVoteExample ex = new StNoticeNewsVoteExample();
+		StNoticeNewsVoteExample.Criteria c = ex.createCriteria();
 		c.andNewsidEqualTo(newsId);
 		c.andUseridEqualTo(userId);
-		int myVote=0;
-		int myDislike=0;
+		int myVote = 0;
+		int myDislike = 0;
 		List<StNoticeNewsVote> r = noticeNewsVoteMapper.selectByExample(ex);
-		if(r.size()!=0){
-			StNoticeNewsVote v=r.get(0);
-			if(v.getDislike()==1)
-				myDislike=1;
-			if(v.getLiked()==1)
-				myVote=1;
+		if (r.size() != 0) {
+			StNoticeNewsVote v = r.get(0);
+			if (v.getDislike() == 1)
+				myDislike = 1;
+			if (v.getLiked() == 1)
+				myVote = 1;
 		}
-		map.put("myVote", myVote+"");
-		map.put("myDislike", myDislike+"");
-		String content=news.getContent();
-		map.put("content",JsonUtils.jsonToList(content, NewsContent.class));
-		//  ∑√Œ ¡ø+1
-		news.setView(news.getView()+1);
+		map.put("myVote", myVote + "");
+		map.put("myDislike", myDislike + "");
+		String content = news.getContent();
+		map.put("content", JsonUtils.jsonToList(content, NewsContent.class));
+		// ËÆøÈóÆÈáè+1
+		news.setView(news.getView() + 1);
 		noticeNewsMapper.updateByPrimaryKeySelective(news);
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
 
 	@Override
-	public KePuResult getNewsComment(Integer newsId, Integer userId,
-			Integer page, Integer size) {
-		if(!checkNews(newsId))
-			return KePuResult.ok(ResultConstant.code_yewu, "∏√œÁ’Ú–¬Œ≈“—±ª…æ≥˝ªÚ≤ª¥Ê‘⁄", "");
-		Map<String,Object> map=new HashMap<String, Object>();
-		StNoticeNewsCommentExample example=new StNoticeNewsCommentExample();
+	public KePuResult getNewsComment(Integer newsId, Integer userId, Integer page, Integer size) {
+		if (!checkNews(newsId))
+			return KePuResult.ok(ResultConstant.code_yewu, "ËØ•‰π°ÈïáÊñ∞ÈóªÂ∑≤Ë¢´Âà†Èô§Êàñ‰∏çÂ≠òÂú®", "");
+		Map<String, Object> map = new HashMap<String, Object>();
+		StNoticeNewsCommentExample example = new StNoticeNewsCommentExample();
 		example.setOrderByClause("createTime");
-		StNoticeNewsCommentExample.Criteria criteria=example.createCriteria();
+		StNoticeNewsCommentExample.Criteria criteria = example.createCriteria();
 		criteria.andStateEqualTo(0);
 		criteria.andNewsidEqualTo(newsId);
 		PageHelper.startPage(page, size);
 		List<StNoticeNewsComment> myList = noticeNewsCommentMapper.selectByExample(example);
-		List<Map<String,String>> commentList=new LinkedList<Map<String,String>>();
-		Map<String,String> temp;
+		List<Map<String, String>> commentList = new LinkedList<Map<String, String>>();
+		Map<String, String> temp;
 		for (StNoticeNewsComment stComment : myList) {
-			temp=new HashMap<String, String>();
-			temp.put("commentId", stComment.getUid()+"");
-			temp.put("createTime",DateUtil.formatDate(stComment.getCreatetime(), MyConstant.updatetime));
-			temp.put("replyNum", stComment.getReplynum()+"");
-			temp.put("praiseNum", stComment.getPraisenum()+"");
+			temp = new HashMap<String, String>();
+			temp.put("commentId", stComment.getUid() + "");
+			temp.put("createTime", DateUtil.formatDate(stComment.getCreatetime(), MyConstant.updatetime));
+			temp.put("replyNum", stComment.getReplynum() + "");
+			temp.put("praiseNum", stComment.getPraisenum() + "");
 			temp.put("comment", stComment.getContent());
-			temp.put("userId", stComment.getUserid()+"");
+			temp.put("userId", stComment.getUserid() + "");
 			temp.put("nickName", stComment.getUsername());
 			temp.put("avatar", stComment.getAvatar());
-			String myPraise=jedisClient.hget("NcommentPraise", "NcommentPraise_"+stComment.getUid()+
-					"_"+userId);
-			if("0".equals(myPraise)||StringUtil.isEmpty(myPraise)){
-				String t=checkPraise(1, userId, stComment.getUid());
-				if("1".equals(t)){
-				     jedisClient.hset("NcommentPraise", "NcommentPraise_"+stComment.getUid()+
-							"_"+userId,"1");
+			String myPraise = jedisClient.hget("NcommentPraise", "NcommentPraise_" + stComment.getUid() + "_" + userId);
+			if ("0".equals(myPraise) || StringUtil.isEmpty(myPraise)) {
+				String t = checkPraise(1, userId, stComment.getUid());
+				if ("1".equals(t)) {
+					jedisClient.hset("NcommentPraise", "NcommentPraise_" + stComment.getUid() + "_" + userId, "1");
 				}
-				myPraise=t;
+				myPraise = t;
 			}
-			temp.put("myPraise", StringUtil.isEmpty(myPraise)?"0":myPraise);
+			temp.put("myPraise", StringUtil.isEmpty(myPraise) ? "0" : myPraise);
 			commentList.add(temp);
 		}
-		PageInfo<StNoticeNewsComment> pageInfo=new PageInfo<StNoticeNewsComment>(myList);
-		long total=pageInfo.getTotal();
-		map.put("totalcount",total+"");
+		PageInfo<StNoticeNewsComment> pageInfo = new PageInfo<StNoticeNewsComment>(myList);
+		long total = pageInfo.getTotal();
+		map.put("totalcount", total + "");
 		map.put("commentList", commentList);
-		map.put("pagesize", size+"");
-		map.put("totalpage", (total/size+1)+"");
-		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		map.put("pagesize", size + "");
+		map.put("totalpage", (total / size + 1) + "");
+		map.put("currentpage", page + "");
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
 
 	@Override
 	public Boolean checkNews(Integer newsId) {
 		StNoticeNews news = noticeNewsMapper.selectByPrimaryKey(newsId);
-		if(news==null||news.getState()==1)
+		if (news == null || news.getState() == 1)
 			return false;
 		return true;
 	}
 
 	@Override
 	public Boolean checkComment(Long commentId) {
-		StNoticeNewsComment comment=noticeNewsCommentMapper.selectByPrimaryKey(commentId);
-		if(comment==null||comment.getState()==1)
+		StNoticeNewsComment comment = noticeNewsCommentMapper.selectByPrimaryKey(commentId);
+		if (comment == null || comment.getState() == 1)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String checkPraise(Integer type, Integer userId, Long typeId) {
-		StNoticeVoteExample example=new StNoticeVoteExample();
-		StNoticeVoteExample.Criteria criteria=example.createCriteria();
+		StNoticeVoteExample example = new StNoticeVoteExample();
+		StNoticeVoteExample.Criteria criteria = example.createCriteria();
 		criteria.andTypeEqualTo(type);
 		criteria.andTypeidEqualTo(typeId);
 		criteria.andUseridEqualTo(userId);
 		criteria.andStatusEqualTo(0);
 		List<StNoticeVote> list = noticeVoteMapper.selectByExample(example);
-		return list.size()==0?"0":"1";
+		return list.size() == 0 ? "0" : "1";
 	}
 
 	@Override
-	public KePuResult getCommentReply(Long commentId, Integer userId,
-			Integer page, Integer size) {
-		if(!checkComment(commentId))
-			return KePuResult.ok(ResultConstant.code_yewu, "∏√∆¿¬€“—±ª…æ≥˝ªÚ≤ª¥Ê‘⁄", "");
-		Map<String,Object> map=new HashMap<String, Object>();
-		StNoticeNewsReplyExample example=new StNoticeNewsReplyExample();
+	public KePuResult getCommentReply(Long commentId, Integer userId, Integer page, Integer size) {
+		if (!checkComment(commentId))
+			return KePuResult.ok(ResultConstant.code_yewu, "ËØ•ËØÑËÆ∫Â∑≤Ë¢´Âà†Èô§Êàñ‰∏çÂ≠òÂú®", "");
+		Map<String, Object> map = new HashMap<String, Object>();
+		StNoticeNewsReplyExample example = new StNoticeNewsReplyExample();
 		example.setOrderByClause("createTime");
-		StNoticeNewsReplyExample.Criteria criteria=example.createCriteria();
+		StNoticeNewsReplyExample.Criteria criteria = example.createCriteria();
 		criteria.andStateEqualTo(0);
 		criteria.andCommentidEqualTo(commentId);
 		PageHelper.startPage(page, size);
 		List<StNoticeNewsReply> myList = noticeNewsReplyMapper.selectByExample(example);
-		List<Map<String,String>> replyList=new LinkedList<Map<String,String>>();
-		Map<String,String> temp;
+		List<Map<String, String>> replyList = new LinkedList<Map<String, String>>();
+		Map<String, String> temp;
 		for (StNoticeNewsReply stReply : myList) {
-			temp=new HashMap<String, String>();
-			temp.put("replyId", stReply.getUid()+"");
-			temp.put("createTime",DateUtil.formatDate(stReply.getCreatetime(), MyConstant.updatetime));
-			temp.put("praiseNum", stReply.getPraisenum()+"");
+			temp = new HashMap<String, String>();
+			temp.put("replyId", stReply.getUid() + "");
+			temp.put("createTime", DateUtil.formatDate(stReply.getCreatetime(), MyConstant.updatetime));
+			temp.put("praiseNum", stReply.getPraisenum() + "");
 			temp.put("comment", stReply.getContent());
-			temp.put("userId", stReply.getUserid()+"");
+			temp.put("userId", stReply.getUserid() + "");
 			temp.put("nickName", stReply.getUsername());
 			temp.put("avatar", stReply.getAvatar());
-			String myPraise=jedisClient.hget("NreplyPraise", "NreplyPraise_"+stReply.getUid()+
-					"_"+userId);
-			if("0".equals(myPraise)||StringUtil.isEmpty(myPraise)){
-				String t=checkPraise(2, userId, stReply.getUid());
-				if("1".equals(t)){
-				     jedisClient.hset("NreplyPraise", "NreplyPraise_"+stReply.getUid()+
-							"_"+userId,"1");
+			String myPraise = jedisClient.hget("NreplyPraise", "NreplyPraise_" + stReply.getUid() + "_" + userId);
+			if ("0".equals(myPraise) || StringUtil.isEmpty(myPraise)) {
+				String t = checkPraise(2, userId, stReply.getUid());
+				if ("1".equals(t)) {
+					jedisClient.hset("NreplyPraise", "NreplyPraise_" + stReply.getUid() + "_" + userId, "1");
 				}
-				myPraise=t;
+				myPraise = t;
 			}
-			temp.put("myPraise", StringUtil.isEmpty(myPraise)?"0":myPraise);
+			temp.put("myPraise", StringUtil.isEmpty(myPraise) ? "0" : myPraise);
 			replyList.add(temp);
 		}
-		PageInfo<StNoticeNewsReply> pageInfo=new PageInfo<StNoticeNewsReply>(myList);
-		long total=pageInfo.getTotal();
-		map.put("totalcount",total+"");
+		PageInfo<StNoticeNewsReply> pageInfo = new PageInfo<StNoticeNewsReply>(myList);
+		long total = pageInfo.getTotal();
+		map.put("totalcount", total + "");
 		map.put("replyList", replyList);
-		map.put("pagesize", size+"");
-		map.put("totalpage", (total/size+1)+"");
-		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		map.put("pagesize", size + "");
+		map.put("totalpage", (total / size + 1) + "");
+		map.put("currentpage", page + "");
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
 
 	@Override
 	public KePuResult likeNews(Integer newsId, Integer userId) {
-		StNoticeNewsCollectionExample example=new StNoticeNewsCollectionExample();
-		StNoticeNewsCollectionExample.Criteria criteria=example.createCriteria();
+		StNoticeNewsCollectionExample example = new StNoticeNewsCollectionExample();
+		StNoticeNewsCollectionExample.Criteria criteria = example.createCriteria();
 		criteria.andNewsidEqualTo(newsId);
 		criteria.andUseridEqualTo(userId);
 		List<StNoticeNewsCollection> list = noticeNewsCollectionMapper.selectByExample(example);
-		if(list.size()>0){
-			return KePuResult.ok(ResultConstant.code_ok, "“— ’≤ÿ", "");
+		if (list.size() > 0) {
+			return KePuResult.ok(ResultConstant.code_ok, "Â∑≤Êî∂Ëóè", "");
 		}
-		StNoticeNewsCollection collection=new StNoticeNewsCollection();
+		StNoticeNewsCollection collection = new StNoticeNewsCollection();
 		collection.setNewsid(newsId);
 		collection.setUserid(userId);
 		collection.setCreatetime(new Date());
 		noticeNewsCollectionMapper.insertSelective(collection);
-		StNoticeNews news=noticeNewsMapper.selectByPrimaryKey(newsId);
-		news.setLikecount(news.getLikecount()+1);
+		StNoticeNews news = noticeNewsMapper.selectByPrimaryKey(newsId);
+		news.setLikecount(news.getLikecount() + 1);
 		noticeNewsMapper.updateByPrimaryKeySelective(news);
-		//  –¥»Îª∫¥Ê
-		String myLikes=jedisClient.get("Nnews_like_user_"+userId);
+		// ÂÜôÂÖ•ÁºìÂ≠ò
+		String myLikes = jedisClient.get("Nnews_like_user_" + userId);
 		List<Integer> likeList;
-		if(StringUtil.isNotEmpty(myLikes)){
-			likeList=JsonUtils.jsonToList(myLikes, Integer.class);
-		}else{
-			likeList=new LinkedList<Integer>();
+		if (StringUtil.isNotEmpty(myLikes)) {
+			likeList = JsonUtils.jsonToList(myLikes, Integer.class);
+		} else {
+			likeList = new LinkedList<Integer>();
 		}
 		likeList.add(newsId);
-		jedisClient.set("Nnews_like_user_"+userId,JsonUtils.objectToJson(likeList));
-		LOG.info(" ’≤ÿ≥…π¶");
-		return KePuResult.ok(ResultConstant.code_ok, " ’≤ÿ≥…π¶", "");
+		jedisClient.set("Nnews_like_user_" + userId, JsonUtils.objectToJson(likeList));
+		LOG.info("Êî∂ËóèÊàêÂäü");
+		return KePuResult.ok(ResultConstant.code_ok, "Êî∂ËóèÊàêÂäü", "");
 	}
 
 	@Override
 	public KePuResult deletelikeNews(String[] newsIds, Integer userId) {
-		List<Integer> values=null;
+		List<Integer> values = null;
 		try {
 			values = StringUtil.asIntegerList(newsIds);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return KePuResult.ok(ResultConstant.code_yewu, "newsId”–ŒÛ£¨≤Ÿ◊˜ ß∞‹", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "newsIdÊúâËØØÔºåÊìç‰ΩúÂ§±Ë¥•", "");
 		}
-		if(values==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "«Î—°‘Ò“™…æ≥˝µƒ ’≤ÿ", "");
-		StNoticeNewsCollectionExample example=new StNoticeNewsCollectionExample();
-		StNoticeNewsCollectionExample.Criteria criteria=example.createCriteria();
+		if (values == null)
+			return KePuResult.ok(ResultConstant.code_yewu, "ËØ∑ÈÄâÊã©Ë¶ÅÂà†Èô§ÁöÑÊî∂Ëóè", "");
+		StNoticeNewsCollectionExample example = new StNoticeNewsCollectionExample();
+		StNoticeNewsCollectionExample.Criteria criteria = example.createCriteria();
 		criteria.andUseridEqualTo(userId);
 		criteria.andNewsidIn(values);
 		noticeNewsCollectionMapper.deleteByExample(example);
-		jedisClient.del("Nnews_like_user_"+userId);
-		StNoticeNewsExample example2=new StNoticeNewsExample();
-		StNoticeNewsExample.Criteria criteria2=example2.createCriteria();
+		jedisClient.del("Nnews_like_user_" + userId);
+		StNoticeNewsExample example2 = new StNoticeNewsExample();
+		StNoticeNewsExample.Criteria criteria2 = example2.createCriteria();
 		criteria2.andUidIn(values);
 		List<StNoticeNews> r = noticeNewsMapper.selectByExample(example2);
 		for (StNoticeNews stNews : r) {
-			stNews.setLikecount(stNews.getLikecount()-1);
+			stNews.setLikecount(stNews.getLikecount() - 1);
 			noticeNewsMapper.updateByPrimaryKeySelective(stNews);
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "…æ≥˝≥…π¶", "");
+		return KePuResult.ok(ResultConstant.code_ok, "Âà†Èô§ÊàêÂäü", "");
 	}
 
 	@Override
 	public KePuResult getMyLikeNews(Integer userId, Integer page, Integer size) {
-		Map<String,Object> map=new HashMap<String, Object>();
-		StNoticeNewsCollectionExample example=new StNoticeNewsCollectionExample();
-		StNoticeNewsCollectionExample.Criteria criteria=example.createCriteria();
+		Map<String, Object> map = new HashMap<String, Object>();
+		StNoticeNewsCollectionExample example = new StNoticeNewsCollectionExample();
+		StNoticeNewsCollectionExample.Criteria criteria = example.createCriteria();
 		criteria.andUseridEqualTo(userId);
 		PageHelper.startPage(page, size);
 		List<StNoticeNewsCollection> myList = noticeNewsCollectionMapper.selectByExample(example);
-		List<Map<String,String>> collectionList=new LinkedList<Map<String,String>>();
-		Map<String,String> temp;
+		List<Map<String, String>> collectionList = new LinkedList<Map<String, String>>();
+		Map<String, String> temp;
 		for (StNoticeNewsCollection stCollection : myList) {
-			temp=new HashMap<String, String>();
-			Integer newsId=stCollection.getNewsid();
-			temp.put("newsId", newsId+"");
-			String newsCache=jedisClient.get("Nnews_"+newsId);
-			if(StringUtil.isNotEmpty(newsCache)){
-				NewsTemp news=JsonUtils.jsonToPojo(newsCache, NewsTemp.class);
+			temp = new HashMap<String, String>();
+			Integer newsId = stCollection.getNewsid();
+			temp.put("newsId", newsId + "");
+			String newsCache = jedisClient.get("Nnews_" + newsId);
+			if (StringUtil.isNotEmpty(newsCache)) {
+				NewsTemp news = JsonUtils.jsonToPojo(newsCache, NewsTemp.class);
 				temp.put("title", news.getTitle());
 				temp.put("auchor", news.getNewsAuthor());
 				temp.put("newsStyle", news.getNewsStyle());
 				temp.put("publishTime", news.getUpdateTime());
 				temp.put("pics", news.getNewsImages());
 				temp.put("view", news.getView());
-				
-			}else{
-				StNoticeNews news=noticeNewsMapper.selectByPrimaryKey(newsId);
+
+			} else {
+				StNoticeNews news = noticeNewsMapper.selectByPrimaryKey(newsId);
 				temp.put("title", news.getTitle());
 				temp.put("auchor", news.getNewsauthor());
-				temp.put("newsStyle", news.getNewsstyle()+"");
+				temp.put("newsStyle", news.getNewsstyle() + "");
 				temp.put("publishTime", DateUtil.formatDate(news.getUpdatetime(), MyConstant.updatetime));
 				temp.put("pics", news.getNewsimages());
-				temp.put("view", news.getView()+"");
-				NewsTemp t=new NewsTemp(news.getTitle(), news.getNewsimages(), news.getNewsauthor(),
-						 news.getNewsstyle()+"", DateUtil.formatDate(news.getUpdatetime(),MyConstant.updatetime),
-						 news.getView()+"");
-				jedisClient.set("Nnews_"+newsId, JsonUtils.objectToJson(t));
-				jedisClient.expire("Nnews_"+newsId, 86400);
+				temp.put("view", news.getView() + "");
+				NewsTemp t = new NewsTemp(news.getTitle(), news.getNewsimages(), news.getNewsauthor(),
+						news.getNewsstyle() + "", DateUtil.formatDate(news.getUpdatetime(), MyConstant.updatetime),
+						news.getView() + "");
+				jedisClient.set("Nnews_" + newsId, JsonUtils.objectToJson(t));
+				jedisClient.expire("Nnews_" + newsId, 2592000);
 			}
 			collectionList.add(temp);
 		}
-		PageInfo<StNoticeNewsCollection> pageInfo=new PageInfo<StNoticeNewsCollection>(myList);
-		long total=pageInfo.getTotal();
-		map.put("totalcount",total+"");
+		PageInfo<StNoticeNewsCollection> pageInfo = new PageInfo<StNoticeNewsCollection>(myList);
+		long total = pageInfo.getTotal();
+		map.put("totalcount", total + "");
 		map.put("collectionList", collectionList);
-		map.put("pagesize", size+"");
-		map.put("totalpage", (total/size+1)+"");
-		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		map.put("pagesize", size + "");
+		map.put("totalpage", (total / size + 1) + "");
+		map.put("currentpage", page + "");
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
 
 	@Override
 	public KePuResult reportNewsComment(Integer userId, Long commentId) {
 		StNoticeNewsComment comment = noticeNewsCommentMapper.selectByPrimaryKey(commentId);
-		if(comment==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "∏√∆¿¬€“—±ª…æ≥˝ªÚ≤ª¥Ê‘⁄", "");
-		StNoticeNewsReportExample example=new StNoticeNewsReportExample();
-		StNoticeNewsReportExample.Criteria criteria=example.createCriteria();
+		if (comment == null)
+			return KePuResult.ok(ResultConstant.code_yewu, "ËØ•ËØÑËÆ∫Â∑≤Ë¢´Âà†Èô§Êàñ‰∏çÂ≠òÂú®", "");
+		StNoticeNewsReportExample example = new StNoticeNewsReportExample();
+		StNoticeNewsReportExample.Criteria criteria = example.createCriteria();
 		criteria.andCommentidEqualTo(commentId);
 		List<StNoticeNewsReport> reportList = noticeNewsReportMapper.selectByExample(example);
-		if(reportList.size()!=0)
-			return KePuResult.ok(ResultConstant.code_yewu, "ƒ˙µƒæŸ±®“—±ª∆‰À˚”√ªßÃ·Ωªπ˝£¨∏––ªƒ˙µƒ÷ß≥÷", "");
-		StNoticeNewsReport report=new StNoticeNewsReport();
+		if (reportList.size() != 0)
+			return KePuResult.ok(ResultConstant.code_yewu, "ÊÇ®ÁöÑ‰∏æÊä•Â∑≤Ë¢´ÂÖ∂‰ªñÁî®Êà∑Êèê‰∫§ËøáÔºåÊÑüË∞¢ÊÇ®ÁöÑÊîØÊåÅ", "");
+		StNoticeNewsReport report = new StNoticeNewsReport();
 		report.setCommentid(commentId);
 		report.setReportuser(userId);
 		report.setCreatetime(new Date());
 		noticeNewsReportMapper.insertSelective(report);
-		return KePuResult.ok(ResultConstant.code_ok, "æŸ±®≥…π¶","");
+		return KePuResult.ok(ResultConstant.code_ok, "‰∏æÊä•ÊàêÂäü", "");
 	}
-	
+
 	@Override
-	public KePuResult praise(Integer type, Long typeId,Integer userId) {
-		if(type==1){
+	public KePuResult praise(Integer type, Long typeId, Integer userId) {
+		if (type == 1) {
 			StNoticeNewsComment r = noticeNewsCommentMapper.selectByPrimaryKey(typeId);
-			if(r==null)
-				return KePuResult.ok(ResultConstant.code_yewu, "typeId≤ª’˝»∑", "");
-			r.setPraisenum(r.getPraisenum()+1);
+			if (r == null)
+				return KePuResult.ok(ResultConstant.code_yewu, "typeId‰∏çÊ≠£Á°Æ", "");
+			r.setPraisenum(r.getPraisenum() + 1);
 			noticeNewsCommentMapper.updateByPrimaryKeySelective(r);
-			StNoticeVote vote=new StNoticeVote(); 
+			StNoticeVote vote = new StNoticeVote();
 			vote.setType(type);
 			vote.setTypeid(typeId);
 			vote.setVotetime(new Date());
 			vote.setUserid(userId);
-			jedisClient.hset("NcommentPraise", "NcommentPraise_"+typeId+
-					"_"+userId,"1");
+			jedisClient.hset("NcommentPraise", "NcommentPraise_" + typeId + "_" + userId, "1");
 			noticeVoteMapper.insertSelective(vote);
-			return KePuResult.ok(ResultConstant.code_ok, "µ„‘ﬁ≥…π¶", "");
-		}else if(type==2){
-			StNoticeNewsReply r=noticeNewsReplyMapper.selectByPrimaryKey(typeId); 
-			if(r==null)
-				return KePuResult.ok(ResultConstant.code_yewu, "typeId≤ª’˝»∑", "");
-			r.setPraisenum(r.getPraisenum()+1);
+			return KePuResult.ok(ResultConstant.code_ok, "ÁÇπËµûÊàêÂäü", "");
+		} else if (type == 2) {
+			StNoticeNewsReply r = noticeNewsReplyMapper.selectByPrimaryKey(typeId);
+			if (r == null)
+				return KePuResult.ok(ResultConstant.code_yewu, "typeId‰∏çÊ≠£Á°Æ", "");
+			r.setPraisenum(r.getPraisenum() + 1);
 			noticeNewsReplyMapper.updateByPrimaryKeySelective(r);
-			StNoticeVote vote=new StNoticeVote();
+			StNoticeVote vote = new StNoticeVote();
 			vote.setType(type);
 			vote.setTypeid(typeId);
 			vote.setVotetime(new Date());
 			vote.setUserid(userId);
-			jedisClient.hset("NreplyPraise", "NreplyPraise_"+typeId+
-					"_"+userId,"1");
+			jedisClient.hset("NreplyPraise", "NreplyPraise_" + typeId + "_" + userId, "1");
 			noticeVoteMapper.insertSelective(vote);
-			return KePuResult.ok(ResultConstant.code_ok, "µ„‘ﬁ≥…π¶", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ÁÇπËµûÊàêÂäü", "");
 		}
-		return KePuResult.ok(ResultConstant.code_yewu, "type≤ª’˝»∑", "");
+		return KePuResult.ok(ResultConstant.code_yewu, "type‰∏çÊ≠£Á°Æ", "");
 	}
-	
+
 	@Override
-	public KePuResult dpNews(Integer newsId, Integer type, Integer userId,Integer operate) {
-		StNoticeNewsVoteExample example=new StNoticeNewsVoteExample();
-		StNoticeNewsVoteExample.Criteria criteria=example.createCriteria();
+	public KePuResult dpNews(Integer newsId, Integer type, Integer userId, Integer operate) {
+		StNoticeNewsVoteExample example = new StNoticeNewsVoteExample();
+		StNoticeNewsVoteExample.Criteria criteria = example.createCriteria();
 		criteria.andNewsidEqualTo(newsId);
 		criteria.andUseridEqualTo(userId);
 		List<StNoticeNewsVote> resultList = noticeNewsVoteMapper.selectByExample(example);
-		StNoticeNews news=noticeNewsMapper.selectByPrimaryKey(newsId);
-		if(news==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "∏√–¬Œ≈“—±ª…æ≥˝ªÚ≤ª¥Ê‘⁄", "");
+		StNoticeNews news = noticeNewsMapper.selectByPrimaryKey(newsId);
+		if (news == null) {
+			return KePuResult.ok(ResultConstant.code_yewu, "ËØ•Êñ∞ÈóªÂ∑≤Ë¢´Âà†Èô§Êàñ‰∏çÂ≠òÂú®", "");
 		}
-		if(resultList.size()==0&&operate==1){
-			StNoticeNewsVote v=new StNoticeNewsVote();
-			if(type==1){
+		if (resultList.size() == 0 && operate == 1) {
+			StNoticeNewsVote v = new StNoticeNewsVote();
+			if (type == 1) {
 				v.setLiked(1);
-				news.setVotenum(news.getVotenum()+1);
+				news.setVotenum(news.getVotenum() + 1);
 			}
-			if(type==2){
+			if (type == 2) {
 				v.setDislike(1);
-				news.setDislikenum(news.getDislikenum()+1);
+				news.setDislikenum(news.getDislikenum() + 1);
 			}
 			noticeNewsMapper.updateByPrimaryKeySelective(news);
 			v.setVotetime(new Date());
 			v.setNewsid(newsId);
 			v.setUserid(userId);
 			noticeNewsVoteMapper.insertSelective(v);
-		}else if(resultList.size()!=0){
-			StNoticeNewsVote v=resultList.get(0);
-			if(type==1){
-				if(v.getLiked()==0&&operate==1){
+		} else if (resultList.size() != 0) {
+			StNoticeNewsVote v = resultList.get(0);
+			if (type == 1) {
+				if (v.getLiked() == 0 && operate == 1) {
 					v.setLiked(1);
-					news.setVotenum(news.getVotenum()+1);
+					news.setVotenum(news.getVotenum() + 1);
 				}
-				if(v.getLiked()==1&&operate==0){
+				if (v.getLiked() == 1 && operate == 0) {
 					v.setLiked(0);
-					news.setVotenum(news.getVotenum()-1);
+					news.setVotenum(news.getVotenum() - 1);
 				}
 			}
-			if(type==2){
-				if(v.getDislike()==0&&operate==1){
-					news.setDislikenum(news.getDislikenum()+1);
+			if (type == 2) {
+				if (v.getDislike() == 0 && operate == 1) {
+					news.setDislikenum(news.getDislikenum() + 1);
 					v.setDislike(1);
 				}
-				if(v.getDislike()==1&&operate==0){
-					news.setDislikenum(news.getDislikenum()-1);
+				if (v.getDislike() == 1 && operate == 0) {
+					news.setDislikenum(news.getDislikenum() - 1);
 					v.setDislike(0);
 				}
 			}
 			noticeNewsMapper.updateByPrimaryKeySelective(news);
 			noticeNewsVoteMapper.updateByPrimaryKeySelective(v);
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "≤Ÿ◊˜≥…π¶", "");
+		return KePuResult.ok(ResultConstant.code_ok, "Êìç‰ΩúÊàêÂäü", "");
 	}
-	
-	
+
 	@Override
 	public KePuResult searchNews(String query, Integer page, Integer size) {
-		Map<String,Object> map=new HashMap<String, Object>();
-		StNoticeNewsExample example=new StNoticeNewsExample();
-		StNoticeNewsExample.Criteria criteria=example.createCriteria();
+		Map<String, Object> map = new HashMap<String, Object>();
+		StNoticeNewsExample example = new StNoticeNewsExample();
+		StNoticeNewsExample.Criteria criteria = example.createCriteria();
 		example.setOrderByClause("updateTime");
 		criteria.andStateEqualTo(0);
-		criteria.andTitleLike("%"+query+"%");
+		criteria.andTitleLike("%" + query + "%");
 		PageHelper.startPage(page, size);
 		List<StNoticeNews> myList = noticeNewsMapper.selectByExample(example);
-		List<Map<String,String>> newsList=new LinkedList<Map<String,String>>();
-		Map<String,String> temp;
+		List<Map<String, String>> newsList = new LinkedList<Map<String, String>>();
+		Map<String, String> temp;
 		for (StNoticeNews news : myList) {
-			temp=new HashMap<String, String>();
-			temp.put("newsId", news.getUid()+"");
+			temp = new HashMap<String, String>();
+			temp.put("newsId", news.getUid() + "");
 			temp.put("title", news.getTitle());
 			temp.put("auchor", news.getNewsauthor());
-			temp.put("newsStyle", news.getNewsstyle()+"");
+			temp.put("newsStyle", news.getNewsstyle() + "");
 			temp.put("publishTime", DateUtil.formatDate(news.getUpdatetime(), MyConstant.updatetime));
 			temp.put("pics", news.getNewsimages());
-			temp.put("view", news.getView()+"");
+			temp.put("view", news.getView() + "");
 			newsList.add(temp);
 		}
-		PageInfo<StNoticeNews> pageInfo=new PageInfo<StNoticeNews>(myList);
-		long total=pageInfo.getTotal();
-		map.put("totalcount",total+"");
+		PageInfo<StNoticeNews> pageInfo = new PageInfo<StNoticeNews>(myList);
+		long total = pageInfo.getTotal();
+		map.put("totalcount", total + "");
 		map.put("newsList", newsList);
-		map.put("pagesize", size+"");
-		map.put("totalpage", (total/size+1)+"");
-		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		map.put("pagesize", size + "");
+		map.put("totalpage", (total / size + 1) + "");
+		map.put("currentpage", page + "");
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
+
 	@Override
 	public void addHotSearch(String query) {
-		if(query.length()<2)
+		if (query.length() < 2)
 			return;
-		StNoticeNewsHotSearchExample example=new StNoticeNewsHotSearchExample();
-		StNoticeNewsHotSearchExample.Criteria criteria=example.createCriteria();
+		StNoticeNewsHotSearchExample example = new StNoticeNewsHotSearchExample();
+		StNoticeNewsHotSearchExample.Criteria criteria = example.createCriteria();
 		criteria.andStateEqualTo(0);
 		List<StNoticeNewsHotSearch> list = noticeNewsHotSearchMapper.selectByExample(example);
-		float maxSilimar=0l;
-		int tempId=1;
+		float maxSilimar = 0l;
+		int tempId = 1;
 		for (StNoticeNewsHotSearch stHotSearch : list) {
-			String word=stHotSearch.getWord();
-			float current=StrSimilarityUtils.getSimilarityRatio(word, query);
-			if(current>maxSilimar){
-				maxSilimar=current;
-				tempId=stHotSearch.getUid();
-			}	
+			String word = stHotSearch.getWord();
+			float current = StrSimilarityUtils.getSimilarityRatio(word, query);
+			if (current > maxSilimar) {
+				maxSilimar = current;
+				tempId = stHotSearch.getUid();
+			}
 		}
-		if(maxSilimar>0.4){
+		if (maxSilimar > 0.4) {
 			StNoticeNewsHotSearch r = noticeNewsHotSearchMapper.selectByPrimaryKey(tempId);
-			r.setSearchnum(r.getSearchnum()+1);
+			r.setSearchnum(r.getSearchnum() + 1);
 			r.setUpdatetime(new Date());
 			noticeNewsHotSearchMapper.updateByPrimaryKeySelective(r);
-		}else{
-			StNoticeNewsHotSearch r =new StNoticeNewsHotSearch();
+		} else {
+			StNoticeNewsHotSearch r = new StNoticeNewsHotSearch();
 			r.setWord(query);
 			r.setCreatetime(new Date());
 			r.setUpdatetime(new Date());
 			noticeNewsHotSearchMapper.insertSelective(r);
 		}
 	}
+
 	@Override
 	public KePuResult getHotSearch() {
-		Map<String,Object> map=new HashMap<String, Object>();
-		StNoticeNewsHotSearchExample example=new StNoticeNewsHotSearchExample();
-		StNoticeNewsHotSearchExample.Criteria criteria=example.createCriteria();
+		Map<String, Object> map = new HashMap<String, Object>();
+		StNoticeNewsHotSearchExample example = new StNoticeNewsHotSearchExample();
+		StNoticeNewsHotSearchExample.Criteria criteria = example.createCriteria();
 		criteria.andStateEqualTo(0);
 		PageHelper.startPage(1, 20);
 		List<StNoticeNewsHotSearch> list = noticeNewsHotSearchMapper.selectByExample(example);
-		List<String> r=new LinkedList<String>();
+		List<String> r = new LinkedList<String>();
 		for (StNoticeNewsHotSearch stHotSearch : list) {
 			r.add(stHotSearch.getWord());
 		}
 		map.put("hotWords", r);
-		map.put("totalcount", r.size()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "ªÒ»°≥…π¶", map);
+		map.put("totalcount", r.size() + "");
+		return KePuResult.ok(ResultConstant.code_ok, "Ëé∑ÂèñÊàêÂäü", map);
 	}
+
 	@Override
 	public List<Integer> findNewsIdsByTownId(Integer townId) {
-		StVillageExample se=new StVillageExample();
-		StVillageExample.Criteria c1=se.createCriteria();
+		StVillageExample se = new StVillageExample();
+		StVillageExample.Criteria c1 = se.createCriteria();
 		c1.andParentEqualTo(townId);
 		List<StVillage> v1 = villageMapper.selectByExample(se);
-		List<Integer> l1=new LinkedList<Integer>();
+		List<Integer> l1 = new LinkedList<Integer>();
 		for (StVillage stVillage : v1) {
 			l1.add(stVillage.getId());
 		}
-		StNoticeNewsRelationExample ex=new StNoticeNewsRelationExample();
-		StNoticeNewsRelationExample.Criteria criteria1=ex.createCriteria();
-		criteria1.andVillageidIn(l1);  //  ∂˛º∂ID
+		StNoticeNewsRelationExample ex = new StNoticeNewsRelationExample();
+		StNoticeNewsRelationExample.Criteria criteria1 = ex.createCriteria();
+		criteria1.andVillageidIn(l1); // ‰∫åÁ∫ßID
 		List<StNoticeNewsRelation> n = relationMapper.selectByExample(ex);
-		List<Integer> l=new LinkedList<Integer>();
+		List<Integer> l = new LinkedList<Integer>();
 		for (StNoticeNewsRelation stNoticeNewsRelation : n) {
 			l.add(stNoticeNewsRelation.getNewsid());
 		}
 		return l;
 	}
+
 	@Override
 	public StNoticeNews getStickTownNews(Integer townId) {
-		List<Integer> l=findNewsIdsByTownId(townId);
-		StNoticeNewsExample example=new StNoticeNewsExample();
-		StNoticeNewsExample.Criteria criteria=example.createCriteria();
+		List<Integer> l = findNewsIdsByTownId(townId);
+		StNoticeNewsExample example = new StNoticeNewsExample();
+		StNoticeNewsExample.Criteria criteria = example.createCriteria();
 		example.setOrderByClause("updateTime");
 		criteria.andStateEqualTo(0);
 		criteria.andStickEqualTo(1);
@@ -747,8 +738,8 @@ public class NoticeServiceImpl implements NoticeService{
 		criteria.andDraftEqualTo(0);
 		PageHelper.startPage(1, 1);
 		List<StNoticeNews> list = noticeNewsMapper.selectByExample(example);
-		if(list.size()==0)
+		if (list.size() == 0)
 			return null;
-		return  list.get(0);
+		return list.get(0);
 	}
 }

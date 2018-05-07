@@ -1,14 +1,10 @@
 package com.kepu.service.impl;
 
-
-
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +77,7 @@ public class BuildServiceImpl implements BuildService {
 			}
 		}
 		map.put("category", rs);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -90,9 +86,9 @@ public class BuildServiceImpl implements BuildService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(line==1){
 			map.put("buildingId", buildingsellContent.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "·¢²¼³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "å‘å¸ƒæˆåŠŸ", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "·¢²¼Ê§°Ü", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "å‘å¸ƒå¤±è´¥", "");
 		}
 	}
 
@@ -136,7 +132,7 @@ public class BuildServiceImpl implements BuildService {
 				r.add(map);
 			}
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", r);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", r);
 	}
 
 	@Override
@@ -144,7 +140,7 @@ public class BuildServiceImpl implements BuildService {
 		Map<String,String> map=new HashMap<String, String>();
 		StBuildingsellContent content = buildingsellContentMapper.selectByPrimaryKey(buildingId);
 		if(content==null||content.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", map);
 		}
 		map.put("title", content.getTitle());
 		map.put("price", content.getPrice()+"");
@@ -165,7 +161,7 @@ public class BuildServiceImpl implements BuildService {
 		map.put("sellType", content.getSelltype()+""); 
 		map.put("config", content.getConfig()+""); 
 		map.put("trade", content.getTrade()); 
-		// ÆÀÂÛÊı
+		// è¯„è®ºæ•°
 		String v=jedisClient.get("commom_commentNum_"+content.getUid()+"_type"+"_"+3);
 		int num=0;
 		if(StringUtil.isEmpty(v)){
@@ -179,7 +175,7 @@ public class BuildServiceImpl implements BuildService {
 			num=Integer.valueOf(v);
 		}
 		map.put("commentCount", num+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -262,7 +258,7 @@ public class BuildServiceImpl implements BuildService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -281,9 +277,9 @@ public class BuildServiceImpl implements BuildService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(line==1){
 			map.put("rentId", buildingrentContent.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "·¢²¼³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "å‘å¸ƒæˆåŠŸ", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "·¢²¼Ê§°Ü", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "å‘å¸ƒå¤±è´¥", "");
 		}
 	}
 
@@ -369,7 +365,7 @@ public class BuildServiceImpl implements BuildService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -377,7 +373,7 @@ public class BuildServiceImpl implements BuildService {
 		Map<String,String> map=new HashMap<String, String>();
 		StBuildingrentContent content = buildingrentContentMapper.selectByPrimaryKey(rentId);
 		if(content==null||content.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", map);
 		}
 		map.put("title", content.getTitle());
 		map.put("createTime",DateUtil.formatDate(content.getCreatetime(), MyConstant.updatetime));
@@ -397,7 +393,7 @@ public class BuildServiceImpl implements BuildService {
 		map.put("classifyName", content.getClassifyname());
 		map.put("sellType", content.getSelltype()+""); 
 		map.put("userId", content.getUserid()+""); 
-		// ÆÀÂÛÊı
+		// è¯„è®ºæ•°
 		String v=jedisClient.get("commom_commentNum_"+content.getUid()+"_type"+"_"+4);
 		int num=0;
 		if(StringUtil.isEmpty(v)){
@@ -411,7 +407,7 @@ public class BuildServiceImpl implements BuildService {
 			num=Integer.valueOf(v);
 		}
 		map.put("commentCount", num+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -455,7 +451,7 @@ public class BuildServiceImpl implements BuildService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -494,7 +490,7 @@ public class BuildServiceImpl implements BuildService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	

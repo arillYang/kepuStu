@@ -234,9 +234,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.StUserAccount" >
     update st_user_account
     <set >
-      <if test="score != null  and  score != ''" >
         score = #{score,jdbcType=DOUBLE},
-      </if>
       <if test="createtime != null  and  createtime!=''" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>

@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-//import org.apache.struts2.ServletActionContext;
 
+/**
+ * 数据格式化 日期、数值、字符串
+ *
+ */
 public class StringUtil {
 
 	private static final Log log = LogFactory.getLog(StringUtil.class);

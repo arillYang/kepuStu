@@ -31,10 +31,7 @@ public interface CommunityService {
 	
 	KePuResult getArticle(Integer userId,Integer communityId,Integer page,Integer size);
 	
-	/**
-	 * @param type 1 社团   2乡镇社团
-	 * @return
-	 */
+	
 	KePuResult getMyArticle(Integer userId,Integer page,Integer size,Integer type);
 	
 	KePuResult dpArticle(Integer articleId,Integer userId,Integer operate);

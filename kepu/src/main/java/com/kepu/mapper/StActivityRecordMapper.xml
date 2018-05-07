@@ -244,7 +244,7 @@
      
      
     <select id="selectByScoreList" resultMap="BaseResultMap">
-			SELECT sum(score) as  score, <include refid="Base_Column_List"  /> from st_activity_record a where a.userId=#{param.userId,jdbcType=INTEGER}
+			SELECT sum(score*rest) as  score, <include refid="Base_Column_List"  /> from st_activity_record a where a.userId=#{param.userId,jdbcType=INTEGER}
      </select>
      
      
@@ -258,13 +258,25 @@
 
 
 
+  <select id="selectByMeitScorList" resultMap="BaseResultMap">
+  	  select
+   			 <include refid="Base_Column_List"  />
+   	 from st_activity_record  where userId=#{0} and  createtime like  "%"#{1}"%" order by createtime desc
+     </select>
+  
+
      
      <select id="selectByMeitlist" resultMap="BaseResultMap">
   	  select
    			 <include refid="Base_Column_List"  />
-   	 from st_activity_record  where userId=#{0}    and  createtime like  "%"#{1}"%"     order by createtime desc
+   	 from st_activity_record  where userId=#{0} and  createtime like  "%"#{1}"%" and type!=0     order by createtime desc
      </select>
   
+  
+  
+  <select id="findTmit"  resultType="int">
+  select sum(score*rest) from st_activity_record where userId=#{userId}  and createtime  &lt;  #{time}
+  </select>
   
   
   

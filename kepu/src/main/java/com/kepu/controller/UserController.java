@@ -91,11 +91,6 @@ public class UserController {
 			StringBuffer sb = new StringBuffer();
 			if (map.containsKey("mobile")) {
 				mobile = map.get("mobile");
-				/*
-				 * if(mobile.length()>12) return
-				 * KePuResult.build(ResultConstant.code_param,
-				 * ResultConstant.mobile_error, "");
-				 */
 			} else {
 				sb.append("mobile").append(",");
 			}
@@ -938,5 +933,14 @@ public class UserController {
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
+	}
+	
+	/**
+	 * 分享成功
+	 * @return
+	 */
+	@RequestMapping(value="shareSuccess")
+	public @ResponseBody Object shareSuccess(HttpServletRequest request){
+		return "yes";
 	}
 }

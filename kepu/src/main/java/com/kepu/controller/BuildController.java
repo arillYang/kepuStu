@@ -14,24 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kepu.constant.ResultConstant;
 import com.kepu.dao.JedisClient;
 import com.kepu.pojo.KePuResult;
-import com.kepu.pojo.StAuthenticCompany;
-import com.kepu.pojo.StAuthenticPeople;
 import com.kepu.pojo.StBuildingrentContent;
 import com.kepu.pojo.StBuildingsellContent;
-import com.kepu.pojo.StSkillContent;
-import com.kepu.pojo.StTaskContent;
 import com.kepu.pojo.StUser;
 import com.kepu.service.BuildService;
-import com.kepu.service.SkillService;
 import com.kepu.service.SysService;
 import com.kepu.service.UserService;
-import com.kepu.util.DateUtil;
 import com.kepu.util.ExceptionUtil;
 import com.kepu.util.StringUtil;
 
@@ -49,7 +42,7 @@ public class BuildController {
 	private BuildService buildService;
 	
 	/**
-	 * »ñÈ¡·ÖÀà   category/menu
+	 * è·å–åˆ†ç±»   category/menu
 	 */
 	@RequestMapping(value="getClassify")
 	public @ResponseBody Object getClassify(HttpServletRequest request){
@@ -62,7 +55,7 @@ public class BuildController {
 	
 	
 	/**
-	 * »ñÈ¡×°ĞŞ 
+	 * è·å–è£…ä¿® 
 	 */
 	@RequestMapping(value="getDecorate")
 	public @ResponseBody Object getDecorate(HttpServletRequest request){
@@ -78,14 +71,14 @@ public class BuildController {
 				}
 		    }
 		    map.put("list", list);
-			return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * »ñÈ¡ÅäÖÃ
+	 * è·å–é…ç½®
 	 */
 	@RequestMapping(value="getConfig")
 	public @ResponseBody Object getConfig(HttpServletRequest request){
@@ -101,14 +94,14 @@ public class BuildController {
 				}
 		    }
 		    map.put("list", list);
-			return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * ·¢²¼³ö×â³öÊÛ
+	 * å‘å¸ƒå‡ºç§Ÿå‡ºå”®
 	 */
 	@RequestMapping(value="release")
 	public @ResponseBody Object release(@RequestBody Map<String, String> map,HttpServletRequest request){
@@ -116,7 +109,7 @@ public class BuildController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String title="";
 			String introduce="";
@@ -132,7 +125,7 @@ public class BuildController {
 			String config="";
 			String trade="";
 			String sellType="";
-			String classifyName="";  // Ò»¼¶+¶ş¼¶
+			String classifyName="";  // ä¸€çº§+äºŒçº§
 			StringBuffer sb=new StringBuffer();
 			if(map.containsKey("title")){title=map.get("title");}else{sb.append("title").append(",");}
 			if(map.containsKey("introduce")){introduce=map.get("introduce");}else{sb.append("introduce").append(",");}
@@ -158,7 +151,7 @@ public class BuildController {
 			if(map.containsKey("sellType")){sellType=map.get("sellType");}else{sb.append("sellType").append(",");}
 			if(map.containsKey("classifyName")){classifyName=map.get("classifyName");}else{sb.append("classifyName").append(",");}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StBuildingsellContent sc=new StBuildingsellContent();
 			sc.setAddress(address);
@@ -182,8 +175,8 @@ public class BuildController {
 			sc.setDecorate(decorate);
 			sc.setSize(Double.valueOf(size));
 			String approve=sysService.getParam("need_approve");
-			if("1".equals(approve))  // ÉóºË¿ª¹Ø
-				sc.setState(2);  //ĞèÒªÉóºË
+			if("1".equals(approve))  // å®¡æ ¸å¼€å…³
+				sc.setState(2);  //éœ€è¦å®¡æ ¸
 			return buildService.releaseSell(sc);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -191,7 +184,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * »ñÈ¡ÂÖ²¥Í¼ 
+	 * è·å–è½®æ’­å›¾ 
 	 * @return
 	 */
 	@RequestMapping(value="getCarousel")
@@ -204,7 +197,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * »ñÈ¡³ö×â³öÊÛÏêÇé
+	 * è·å–å‡ºç§Ÿå‡ºå”®è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getBuildingDetail/{buildingId}")
@@ -218,7 +211,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * »ñÈ¡³ö×â³öÊÛÁĞ±í
+	 * è·å–å‡ºç§Ÿå‡ºå”®åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getBuildingList/{page}")
@@ -235,7 +228,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * ĞŞ¸Ä³ö×â³öÊÛ
+	 * ä¿®æ”¹å‡ºç§Ÿå‡ºå”®
 	 * @param map
 	 * @return
 	 */
@@ -243,10 +236,10 @@ public class BuildController {
 	public @ResponseBody Object editProduct(@PathVariable Integer buildingId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StUser stUser=userService.getUserById(stUser2.getUserid());
 			String title="";
@@ -263,16 +256,16 @@ public class BuildController {
 			String config="";
 			String trade="";
 			String sellType="";
-			String classifyName="";  // Ò»¼¶+¶ş¼¶
+			String classifyName="";  // ä¸€çº§+äºŒçº§
 			StringBuffer sb=new StringBuffer();
 			
 			StBuildingsellContent content = buildService.getSellContentById(buildingId);
 			if(content==null||content.getState()==1)
-				return KePuResult.build(ResultConstant.code_param, "ÒÑ±»É¾³ı»ò²»´æÔÚ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨"+sb.toString(), "");
 			int userId=content.getUserid();
 			int real=stUser2.getUserid();
 			if(userId!=real)
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíĞŞ¸Ä"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸ä¿®æ”¹"+sb.toString(), "");
 			if(map.containsKey("title")){
 				title=map.get("title");
 				content.setTitle(title);
@@ -335,14 +328,14 @@ public class BuildController {
 			}
 			content.setCreatetime(new Date());
 			buildService.saveSellContent(content);
-			return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ", "");
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * ·¢²¼Çó×âÇó¹º
+	 * å‘å¸ƒæ±‚ç§Ÿæ±‚è´­
 	 */
 	@RequestMapping(value="rentRelease")
 	public @ResponseBody Object rentRelease(@RequestBody Map<String, String> map,HttpServletRequest request){
@@ -350,7 +343,7 @@ public class BuildController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String title="";
 			String introduce="";
@@ -380,7 +373,7 @@ public class BuildController {
 			if(map.containsKey("trade")){trade=map.get("trade");}else{sb.append("trade").append(",");}
 			if(map.containsKey("classifyName")){classifyName=map.get("classifyName");}else{sb.append("classifyName").append(",");}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StBuildingrentContent  sc=new StBuildingrentContent();
 			sc.setTitle(title);
@@ -401,8 +394,8 @@ public class BuildController {
 			sc.setCreatetime(new Date());
 			sc.setNickname(stUser2.getNickname());
 			String approve=sysService.getParam("need_approve");
-			if("1".equals(approve))  // ÉóºË¿ª¹Ø
-				sc.setState(2);  //ĞèÒªÉóºË
+			if("1".equals(approve))  // å®¡æ ¸å¼€å…³
+				sc.setState(2);  //éœ€è¦å®¡æ ¸
 			return buildService.releaseRent(sc);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -410,7 +403,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * »ñÈ¡Çó×âÇó¹ºÁĞ±í
+	 * è·å–æ±‚ç§Ÿæ±‚è´­åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getRentList/{page}")
@@ -427,7 +420,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * »ñÈ¡Çó×âÇó¹ºÏêÇé
+	 * è·å–æ±‚ç§Ÿæ±‚è´­è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getRentDetail/{rentId}")
@@ -441,7 +434,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * ĞŞ¸ÄÇó×âÇó¹º
+	 * ä¿®æ”¹æ±‚ç§Ÿæ±‚è´­
 	 * @param map
 	 * @return
 	 */
@@ -449,10 +442,10 @@ public class BuildController {
 	public @ResponseBody Object editTask(@PathVariable Integer rentId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StUser stUser=userService.getUserById(stUser2.getUserid());
 			String title="";
@@ -471,11 +464,11 @@ public class BuildController {
 			StringBuffer sb=new StringBuffer();
 			StBuildingrentContent content = buildService.getRentContentById(rentId);
 			if(content==null||content.getState()==1)
-				return KePuResult.build(ResultConstant.code_param, "ÒÑ±»É¾³ı»ò²»´æÔÚ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨"+sb.toString(), "");
 			int userId=content.getUserid();
 			int real=stUser2.getUserid();
 			if(userId!=real)
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíĞŞ¸Ä"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸ä¿®æ”¹"+sb.toString(), "");
 			if(map.containsKey("title")){
 				title=map.get("title");
 				content.setTitle(title);
@@ -530,13 +523,13 @@ public class BuildController {
 			}
 			content.setCreatetime(new Date());
 			buildService.saveRentContent(content);
-			return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ", "");
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	/**
-	 * »ñÈ¡ÎÒ·¢²¼µÄ³ö×â³öÊÛ
+	 * è·å–æˆ‘å‘å¸ƒçš„å‡ºç§Ÿå‡ºå”®
 	 * @return
 	 */
 	@RequestMapping(value="getMyBuilding/{page}")
@@ -551,7 +544,7 @@ public class BuildController {
 	}
 	
 	/**
-	 * »ñÈ¡ÎÒ·¢²¼µÄÈÎÎñ
+	 * è·å–æˆ‘å‘å¸ƒçš„ä»»åŠ¡
 	 * @return
 	 */
 	@RequestMapping(value="getMyRent/{page}")

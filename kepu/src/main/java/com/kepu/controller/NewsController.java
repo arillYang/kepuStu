@@ -31,7 +31,7 @@ public class NewsController {
 	@Autowired
 	private UserService userService;
 	/**
-	 * »ñÈ¡¶¥²¿¶©ÔÄÀ¸Ä¿
+	 * è·å–é¡¶éƒ¨è®¢é˜…æ ç›®
 	 * @param map
 	 * @return
 	 */
@@ -45,13 +45,13 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡ÂÖ²¥Í¼ 
+	 * è·å–è½®æ’­å›¾ 
 	 * @return
 	 */
 	@RequestMapping(value="getCarousel")
 	public @ResponseBody Object getCarousel(@RequestParam(required=false) Integer type){
 		try {
-			//  ¸ù¾İÀàĞÍ»ñÈ¡ÂÖ²¥
+			//  æ ¹æ®ç±»å‹è·å–è½®æ’­
 			if(type==null)
 				type=1;
 			return newService.getCarousel(5,type);
@@ -61,7 +61,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡ĞÂÎÅÁĞ±í
+	 * è·å–æ–°é—»åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getNews/{type}/{page}")
@@ -74,7 +74,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡ÍÆ¼öµÄĞÂÎÅÁĞ±í
+	 * è·å–æ¨èçš„æ–°é—»åˆ—è¡¨
 	 */
 	@RequestMapping(value="getCommend")
 	public @ResponseBody Object getCommend(){
@@ -86,7 +86,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡»¥¶¯ÌâÄ¿
+	 * è·å–äº’åŠ¨é¢˜ç›®
 	 */
 	@RequestMapping(value="getQuestion/{newsId}")
 	public @ResponseBody Object getQuestion(@PathVariable Integer newsId){
@@ -98,14 +98,14 @@ public class NewsController {
 	}
 	
 	/**
-	 * Ìá½»»¥¶¯´ğ°¸
+	 * æäº¤äº’åŠ¨ç­”æ¡ˆ
 	 */
 	@RequestMapping(value="submitAnswer")
 	public @ResponseBody Object getQuestion(@RequestBody Map<String, Object> map,HttpServletRequest request){
 		try {
 			List<Map<String,String>> list=(List<Map<String, String>>) map.get("answerList");
 			if(list.size()<3){
-				return KePuResult.build(ResultConstant.code_param, "ÖÁÉÙÌá½»ÈıµÀÌâ", "");	
+				return KePuResult.build(ResultConstant.code_param, "è‡³å°‘æäº¤ä¸‰é“é¢˜", "");	
 			}
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
 			StUser stUser2 = userService.getUserByToken(token);
@@ -115,17 +115,17 @@ public class NewsController {
 		}
 	}
 	/**
-	 * »ñÈ¡ĞÂÎÅÏêÇé
+	 * è·å–æ–°é—»è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getNewsDetail/{newsId}")
 	public @ResponseBody Object getNewsDetail(@PathVariable Integer newsId,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}*/
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			String appVersion=(String) request.getAttribute("appVersion");
@@ -137,7 +137,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡ĞÂÎÅÆÀÂÛ
+	 * è·å–æ–°é—»è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="getNewsComment/{newsId}/{page}")
@@ -154,7 +154,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡ÆÀÂÛ»Ø¸´ÁĞ±í
+	 * è·å–è¯„è®ºå›å¤åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getReply/{commentId}/{page}")
@@ -162,10 +162,10 @@ public class NewsController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}*/
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			return newService.getCommentReply(commentId, userId,page, 10);
@@ -175,7 +175,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * ĞÂÎÅËÑË÷½Ó¿Ú
+	 * æ–°é—»æœç´¢æ¥å£
 	 * @return
 	 */
 	@RequestMapping(value="search/{page}")
@@ -183,7 +183,7 @@ public class NewsController {
 		try {
 			String query=request.getParameter("q");
 			if(StringUtil.isEmpty(query))
-				return KePuResult.build(ResultConstant.code_param, "ËÑË÷´Ê²»ÄÜÎª¿Õ","");	
+				return KePuResult.build(ResultConstant.code_param, "æœç´¢è¯ä¸èƒ½ä¸ºç©º","");	
 			if(page==1)
 				newService.addHotSearch(query);
 			return newService.searchNews(query, page, 10);
@@ -193,7 +193,7 @@ public class NewsController {
 	}
 	
 	/**
-	 * »ñÈ¡ÈÈËÑ´Ê»ã
+	 * è·å–çƒ­æœè¯æ±‡
 	 * @return
 	 */
 	@RequestMapping(value="getHotSearch")

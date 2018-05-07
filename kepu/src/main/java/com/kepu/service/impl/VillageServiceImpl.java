@@ -1,6 +1,5 @@
 package com.kepu.service.impl;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,7 +15,6 @@ import com.github.pagehelper.PageInfo;
 import com.kepu.constant.MyConstant;
 import com.kepu.constant.ResultConstant;
 import com.kepu.dao.JedisClient;
-import com.kepu.mapper.StLinkMapper;
 import com.kepu.mapper.StVillageContentMapper;
 import com.kepu.mapper.StVillageMapper;
 import com.kepu.mapper.StVillageNewsCollectionMapper;
@@ -30,27 +28,8 @@ import com.kepu.mapper.StVillageNewsVoteMapper;
 import com.kepu.mapper.StVillageVoteMapper;
 import com.kepu.pojo.KePuResult;
 import com.kepu.pojo.StActivityRecord;
-import com.kepu.pojo.StCollection;
-import com.kepu.pojo.StCollectionExample;
-import com.kepu.pojo.StComment;
-import com.kepu.pojo.StCommentExample;
-import com.kepu.pojo.StHotSearch;
-import com.kepu.pojo.StHotSearchExample;
-import com.kepu.pojo.StLink;
-import com.kepu.pojo.StLinkExample;
-import com.kepu.pojo.StLog;
-import com.kepu.pojo.StLogExample;
-import com.kepu.pojo.StNews;
-import com.kepu.pojo.StNewsExample;
-import com.kepu.pojo.StNewsVote;
-import com.kepu.pojo.StNewsVoteExample;
-import com.kepu.pojo.StReply;
-import com.kepu.pojo.StReplyExample;
-import com.kepu.pojo.StReport;
-import com.kepu.pojo.StReportExample;
 import com.kepu.pojo.StUser;
 import com.kepu.pojo.StVillage;
-import com.kepu.pojo.StVillageContentExample;
 import com.kepu.pojo.StVillageContentWithBLOBs;
 import com.kepu.pojo.StVillageExample;
 import com.kepu.pojo.StVillageNews;
@@ -71,8 +50,6 @@ import com.kepu.pojo.StVillageNewsVote;
 import com.kepu.pojo.StVillageNewsVoteExample;
 import com.kepu.pojo.StVillageVote;
 import com.kepu.pojo.StVillageVoteExample;
-import com.kepu.pojo.StVote;
-import com.kepu.pojo.StVoteExample;
 import com.kepu.pojo.news.NewsContent;
 import com.kepu.pojo.news.NewsTemp;
 import com.kepu.pojo.news.VillageTotalResult;
@@ -129,7 +106,7 @@ public class VillageServiceImpl implements VillageService {
 	public List<Integer> findNewsIdsByVillageId(Integer villageId) {
 		StVillageNewsRelationExample ex=new StVillageNewsRelationExample();
 		StVillageNewsRelationExample.Criteria criteria1=ex.createCriteria();
-		criteria1.andVillageidEqualTo(villageId);  //  ¶ş¼¶ID
+		criteria1.andVillageidEqualTo(villageId);  //  äºŒçº§ID
 		List<StVillageNewsRelation> n = relationMapper.selectByExample(ex);
 		List<Integer> l=new LinkedList<Integer>();
 		for (StVillageNewsRelation stVillageNewsRelation : n) {
@@ -145,9 +122,9 @@ public class VillageServiceImpl implements VillageService {
 		else
 		l=findNewsIdsByTownId(type);
 		if(l.size()==0){
-			//return KePuResult.ok(ResultConstant.code_yewu, "ÇëÊäÈëÕıÈ·µÄÏçÕòID", null);
-			LOG.info("ÇëÊäÈëÕıÈ·µÄÏçÕòID");
-			return KePuResult.ok(ResultConstant.code_yewu, "", null);
+			//return KePuResult.ok(ResultConstant.code_yewu, "è¯·è¾“å…¥æ­£ç¡®çš„ä¹¡é•‡ID", null);
+			LOG.info("è¯·è¾“å…¥æ­£ç¡®çš„ä¹¡é•‡ID");
+			return KePuResult.ok(ResultConstant.code_yewu, "æš‚æ— æœ€æ–°æ¶ˆæ¯", null);
 		}
 		StVillageNewsExample example=new StVillageNewsExample();
 		StVillageNewsExample.Criteria criteria=example.createCriteria();
@@ -155,7 +132,7 @@ public class VillageServiceImpl implements VillageService {
 		criteria.andCarouselEqualTo(1);
 		criteria.andStateEqualTo(0);
 		criteria.andUidIn(l);
-		criteria.andDraftEqualTo(0);  // ·Ç²İ¸å
+		criteria.andDraftEqualTo(0);  // éè‰ç¨¿
 		PageHelper.startPage(1, total);
 		List<StVillageNews> list = villageNewsMapper.selectByExample(example);
 		List<Map<String,String>> data=new LinkedList<Map<String,String>>();
@@ -184,23 +161,23 @@ public class VillageServiceImpl implements VillageService {
 				data.add(map);
 			}
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", data);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", data);
 	}
 	@Override
 	public KePuResult getNews(Integer type, Integer page, Integer size) {
-		// type Ïç´åID 
+		// type ä¹¡æ‘ID 
 		List<Integer> l=null;
 		if(type>50)
 			l=findNewsIdsByVillageId(type);
 		else
 			l=findNewsIdsByTownId(type);
 		if(l.size()==0){
-			return KePuResult.ok(ResultConstant.code_ok, "ÔİÎŞÏûÏ¢", null);
+			return KePuResult.ok(ResultConstant.code_ok, "æš‚æ— æ¶ˆæ¯", null);
 		}
 		List<Map<String,String>> myList=new LinkedList<Map<String,String>>();
 		Map<String,String> temp;
 		Integer stickNewsId=null;
-		// page=1  »ñÈ¡ÖÃ¶¥ĞÂÎÅ·Å×îµÚÒ»¸ö
+		// page=1  è·å–ç½®é¡¶æ–°é—»æ”¾æœ€ç¬¬ä¸€ä¸ª
 		StVillageNews stick=null;
 		if(type>50)
 			stick=getStickNews(type);
@@ -227,11 +204,11 @@ public class VillageServiceImpl implements VillageService {
 		example.setOrderByClause("updateTime");
 		criteria.andStateEqualTo(0);
 		criteria.andUidIn(l);
-		criteria.andDraftEqualTo(0);  // ²»ÊÇ²İ¸å
+		criteria.andDraftEqualTo(0);  // ä¸æ˜¯è‰ç¨¿
 		if(stick!=null)
 			criteria.andUidNotEqualTo(stick.getUid());
 		PageHelper.startPage(page, size);
-		// type=villageId  ĞÂÎÅÒ²¿ÉÒÔ´ÓÒ»¼¶ÏçÕò»ñÈ¡
+		// type=villageId  æ–°é—»ä¹Ÿå¯ä»¥ä»ä¸€çº§ä¹¡é•‡è·å–
 		List<StVillageNews> list = villageNewsMapper.selectByExample(example);
 		PageInfo<StVillageNews> pageInfo=new PageInfo<StVillageNews>(list);
 		for (StVillageNews stNews : list) {
@@ -252,7 +229,7 @@ public class VillageServiceImpl implements VillageService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -294,7 +271,7 @@ public class VillageServiceImpl implements VillageService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		StVillageNews news = villageNewsMapper.selectByPrimaryKey(newsId);
 		if(news==null||news.getState()==1)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÏç´åĞÂÎÅÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥ä¹¡æ‘æ–°é—»å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		String pic=news.getNewsimages();
 		String image="";
 		if(StringUtil.isNotEmpty(pic)){
@@ -318,7 +295,7 @@ public class VillageServiceImpl implements VillageService {
 		map.put("auchor", news.getNewsauthor());
 		map.put("likeCount", news.getLikecount()+"");
 		map.put("commentCount", news.getCommentcount()+"");
-		//2017-6-26  ĞÂÎÅµ×²¿  µã»÷Ï²»¶(Çø±ğÓëÊÕ²Ø),²»Ï²»¶
+		//2017-6-26  æ–°é—»åº•éƒ¨  ç‚¹å‡»å–œæ¬¢(åŒºåˆ«ä¸æ”¶è—),ä¸å–œæ¬¢
 		map.put("voteNum", news.getVotenum()+"");
 		map.put("dislikeNum", news.getDislikenum()+"");
 		StVillageNewsVoteExample ex=new StVillageNewsVoteExample();
@@ -339,17 +316,17 @@ public class VillageServiceImpl implements VillageService {
 		map.put("myDislike", myDislike+"");
 		String content=news.getContent();
 		map.put("content",JsonUtils.jsonToList(content, NewsContent.class));
-		//  ·ÃÎÊÁ¿+1
+		//  è®¿é—®é‡+1
 		news.setView(news.getView()+1);
 		villageNewsMapper.updateByPrimaryKeySelective(news);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
 	public KePuResult getNewsComment(Integer newsId, Integer userId,
 			Integer page, Integer size) {
 		if(!checkNews(newsId))
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÏçÕòĞÂÎÅÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥ä¹¡é•‡æ–°é—»å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		Map<String,Object> map=new HashMap<String, Object>();
 		StVillageNewsCommentExample example=new StVillageNewsCommentExample();
 		example.setOrderByClause("createTime");
@@ -390,7 +367,7 @@ public class VillageServiceImpl implements VillageService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -425,7 +402,7 @@ public class VillageServiceImpl implements VillageService {
 	public KePuResult getCommentReply(Long commentId, Integer userId,
 			Integer page, Integer size) {
 		if(!checkComment(commentId))
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÆÀÂÛÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥è¯„è®ºå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		Map<String,Object> map=new HashMap<String, Object>();
 		StVillageNewsReplyExample example=new StVillageNewsReplyExample();
 		example.setOrderByClause("createTime");
@@ -465,7 +442,7 @@ public class VillageServiceImpl implements VillageService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -476,7 +453,7 @@ public class VillageServiceImpl implements VillageService {
 		criteria.andUseridEqualTo(userId);
 		List<StVillageNewsCollection> list = villageNewsCollectionMapper.selectByExample(example);
 		if(list.size()>0){
-			return KePuResult.ok(ResultConstant.code_ok, "ÒÑÊÕ²Ø", "");
+			return KePuResult.ok(ResultConstant.code_ok, "å·²æ”¶è—", "");
 		}
 		StVillageNewsCollection collection=new StVillageNewsCollection();
 		collection.setNewsid(newsId);
@@ -486,7 +463,7 @@ public class VillageServiceImpl implements VillageService {
 		StVillageNews news=villageNewsMapper.selectByPrimaryKey(newsId);
 		news.setLikecount(news.getLikecount()+1);
 		villageNewsMapper.updateByPrimaryKeySelective(news);
-		//  Ğ´Èë»º´æ
+		//  å†™å…¥ç¼“å­˜
 		String myLikes=jedisClient.get("Vnews_like_user_"+userId);
 		List<Integer> likeList;
 		if(StringUtil.isNotEmpty(myLikes)){
@@ -496,8 +473,8 @@ public class VillageServiceImpl implements VillageService {
 		}
 		likeList.add(newsId);
 		jedisClient.set("Vnews_like_user_"+userId,JsonUtils.objectToJson(likeList));
-		LOG.info("ÊÕ²Ø³É¹¦");
-		return KePuResult.ok(ResultConstant.code_ok, "ÊÕ²Ø³É¹¦", "");
+		LOG.info("æ”¶è—æˆåŠŸ");
+		return KePuResult.ok(ResultConstant.code_ok, "æ”¶è—æˆåŠŸ", "");
 	}
 
 	@Override
@@ -507,10 +484,10 @@ public class VillageServiceImpl implements VillageService {
 			values = StringUtil.asIntegerList(newsIds);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return KePuResult.ok(ResultConstant.code_yewu, "newsIdÓĞÎó£¬²Ù×÷Ê§°Ü", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "newsIdæœ‰è¯¯ï¼Œæ“ä½œå¤±è´¥", "");
 		}
 		if(values==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "ÇëÑ¡ÔñÒªÉ¾³ıµÄÊÕ²Ø", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯·é€‰æ‹©è¦åˆ é™¤çš„æ”¶è—", "");
 		StVillageNewsCollectionExample example=new StVillageNewsCollectionExample();
 		StVillageNewsCollectionExample.Criteria criteria=example.createCriteria();
 		criteria.andUseridEqualTo(userId);
@@ -525,7 +502,7 @@ public class VillageServiceImpl implements VillageService {
 			stNews.setLikecount(stNews.getLikecount()-1);
 			villageNewsMapper.updateByPrimaryKeySelective(stNews);
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", "");
 	}
 
 	@Override
@@ -564,7 +541,7 @@ public class VillageServiceImpl implements VillageService {
 						 news.getNewsstyle()+"", DateUtil.formatDate(news.getUpdatetime(),MyConstant.updatetime),
 						 news.getView()+"");
 				jedisClient.set("Vnews_"+newsId, JsonUtils.objectToJson(t));
-				jedisClient.expire("Vnews_"+newsId, 86400);
+				jedisClient.expire("Vnews_"+newsId, 2592000);
 			}
 			collectionList.add(temp);
 		}
@@ -575,26 +552,26 @@ public class VillageServiceImpl implements VillageService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
 	public KePuResult reportNewsComment(Integer userId, Long commentId) {
 		StVillageNewsComment comment = villageNewsCommentMapper.selectByPrimaryKey(commentId);
 		if(comment==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÆÀÂÛÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥è¯„è®ºå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		StVillageNewsReportExample example=new StVillageNewsReportExample();
 		StVillageNewsReportExample.Criteria criteria=example.createCriteria();
 		criteria.andCommentidEqualTo(commentId);
 		List<StVillageNewsReport> reportList = villageNewsReportMapper.selectByExample(example);
 		if(reportList.size()!=0)
-			return KePuResult.ok(ResultConstant.code_yewu, "ÄúµÄ¾Ù±¨ÒÑ±»ÆäËûÓÃ»§Ìá½»¹ı£¬¸ĞĞ»ÄúµÄÖ§³Ö", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "æ‚¨çš„ä¸¾æŠ¥å·²è¢«å…¶ä»–ç”¨æˆ·æäº¤è¿‡ï¼Œæ„Ÿè°¢æ‚¨çš„æ”¯æŒ", "");
 		StVillageNewsReport report=new StVillageNewsReport();
 		report.setCommentid(commentId);
 		report.setReportuser(userId);
 		report.setCreatetime(new Date());
 		villageNewsReportMapper.insertSelective(report);
-		return KePuResult.ok(ResultConstant.code_ok, "¾Ù±¨³É¹¦","");
+		return KePuResult.ok(ResultConstant.code_ok, "ä¸¾æŠ¥æˆåŠŸ","");
 	}
 	
 	@Override
@@ -602,7 +579,7 @@ public class VillageServiceImpl implements VillageService {
 		if(type==1){
 			StVillageNewsComment r = villageNewsCommentMapper.selectByPrimaryKey(typeId);
 			if(r==null)
-				return KePuResult.ok(ResultConstant.code_yewu, "typeId²»ÕıÈ·", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "typeIdä¸æ­£ç¡®", "");
 			r.setPraisenum(r.getPraisenum()+1);
 			villageNewsCommentMapper.updateByPrimaryKeySelective(r);
 			StVillageVote vote=new StVillageVote(); 
@@ -613,11 +590,11 @@ public class VillageServiceImpl implements VillageService {
 			jedisClient.hset("VcommentPraise", "VcommentPraise_"+typeId+
 					"_"+userId,"1");
 			villageVoteMapper.insertSelective(vote);
-			return KePuResult.ok(ResultConstant.code_ok, "µãÔŞ³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ç‚¹èµæˆåŠŸ", "");
 		}else if(type==2){
 			StVillageNewsReply r=villageNewsReplyMapper.selectByPrimaryKey(typeId); 
 			if(r==null)
-				return KePuResult.ok(ResultConstant.code_yewu, "typeId²»ÕıÈ·", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "typeIdä¸æ­£ç¡®", "");
 			r.setPraisenum(r.getPraisenum()+1);
 			villageNewsReplyMapper.updateByPrimaryKeySelective(r);
 			StVillageVote vote=new StVillageVote();
@@ -628,9 +605,9 @@ public class VillageServiceImpl implements VillageService {
 			jedisClient.hset("VreplyPraise", "VreplyPraise_"+typeId+
 					"_"+userId,"1");
 			villageVoteMapper.insertSelective(vote);
-			return KePuResult.ok(ResultConstant.code_ok, "µãÔŞ³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ç‚¹èµæˆåŠŸ", "");
 		}
-		return KePuResult.ok(ResultConstant.code_yewu, "type²»ÕıÈ·", "");
+		return KePuResult.ok(ResultConstant.code_yewu, "typeä¸æ­£ç¡®", "");
 	}
 	
 	@Override
@@ -642,7 +619,7 @@ public class VillageServiceImpl implements VillageService {
 		List<StVillageNewsVote> resultList = villageNewsVoteMapper.selectByExample(example);
 		StVillageNews news=villageNewsMapper.selectByPrimaryKey(newsId);
 		if(news==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃĞÂÎÅÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥æ–°é—»å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		}
 		if(resultList.size()==0&&operate==1){
 			StVillageNewsVote v=new StVillageNewsVote();
@@ -655,11 +632,11 @@ public class VillageServiceImpl implements VillageService {
 				news.setDislikenum(news.getDislikenum()+1);
 			}
 			villageNewsMapper.updateByPrimaryKeySelective(news);
-			// µãÔŞ»ı·Ö  begin
+			// ç‚¹èµç§¯åˆ†  begin
 			StActivityRecord record=new StActivityRecord();
 			record.setScore(1.0);
 			StUser user = userService.getUserById(userId);
-			sysService.insertActivityRecord(user, record, 21, "ÏçÕòĞÂÎÅµãÔŞ,ĞÂÎÅID:"+newsId);
+			sysService.insertActivityRecord(user, record, 21, "ä¹¡é•‡æ–°é—»ç‚¹èµ,æ–°é—»ID:"+newsId);
 			// end
 			v.setVotetime(new Date());
 			v.setNewsid(newsId);
@@ -690,7 +667,7 @@ public class VillageServiceImpl implements VillageService {
 			villageNewsMapper.updateByPrimaryKeySelective(news);
 			villageNewsVoteMapper.updateByPrimaryKeySelective(v);
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "²Ù×÷³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "æ“ä½œæˆåŠŸ", "");
 	}
 	
 	
@@ -724,7 +701,7 @@ public class VillageServiceImpl implements VillageService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public void addHotSearch(String query) {
@@ -771,7 +748,7 @@ public class VillageServiceImpl implements VillageService {
 		}
 		map.put("hotWords", r);
 		map.put("totalcount", r.size()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -822,7 +799,7 @@ public class VillageServiceImpl implements VillageService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -842,7 +819,7 @@ public class VillageServiceImpl implements VillageService {
 		}
 		StVillageNewsRelationExample ex=new StVillageNewsRelationExample();
 		StVillageNewsRelationExample.Criteria criteria1=ex.createCriteria();
-		//criteria1.andVillageidEqualTo(villageId);  // Ò»¼¶µØÃû
+		//criteria1.andVillageidEqualTo(villageId);  // ä¸€çº§åœ°å
 		criteria1.andVillageidIn(l1);
 		List<StVillageNewsRelation> n = relationMapper.selectByExample(ex);
 		List<Integer> l=new LinkedList<Integer>();

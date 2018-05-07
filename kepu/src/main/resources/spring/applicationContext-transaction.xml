@@ -2,7 +2,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:task="http://www.springframework.org/schema/task"  
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
 		http://www.springframework.org/schema/mvc 
@@ -12,14 +11,7 @@
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
 		http://www.springframework.org/schema/tx 
-		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
-		http://www.springframework.org/schema/task  
-		http://www.springframework.org/schema/task/spring-task-3.1.xsd  ">
-
-	<task:annotation-driven/>  
-	<context:annotation-config/>  
-    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  
-    <context:component-scan base-package="com.kepu.task"/> 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd ">
 
 <!-- 事务管理器 
 	对mybatis操作数据库事务控制，spring使用jdbc的事务控制类
@@ -48,41 +40,6 @@
 <aop:config>
 	<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.kepu.service.impl.*.*(..))"/>
 </aop:config>
-<!-- 定时任务测试 -->
-    <!-- <bean id="TaskController" class="com.kepu.task.TaskController" /> -->
- 
-    <!-- 定义调用对象和调用对象的方法 -->
-   <!--  <bean id="MyTask"
-        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        调用的类
-        <property name="targetObject" ref="TaskController" />
-        调用类中的方法
-        <property name="targetMethod" value="publish" />
-        是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
-        <property name="concurrent" value="false"/>
-    </bean> -->
-         
-    <!-- quartz-2.x的配置 -->
-     <!-- 定义触发时间 -->
-    <!-- <bean id="myJobTrigger"
-        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail">
-            <ref bean="MyTask" />
-        </property>
-        <property name="cronExpression">
-       	<value>0 0 * * * ?</value>  
-        </property>
-    </bean> -->
-     
-    <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
-    <!-- 如果lazy-init='true',则需要实例化该bean才能执行调度程序 -->
-    <!-- <bean name="startQuertz" lazy-init="false" autowire="no"
-        class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="triggers">
-            <list>
-                <ref bean="myJobTrigger" />
-            </list>
-        </property>
-    </bean> -->
+
 	
 </beans>

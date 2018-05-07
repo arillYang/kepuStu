@@ -15,6 +15,7 @@ public class JedisClientCluster implements JedisClient {
 	
 	@Override
 	public String get(String key) {
+		
 		return jedisCluster.get(key);
 	}
 

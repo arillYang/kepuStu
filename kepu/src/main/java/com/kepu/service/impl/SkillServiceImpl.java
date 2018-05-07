@@ -68,18 +68,18 @@ public class SkillServiceImpl implements SkillService {
 		List<StAuthenticPeople> result = authenticPeopleMapper.selectByExample(example);
 		if(result.size()==0){
 			authenticPeopleMapper.insertSelective(sap);
-			return KePuResult.ok(ResultConstant.code_ok, "ÉêÇë³É¹¦,ÇëµÈ´ı¹ÜÀíÔ±ÉóºË", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ç”³è¯·æˆåŠŸ,è¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸", "");
 		}else{
 			StAuthenticPeople temp=result.get(0);
 			if(temp.getState()==0)
-				return KePuResult.ok(ResultConstant.code_yewu, "ÇëÎğÖØ¸´ÉêÇë", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "è¯·å‹¿é‡å¤ç”³è¯·", "");
 			else if(temp.getState()==1){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÉêÇëÕıÔÚ´¦ÀíÖĞ", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”³è¯·æ­£åœ¨å¤„ç†ä¸­", "");
 			}else if(temp.getState()==2){
 				authenticPeopleMapper.insertSelective(sap);
-				return KePuResult.ok(ResultConstant.code_ok, "ÉêÇë³É¹¦,ÇëµÈ´ı¹ÜÀíÔ±ÉóºË", "");
+				return KePuResult.ok(ResultConstant.code_ok, "ç”³è¯·æˆåŠŸ,è¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸", "");
 			}
-			return KePuResult.ok(ResultConstant.code_yewu, "ÏµÍ³Òì³£", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "ç³»ç»Ÿå¼‚å¸¸", "");
 		}
 		
 	}
@@ -93,18 +93,18 @@ public class SkillServiceImpl implements SkillService {
 		List<StAuthenticCompany> result = authenticCompanyMapper.selectByExample(example);
 		if(result.size()==0){
 			authenticCompanyMapper.insertSelective(sap);
-			return KePuResult.ok(ResultConstant.code_ok, "ÉêÇë³É¹¦,ÇëµÈ´ı¹ÜÀíÔ±ÉóºË", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ç”³è¯·æˆåŠŸ,è¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸", "");
 		}else{
 			StAuthenticCompany temp=result.get(0);
 			if(temp.getState()==0)
-				return KePuResult.ok(ResultConstant.code_yewu, "ÇëÎğÖØ¸´ÉêÇë", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "è¯·å‹¿é‡å¤ç”³è¯·", "");
 			else if(temp.getState()==1){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÉêÇëÕıÔÚ´¦ÀíÖĞ", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”³è¯·æ­£åœ¨å¤„ç†ä¸­", "");
 			}else if(temp.getState()==2){
 				authenticCompanyMapper.insertSelective(sap);
-				return KePuResult.ok(ResultConstant.code_ok, "ÉêÇë³É¹¦,ÇëµÈ´ı¹ÜÀíÔ±ÉóºË", "");
+				return KePuResult.ok(ResultConstant.code_ok, "ç”³è¯·æˆåŠŸ,è¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸", "");
 			}
-			return KePuResult.ok(ResultConstant.code_yewu, "ÏµÍ³Òì³£", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "ç³»ç»Ÿå¼‚å¸¸", "");
 		}
 	}
 
@@ -137,7 +137,7 @@ public class SkillServiceImpl implements SkillService {
 		}
 		data.put("people", pstate+"");
 		data.put("company", cstate+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", data);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", data);
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class SkillServiceImpl implements SkillService {
 			}
 		}
 		map.put("category", rs);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -200,9 +200,9 @@ public class SkillServiceImpl implements SkillService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(line==1){
 			map.put("skillId", skillContent.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "·¢²¼³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "å‘å¸ƒæˆåŠŸ", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "·¢²¼Ê§°Ü", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "å‘å¸ƒå¤±è´¥", "");
 		}
 	}
 
@@ -270,7 +270,7 @@ public class SkillServiceImpl implements SkillService {
 				r.add(map);
 			}
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", r);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", r);
 	}
 
 	@Override
@@ -278,7 +278,7 @@ public class SkillServiceImpl implements SkillService {
 		Map<String,String> map=new HashMap<String, String>();
 		StSkillContent content = skillContentMapper.selectByPrimaryKey(skillId);
 		if(content==null||content.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", map);
 		}
 		map.put("title", content.getTitle());
 		map.put("price", content.getPrice()+"");
@@ -294,7 +294,7 @@ public class SkillServiceImpl implements SkillService {
 		map.put("classifyName", content.getClassifyname());
 		map.put("skillId", content.getUid()+"");
 		map.put("coverPic", content.getCoverpic());
-		// ÆÀÂÛÊı
+		// è¯„è®ºæ•°
 		String v=jedisClient.get("commom_commentNum_"+content.getUid()+"_type"+"_"+1);
 		int num=0;
 		if(StringUtil.isEmpty(v)){
@@ -309,7 +309,7 @@ public class SkillServiceImpl implements SkillService {
 		}
 		map.put("commentCount", num+"");
 		map.put("coverPic", content.getCoverpic());
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -317,7 +317,7 @@ public class SkillServiceImpl implements SkillService {
 			Map<String, String> conditions) {
 		Map<String,Object> map=new HashMap<String, Object>();
 		StSkillContentExample example=new StSkillContentExample();
-		/*ÅÅĞò²¿·Ö*/
+		/*æ’åºéƒ¨åˆ†*/
 		StringBuffer orderString=new StringBuffer();
 		if(conditions.containsKey("all")){
 			int v=Integer.valueOf(conditions.get("all"));
@@ -351,7 +351,7 @@ public class SkillServiceImpl implements SkillService {
 		if(!conditions.containsKey("distance"))
 			myList=skillContentMapper.selectByExample(example);
 		else{
-			// °´ÕÕ¾àÀëÅÅĞò
+			// æŒ‰ç…§è·ç¦»æ’åº
 			Map<String,Object> param=new HashMap<String, Object>();
 			param.put("lat", Double.valueOf((String)conditions.get("lat")));
 			param.put("lon", Double.valueOf((String)conditions.get("lon")));
@@ -378,7 +378,7 @@ public class SkillServiceImpl implements SkillService {
 			temp.put("coverPic", skill.getCoverpic());
 			temp.put("realName", skill.getRealname());
 			temp.put("classifyName", skill.getClassifyname());
-			// ¼ÆËã¾àÀë
+			// è®¡ç®—è·ç¦»
 			double lat1=Double.valueOf((String)conditions.get("lat"));
 			double lon1=Double.valueOf((String)conditions.get("lon"));
 			double lat2=skill.getLat();
@@ -394,7 +394,7 @@ public class SkillServiceImpl implements SkillService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -413,9 +413,9 @@ public class SkillServiceImpl implements SkillService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		if(line==1){
 			map.put("taskId", stTaskContent.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "·¢²¼³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "å‘å¸ƒæˆåŠŸ", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "·¢²¼Ê§°Ü", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "å‘å¸ƒå¤±è´¥", "");
 		}
 	}
 
@@ -424,7 +424,7 @@ public class SkillServiceImpl implements SkillService {
 			Map<String, String> conditions) {
 		Map<String,Object> map=new HashMap<String, Object>();
 		StTaskContentExample example=new StTaskContentExample();
-		/*ÅÅĞò²¿·Ö*/
+		/*æ’åºéƒ¨åˆ†*/
 		StringBuffer orderString=new StringBuffer();
 		if(conditions.containsKey("all")){
 			int v=Integer.valueOf(conditions.get("all"));
@@ -458,7 +458,7 @@ public class SkillServiceImpl implements SkillService {
 		if(!conditions.containsKey("distance"))
 			myList=stTaskContentMapper.selectByExample(example);
 		else{
-			// °´ÕÕ¾àÀëÅÅĞò
+			// æŒ‰ç…§è·ç¦»æ’åº
 			Map<String,Object> param=new HashMap<String, Object>();
 			param.put("lat", Double.valueOf((String)conditions.get("lat")));
 			param.put("lon", Double.valueOf((String)conditions.get("lon")));
@@ -486,7 +486,7 @@ public class SkillServiceImpl implements SkillService {
 			temp.put("realName", skill.getRealname());
 			temp.put("classifyName", skill.getClassifyname());
 			temp.put("startTime", DateUtil.formatDate(skill.getStarttime(), "yyyy-MM-dd"));
-			// ¼ÆËã¾àÀë
+			// è®¡ç®—è·ç¦»
 			double lat1=Double.valueOf((String)conditions.get("lat"));
 			double lon1=Double.valueOf((String)conditions.get("lon"));
 			double lat2=skill.getLat();
@@ -502,7 +502,7 @@ public class SkillServiceImpl implements SkillService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -510,7 +510,7 @@ public class SkillServiceImpl implements SkillService {
 		Map<String,String> map=new HashMap<String, String>();
 		StTaskContent content = stTaskContentMapper.selectByPrimaryKey(taskId);
 		if(content==null||content.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", map);
 		}
 		map.put("title", content.getTitle());
 		map.put("price", content.getPrice()+"");
@@ -527,7 +527,7 @@ public class SkillServiceImpl implements SkillService {
 		map.put("taskId", content.getUid()+"");
 		map.put("coverPic", content.getCoverpic());
 		map.put("startTime",DateUtil.formatDate(content.getStarttime(), "yyyy-MM-dd"));
-		// ÆÀÂÛÊı
+		// è¯„è®ºæ•°
 		String v=jedisClient.get("commom_commentNum_"+content.getUid()+"_type"+"_"+2);
 		int num=0;
 		if(StringUtil.isEmpty(v)){
@@ -541,7 +541,7 @@ public class SkillServiceImpl implements SkillService {
 			num=Integer.valueOf(v);
 		}
 		map.put("commentCount", num+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -582,7 +582,7 @@ public class SkillServiceImpl implements SkillService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	@Override
@@ -615,7 +615,7 @@ public class SkillServiceImpl implements SkillService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 
 	

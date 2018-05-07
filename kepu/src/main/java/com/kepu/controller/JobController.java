@@ -1,6 +1,5 @@
 package com.kepu.controller;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,25 +16,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kepu.constant.MyConstant;
 import com.kepu.constant.ResultConstant;
 import com.kepu.dao.JedisClient;
 import com.kepu.pojo.KePuResult;
-import com.kepu.pojo.StAuthenticCompany;
-import com.kepu.pojo.StAuthenticPeople;
-import com.kepu.pojo.StBuildingrentContent;
-import com.kepu.pojo.StBuildingsellContent;
 import com.kepu.pojo.StJob;
 import com.kepu.pojo.StJobApply;
-import com.kepu.pojo.StSkillContent;
-import com.kepu.pojo.StTaskContent;
 import com.kepu.pojo.StUser;
 import com.kepu.service.JobService;
 import com.kepu.service.SkillService;
 import com.kepu.service.SysService;
 import com.kepu.service.UserService;
 import com.kepu.service.VillageService;
-import com.kepu.util.DateUtil;
 import com.kepu.util.ExceptionUtil;
 import com.kepu.util.StringUtil;
 
@@ -58,7 +49,7 @@ public class JobController {
 	
 	
 	/**
-	 * »ñÈ¡ÂÖ²¥Í¼ 
+	 * è·å–è½®æ’­å›¾ 
 	 * @return
 	 */
 	@RequestMapping(value="getCarousel")
@@ -70,7 +61,7 @@ public class JobController {
 		}
 	}
 	/**
-	 * »ñÈ¡·ÖÀà   category/menu
+	 * è·å–åˆ†ç±»   category/menu
 	 */
 	@RequestMapping(value="getClassify")
 	public @ResponseBody Object getClassify(HttpServletRequest request){
@@ -83,7 +74,7 @@ public class JobController {
 	
 	
 	/**
-	 * »ñÈ¡ĞĞÒµ
+	 * è·å–è¡Œä¸š
 	 */
 	@RequestMapping(value="getIndustry")
 	public @ResponseBody Object getIndustry(HttpServletRequest request){
@@ -99,7 +90,7 @@ public class JobController {
 				}
 		    }
 		    map.put("list", list);
-			return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
@@ -107,7 +98,7 @@ public class JobController {
 	
 	
 	/**
-	 * ·¢²¼ÕĞÆ¸
+	 * å‘å¸ƒæ‹›è˜
 	 */
 	@RequestMapping(value="release")
 	public @ResponseBody Object release(@RequestBody Map<String, String> map,HttpServletRequest request){
@@ -115,11 +106,11 @@ public class JobController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
-			// ¼ì²éÊÇ·ñÈÏÖ¤
+			// æ£€æŸ¥æ˜¯å¦è®¤è¯
 			if(!skillService.checkAuth(stUser2.getUserid(),2)){
-				return KePuResult.build(ResultConstant.code_yewu, "ÇëÏÈ½øĞĞÆóÒµÈÏÖ¤", "");
+				return KePuResult.build(ResultConstant.code_yewu, "è¯·å…ˆè¿›è¡Œä¼ä¸šè®¤è¯", "");
 			}
 			String title="";
 			String introduce="";
@@ -167,7 +158,7 @@ public class JobController {
 			}
 			if(map.containsKey("address")){address=map.get("address");}else{sb.append("address").append(",");}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StJob sc=new StJob();
 			sc.setJobname(title);
@@ -192,8 +183,8 @@ public class JobController {
 			sc.setDetailpics(detailPics);
 			sc.setState(0);
 			//String approve=sysService.getParam("need_approve");
-			/*if("1".equals(approve))  // ÉóºË¿ª¹Ø
-				sc.setState(2);  //ĞèÒªÉóºË
+			/*if("1".equals(approve))  // å®¡æ ¸å¼€å…³
+				sc.setState(2);  //éœ€è¦å®¡æ ¸
 */			return jobService.releaseJob(sc);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -202,7 +193,7 @@ public class JobController {
 	
 	
 	/**
-	 * »ñÈ¡Ö°Î»ÏêÇé
+	 * è·å–èŒä½è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getJobDetail/{jobId}")
@@ -216,7 +207,7 @@ public class JobController {
 	}
 	
 	/**
-	 * »ñÈ¡ÕĞÆ¸ÁĞ±í
+	 * è·å–æ‹›è˜åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getJobList/{page}")
@@ -226,7 +217,7 @@ public class JobController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(map==null)
 				map=new HashMap<String, String>();
@@ -265,7 +256,7 @@ public class JobController {
 	}
 	
 	/**
-	 * ĞŞ¸ÄÕĞÆ¸ĞÅÏ¢
+	 * ä¿®æ”¹æ‹›è˜ä¿¡æ¯
 	 * @param map
 	 * @return
 	 */
@@ -273,10 +264,10 @@ public class JobController {
 	public @ResponseBody Object editProduct(@PathVariable Integer jobId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StUser stUser=userService.getUserById(stUser2.getUserid());
 			String title="";
@@ -297,11 +288,11 @@ public class JobController {
 			
 			StJob job = jobService.getJobById(jobId);
 			if(job==null||job.getState()==1)
-				return KePuResult.build(ResultConstant.code_param, "ÒÑ±»É¾³ı»ò²»´æÔÚ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨"+sb.toString(), "");
 			int userId=job.getUserid();
 			int real=stUser2.getUserid();
 			if(userId!=real)
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíĞŞ¸Ä"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸ä¿®æ”¹"+sb.toString(), "");
 			if(map.containsKey("title")){
 				title=map.get("title");
 				job.setJobname(title);
@@ -364,14 +355,14 @@ public class JobController {
 			}
 			job.setCreatetime(new Date());
 			jobService.saveJob(job);
-			return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ", "");
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * ÇóÖ°·¢²¼
+	 * æ±‚èŒå‘å¸ƒ
 	 */
 	@RequestMapping(value="applyRelease")
 	public @ResponseBody Object applyRelease(@RequestBody Map<String, String> map,HttpServletRequest request){
@@ -379,7 +370,7 @@ public class JobController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String position="";
 			String industry="";
@@ -427,7 +418,7 @@ public class JobController {
 				map.put("endPrice", endPrice);
 			}else{sb.append("salary").append(",");}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");	
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");	
 			}
 			StJobApply jobApply =new StJobApply();
 			jobApply.setPosition(position);
@@ -454,7 +445,7 @@ public class JobController {
 	}
 	
 	/**
-	 * »ñÈ¡ ÇóÖ°ÁĞ±í
+	 * è·å– æ±‚èŒåˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getApplyList/{page}")
@@ -464,7 +455,7 @@ public class JobController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			if(map==null)
 				map=new HashMap<String, String>();
@@ -510,7 +501,7 @@ public class JobController {
 	}
 	
 	/**
-	 * »ñÈ¡ ÇóÖ°ÏêÇé
+	 * è·å– æ±‚èŒè¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getApplyDetail/{applyId}")
@@ -524,7 +515,7 @@ public class JobController {
 	}
 	
 	/**
-	 * ĞŞ¸Ä ÇóÖ°
+	 * ä¿®æ”¹ æ±‚èŒ
 	 * @param map
 	 * @return
 	 */
@@ -532,10 +523,10 @@ public class JobController {
 	public @ResponseBody Object editApplyJob(@PathVariable Integer applyId,@RequestBody Map<String, String> map,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			StUser stUser=userService.getUserById(stUser2.getUserid());
 			String position="";
@@ -549,11 +540,11 @@ public class JobController {
 			StringBuffer sb=new StringBuffer();
 			StJobApply job = jobService.getApplyById(applyId);
 			if(job==null||job.getState()==1)
-				return KePuResult.build(ResultConstant.code_param, "ÒÑ±»É¾³ı»ò²»´æÔÚ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨"+sb.toString(), "");
 			int userId=job.getUserid();
 			int real=stUser2.getUserid();
 			if(userId!=real)
-				return KePuResult.build(ResultConstant.code_param, "Ö»ÓĞ·¢²¼Õß²ÅÔÊĞíĞŞ¸Ä"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "åªæœ‰å‘å¸ƒè€…æ‰å…è®¸ä¿®æ”¹"+sb.toString(), "");
 			if(map.containsKey("position")){
 				position=map.get("position");
 				job.setPosition(position);
@@ -614,7 +605,7 @@ public class JobController {
 			}
 			job.setCreatetime(new Date());
 			jobService.saveApply(job);
-			return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ", "");
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}

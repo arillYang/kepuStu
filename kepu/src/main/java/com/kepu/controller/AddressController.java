@@ -27,7 +27,9 @@ import com.kepu.service.AddressService;
 import com.kepu.service.UserService;
 import com.kepu.service.WithdrawCashService;
 import com.kepu.util.LocalDateUtil;
-
+/**
+ * 地址管理
+ */
 @Controller
 @RequestMapping("/address")
 public class AddressController {
@@ -43,10 +45,14 @@ public class AddressController {
 	private WithdrawCashMapper withdrawCashMapper;
 
 	protected final Log logger = LogFactory.getLog(AddressController.class);
-	//添加地址
+	/**
+	 * 添加地址
+	 * @param map
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("addAddress")
 	@ResponseBody
-//	public Object addAddress(@RequestBody Map<String,String> map,HttpServletRequest request) {
 	public  Object addAddress(@RequestBody Map<String, String> map, HttpServletRequest request) {
 		UserAddress userAddress=new UserAddress();
 		Integer userId=Integer.valueOf(map.get("userId"));
@@ -73,7 +79,6 @@ public class AddressController {
 		userAddress.setCreateTime(date);
 		userAddress.setIsDelete(isdelete);
 		
-		//如果修改地址为1  查询出要修改状态的所有地址 并修改为2
 		if(status==1&&null!=userAddress){
 			UserAddressExample example=new UserAddressExample();
 			UserAddressExample.Criteria criteria=example.createCriteria();
@@ -93,12 +98,17 @@ public class AddressController {
 		if(a>0){
 			return KePuResult.ok(ResultConstant.code_ok, "添加地址成功", "");
 		}else{
-			return KePuResult.ok(ResultConstant.code_exception, "添加地址失败2", "");
+			return KePuResult.ok(ResultConstant.code_exception, "添加数据异常", "");
 		}
 		
 	}
 
-	// 查询订单列表
+	/**
+	 * 获取地址列表
+	 * @param map
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("addressList")
 	@ResponseBody
 	public Object addressList(@RequestBody Map<String,String> map,HttpServletRequest request) {
@@ -116,7 +126,12 @@ public class AddressController {
 		return KePuResult.ok(ResultConstant.code_ok, "获取列表成功", address);
 	}
 
-	// 修改订单跳转
+	/**
+	 * 查询当前地址信息
+	 * @param map
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("selectAddress")
 	public @ResponseBody Object selectAddress(@RequestBody Map<String,String> map,HttpServletRequest request) {
 		String addressId =null;
@@ -129,7 +144,7 @@ public class AddressController {
 		return KePuResult.ok(ResultConstant.code_ok, "查询地址成功", address);
 	}
 
-	// 修改地址提交
+	// 修改订单跳转
 	@RequestMapping("updateCommit")
 		public @ResponseBody  Object UpdateCommit(@RequestBody Map<String, String> map, HttpServletRequest request) {
 		Integer userId=Integer.valueOf(map.get("userId"));
@@ -140,9 +155,8 @@ public class AddressController {
 		}else{
 			 addressId2=request.getParameter("addressId");
 		}
-		//查询出要修改的地址
+		//根据地址主键单查
 		UserAddress userAddress = userAddressMapper.selectByPrimaryKey(Integer.parseInt(addressId2));
-		//如果修改地址为1  查询出要修改状态的所有地址 并修改为2
 		if(status==1&&null!=userAddress){
 			UserAddressExample example=new UserAddressExample();
 			UserAddressExample.Criteria criteria=example.createCriteria();
@@ -178,14 +192,13 @@ public class AddressController {
 		userAddress.setUpdateTime(date);
 		int s = userAddressMapper.updateByPrimaryKeySelective(userAddress) ;
 		if (s > 0){
-			return KePuResult.ok(ResultConstant.code_ok, "更改地址成功", "");
+			return KePuResult.ok(ResultConstant.code_ok, "成功", "");
 		}
-		return KePuResult.ok(ResultConstant.code_exception, "更改失败", "");
+		return KePuResult.ok(ResultConstant.code_exception, "失败", "");
 	}
 	
 	@RequestMapping("withdrawCashList")
 	@ResponseBody
-//	public @ResponseBody Object withdrawCashList(@RequestParam(value="page",required=false)String page,WithdrawCash withdrawCash,HttpServletRequest request){
 	public Object withdrawCashList(@RequestBody Map<String,String> map,HttpServletRequest request) {	
 		Integer userid=null;
 		if(null==request.getParameter("userId")){
@@ -197,23 +210,20 @@ public class AddressController {
 		WithdrawCashExample.Criteria criteria=example.createCriteria();
 		criteria.andBuyUserIdEqualTo(userid);
 		List<WithdrawCash> cash=withdrawCashMapper.selectByExample(example);
-		return KePuResult.ok(ResultConstant.code_ok, "获取列表成功", cash);
+		return KePuResult.ok(ResultConstant.code_ok, "成功", cash);
 	}
 	
-	// 修改地址提交
-		@RequestMapping("deleteCommit")
-			public @ResponseBody  Object deleteCommit(@RequestBody Map<String, String> map, HttpServletRequest request) {
-			// 判断是否登录
-			String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
-			StUser user = userService.getUserByToken(token);
-			if (user == null) {
-				return KePuResult.ok(ResultConstant.code_yewu, "用户ID错误", "");
-			}
-			// 判断是否登录结束
-			Integer addressId=Integer.valueOf(map.get("addressId"));
-			int s = userAddressMapper.deleteByPrimaryKey(addressId);
-			if (s > 0)
-				return KePuResult.ok(ResultConstant.code_ok, "删除地址成功", "");
-			return KePuResult.ok(ResultConstant.code_exception, "删除失败", "");
+	@RequestMapping("deleteCommit")
+		public @ResponseBody  Object deleteCommit(@RequestBody Map<String, String> map, HttpServletRequest request) {
+		String token = request.getHeader("baseParams") == null ? "" : request.getHeader("baseParams");
+		StUser user = userService.getUserByToken(token);
+		if (user == null) {
+			return KePuResult.ok(ResultConstant.code_yewu, "用户id错误", "");
 		}
+		Integer addressId=Integer.valueOf(map.get("addressId"));
+		int s = userAddressMapper.deleteByPrimaryKey(addressId);
+		if (s > 0)
+			return KePuResult.ok(ResultConstant.code_ok, "成功", "");
+		return KePuResult.ok(ResultConstant.code_exception, "失败", "");
+	}
 }

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kepu.constant.ResultConstant;
@@ -35,7 +34,7 @@ public class VillagesController {
 	@Autowired
 	private UserService userService;
 	/**
-	 * ¸ù¾İÏçÕò»ñÈ¡ËùÏ½ËùÓĞ´åµÄÍ¼Æ¬
+	 * æ ¹æ®ä¹¡é•‡è·å–æ‰€è¾–æ‰€æœ‰æ‘çš„å›¾ç‰‡
 	 * @return
 	 */
 	@RequestMapping(value="getPicture")  
@@ -58,20 +57,20 @@ public class VillagesController {
 				}
 				r2.put(townId+"", result);
 			}
-			return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", r2);
+			return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", r2);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * »ñÈ¡ÏçÕòÂÖ²¥Í¼  Çø·Ö²»Í¬ÏçÕò 
+	 * è·å–ä¹¡é•‡è½®æ’­å›¾  åŒºåˆ†ä¸åŒä¹¡é•‡ 
 	 * @return
 	 */
 	@RequestMapping(value="getCarousel/{villageId}")
 	public @ResponseBody Object getCarousel(@PathVariable Integer villageId){
 		try {
-			//  ¸ù¾İÀàĞÍ»ñÈ¡ÂÖ²¥
+			//  æ ¹æ®ç±»å‹è·å–è½®æ’­
 			return villageService.getCarousel(5,villageId);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
@@ -79,7 +78,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡ÏçÕòĞÂÎÅÁĞ±í
+	 * è·å–ä¹¡é•‡æ–°é—»åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getNews/{villageId}/{page}")
@@ -92,17 +91,17 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡ÏçÕòĞÂÎÅÏêÇé
+	 * è·å–ä¹¡é•‡æ–°é—»è¯¦æƒ…
 	 * @return
 	 */
 	@RequestMapping(value="getNewsDetail/{newsId}")
 	public @ResponseBody Object getNewsDetail(@PathVariable Integer newsId,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams");
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}*/
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			String appVersion=(String) request.getAttribute("appVersion");
@@ -113,7 +112,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡ÏçÕòĞÂÎÅÆÀÂÛ
+	 * è·å–ä¹¡é•‡æ–°é—»è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="getNewsComment/{newsId}/{page}")
@@ -121,10 +120,10 @@ public class VillagesController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}*/
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			return villageService.getNewsComment(newsId,userId, page, 10);
@@ -134,7 +133,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡ÆÀÂÛ»Ø¸´ÁĞ±í
+	 * è·å–è¯„è®ºå›å¤åˆ—è¡¨
 	 * @return
 	 */
 	@RequestMapping(value="getReply/{commentId}/{page}")
@@ -142,10 +141,10 @@ public class VillagesController {
 			HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// »º´æÖĞÈ¡ÓÃ»§ĞÅÏ¢
+			// ç¼“å­˜ä¸­å–ç”¨æˆ·ä¿¡æ¯
 			StUser stUser2 = userService.getUserByToken(token);
 			/*if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.build(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}*/
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			return villageService.getCommentReply(commentId, userId,page, 10);
@@ -156,7 +155,7 @@ public class VillagesController {
 	
 	
 	/**
-	 * ·¢±íĞÂÎÅÆÀÂÛ
+	 * å‘è¡¨æ–°é—»è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="sentComment")
@@ -166,7 +165,7 @@ public class VillagesController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String comment=map.get("comment");
 			String newsId=map.get("newsId");
@@ -181,7 +180,7 @@ public class VillagesController {
 				sb.append("newsId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");
 			}
 			return userService.villageSentComment(user,Integer.valueOf(newsId),comment);
 		} catch (Exception e) {
@@ -190,7 +189,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »Ø¸´ÆÀÂÛ
+	 * å›å¤è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="replyComment")
@@ -200,7 +199,7 @@ public class VillagesController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			String comment=map.get("comment");
 			String commentId=map.get("commentId");
@@ -215,7 +214,7 @@ public class VillagesController {
 				sb.append("commentId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");
 			}
 			return userService.villageReplyComment(user, Long.valueOf(commentId), comment);
 		} catch (Exception e) {
@@ -224,7 +223,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * ÊÕ²ØĞÂÎÅ
+	 * æ”¶è—æ–°é—»
 	 * @return
 	 */
 	@RequestMapping(value="likeNews")
@@ -234,7 +233,7 @@ public class VillagesController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			String newsId=map.get("newsId");
 			if(map.containsKey("newsId"))
@@ -243,7 +242,7 @@ public class VillagesController {
 				sb.append("newsId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");
 			}
 			return villageService.likeNews(Integer.valueOf(newsId),user.getUserid());
 		} catch (Exception e) {
@@ -252,7 +251,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡ÎÒµÄÊÕ²Ø
+	 * è·å–æˆ‘çš„æ”¶è—
 	 * @return
 	 */
 	@RequestMapping(value="getMyLikeNews/{page}")
@@ -261,7 +260,7 @@ public class VillagesController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser user=userService.getUserByToken(token);
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			
 			return villageService.getMyLikeNews(user.getUserid(), page, 10);
@@ -270,7 +269,7 @@ public class VillagesController {
 		}
 	}
 	/**
-	 * É¾³ıÊÕ²ØµÄĞÂÎÅ
+	 * åˆ é™¤æ”¶è—çš„æ–°é—»
 	 * @return
 	 */
 	@RequestMapping(value="delete/likeNews")
@@ -280,7 +279,7 @@ public class VillagesController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			String newsId=map.get("newsId");
 			if(map.containsKey("newsId"))
@@ -289,7 +288,7 @@ public class VillagesController {
 				sb.append("newsId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "ÒÔÏÂ²ÎÊı²»ÄÜÎª¿Õ"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "ä»¥ä¸‹å‚æ•°ä¸èƒ½ä¸ºç©º"+sb.toString(), "");
 			}
 			String[] newsIds=newsId.split(",");
 			return villageService.deletelikeNews(newsIds, user.getUserid());
@@ -299,7 +298,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * ¾Ù±¨ĞÂÎÅÆÀÂÛ
+	 * ä¸¾æŠ¥æ–°é—»è¯„è®º
 	 * @return
 	 */
 	@RequestMapping(value="report/{commentId}")
@@ -309,7 +308,7 @@ public class VillagesController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§id´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·idé”™è¯¯", "");
 			}
 			return villageService.reportNewsComment(user.getUserid(), commentId);
 		} catch (Exception e) {
@@ -318,7 +317,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * ÆÀÂÛ/»Ø¸´µãÔŞ
+	 * è¯„è®º/å›å¤ç‚¹èµ
 	 * @return
 	 */
 	@RequestMapping(value="praise/{type}/{typeId}")
@@ -328,7 +327,7 @@ public class VillagesController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser user=userService.getUserByToken(token);
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			return villageService.praise(type,typeId,user.getUserid());
 		} catch (Exception e) {
@@ -337,19 +336,19 @@ public class VillagesController {
 	}
 	
 	/**
-	 * ĞÂÎÅµãÔŞ/²»Ï²»¶
+	 * æ–°é—»ç‚¹èµ/ä¸å–œæ¬¢
 	 * @return
 	 */
 	@RequestMapping(value="dp/{newsId}/{type}/{operate}")
 	public @ResponseBody Object dp(@PathVariable Integer newsId,@PathVariable Integer type,
 			@PathVariable Integer operate,HttpServletRequest request){
 		try {
-			// type=1 µãÔŞ  type=2  ²»Ï²»¶
-			// operate=1 µã»÷  operate=0 È¡Ïû
+			// type=1 ç‚¹èµ  type=2  ä¸å–œæ¬¢
+			// operate=1 ç‚¹å‡»  operate=0 å–æ¶ˆ
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser user=userService.getUserByToken(token);
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "ÓÃ»§ID´íÎó", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”¨æˆ·IDé”™è¯¯", "");
 			}
 			return villageService.dpNews(newsId, type, user.getUserid(), operate);
 		} catch (Exception e) {
@@ -358,7 +357,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * ÏçÕòĞÂÎÅËÑË÷½Ó¿Ú
+	 * ä¹¡é•‡æ–°é—»æœç´¢æ¥å£
 	 * @return
 	 */
 	@RequestMapping(value="search/{page}")
@@ -366,7 +365,7 @@ public class VillagesController {
 		try {
 			String query=request.getParameter("q");
 			if(StringUtil.isEmpty(query))
-				return KePuResult.build(ResultConstant.code_param, "ËÑË÷´Ê²»ÄÜÎª¿Õ","");	
+				return KePuResult.build(ResultConstant.code_param, "æœç´¢è¯ä¸èƒ½ä¸ºç©º","");	
 			if(page==1)
 				villageService.addHotSearch(query);
 			return villageService.searchNews(query, page, 10);
@@ -376,7 +375,7 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡ÈÈËÑ´Ê»ã
+	 * è·å–çƒ­æœè¯æ±‡
 	 * @return
 	 */
 	@RequestMapping(value="getHotSearch")
@@ -389,23 +388,23 @@ public class VillagesController {
 	}
 	
 	/**
-	 * »ñÈ¡Ïç´å¼ò½é
+	 * è·å–ä¹¡æ‘ç®€ä»‹
 	 */
 	@RequestMapping(value="getVillageMessage/{villageId}")
 	public @ResponseBody Object getVillageMessage(@PathVariable Integer villageId){
 		try {
 			 String content = villageService.getVillageMessage(villageId);
 			 if(StringUtil.isEmpty(content))
-				 return KePuResult.ok(ResultConstant.code_yewu, "Ïç´åID²»´æÔÚ»òÄÚÈİÎª¿Õ", "");
+				 return KePuResult.ok(ResultConstant.code_yewu, "ä¹¡æ‘IDä¸å­˜åœ¨æˆ–å†…å®¹ä¸ºç©º", "");
 			 List<VillageContent> vc=JsonUtils.jsonToList(content, VillageContent.class);
-			 return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", vc);
+			 return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", vc);
 		} catch (Exception e) {
 			return KePuResult.build(ResultConstant.code_exception, ExceptionUtil.getStackTrace(e),"");
 		}
 	}
 	
 	/**
-	 * ÏçÕòĞÂÎÅ/¹«¸æ»ã×ÜËÑË÷½Ó¿Ú
+	 * ä¹¡é•‡æ–°é—»/å…¬å‘Šæ±‡æ€»æœç´¢æ¥å£
 	 * @return
 	 */
 	@RequestMapping(value="searchTotal/{page}")
@@ -413,7 +412,7 @@ public class VillagesController {
 		try {
 			String query=request.getParameter("q");
 			if(StringUtil.isEmpty(query))
-				return KePuResult.build(ResultConstant.code_param, "ËÑË÷´Ê²»ÄÜÎª¿Õ","");	
+				return KePuResult.build(ResultConstant.code_param, "æœç´¢è¯ä¸èƒ½ä¸ºç©º","");	
 			if(page==1)
 				villageService.addHotSearch(query);
 			return villageService.searchVillageTotal(query, page, 10);

@@ -46,7 +46,7 @@ public class LotteryServiceImpl implements LotteryService {
 		Map<String,String> map=new HashMap<String, String>();
 		StLottery lottery = lotteryMapper.selectByPrimaryKey(lotteryId);
 		if(lottery==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", map);
 		}
 		if(lottery.getState()!=4){
 			int state=getLotteryState(lotteryId);
@@ -59,10 +59,10 @@ public class LotteryServiceImpl implements LotteryService {
 		map.put("joinNum",lottery.getJoinnum().toString());
 		map.put("voteNum", lottery.getVotenum().toString());
 		map.put("viewNum", lottery.getViewnum().toString());
-		map.put("endTime", DateUtil.formatDate(lottery.getJoinend(),LinConstant.formatStr)); //±¨Ãû½áÊøÊ±¼ä
+		map.put("endTime", DateUtil.formatDate(lottery.getJoinend(),LinConstant.formatStr)); //æŠ¥åç»“æŸæ—¶é—´
 		map.put("detail", lottery.getDetail());
 		map.put("state", lottery.getState().toString());
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult getVoteList(Integer page, Integer size, Integer aId,
@@ -93,7 +93,7 @@ public class LotteryServiceImpl implements LotteryService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult getRankingList(Integer aId) {
@@ -115,14 +115,14 @@ public class LotteryServiceImpl implements LotteryService {
 			r.add(temp);
 		}
 		map.put("list", r);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult getJoinerDetail(Integer joinId,Integer userId) {
 		Map<String,String> map=new HashMap<String, String>();
 		StLotteryJoin join = lotteryJoinMapper.selectByPrimaryKey(joinId);
 		if(join==null||join.getState()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÒÑ±»É¾³ı»ò²»´æÔÚ", map);
+			return KePuResult.ok(ResultConstant.code_yewu, "å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", map);
 		}
 		map.put("voteNum", join.getVotenum().toString());
 		map.put("name", join.getName());
@@ -130,10 +130,10 @@ public class LotteryServiceImpl implements LotteryService {
 		map.put("pics", join.getPics());
 		map.put("vedios", join.getVedios());
 		map.put("number", join.getNumber());
-		// ÊÇ·ñÔÊĞíÍ¶Æ±    ²»ÔÊĞí3ÖÖÇé¿ö: 1.Î´¿ªÊ¼(Í¶Æ±¿ªÊ¼Ö®Ç°),ÒÑ½áÊø    -->  Ìá½»ºóÅĞ¶Ï    2.ÒÑÍ¶Æ± 3.×Ô¼ºÕÊºÅ
+		// æ˜¯å¦å…è®¸æŠ•ç¥¨    ä¸å…è®¸3ç§æƒ…å†µ: 1.æœªå¼€å§‹(æŠ•ç¥¨å¼€å§‹ä¹‹å‰),å·²ç»“æŸ    -->  æäº¤ååˆ¤æ–­    2.å·²æŠ•ç¥¨ 3.è‡ªå·±å¸å·
 		Integer state=getLotteryState(join.getLotteryid());
 		map.put("state", state.toString());
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public Boolean checkVote(Integer joinId, Integer userId) {
@@ -157,9 +157,9 @@ public class LotteryServiceImpl implements LotteryService {
 			l.setJoinnum(l.getJoinnum()+1);
 			lotteryMapper.updateByPrimaryKeySelective(l);
 			map.put("joinId", lotteryJoin.getUid()+"");
-			return KePuResult.ok(ResultConstant.code_ok, "²ÎÓë³É¹¦", map);
+			return KePuResult.ok(ResultConstant.code_ok, "å‚ä¸æˆåŠŸ", map);
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "²ÎÓëÊ§°Ü", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "å‚ä¸å¤±è´¥", "");
 		}
 	}
 	@Override
@@ -202,7 +202,7 @@ public class LotteryServiceImpl implements LotteryService {
 		lotteryJoinMapper.updateByPrimaryKeySelective(join);
 		l.setVotenum(l.getVotenum()+1);
 		lotteryMapper.updateByPrimaryKeySelective(l);
-		return KePuResult.ok(ResultConstant.code_ok, "²ÎÓë³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "å‚ä¸æˆåŠŸ", "");
 	}
 
 	

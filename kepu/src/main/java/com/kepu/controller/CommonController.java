@@ -27,7 +27,7 @@ public class CommonController {
 	@Autowired
 	private UserService userService;
 	/**
-	 * 获取热搜词汇
+	 * 鑾峰彇鐑悳璇嶆眹
 	 * @return
 	 */
 	@RequestMapping(value="getHotSearch/{type}")
@@ -41,7 +41,7 @@ public class CommonController {
 	
 	
 	/**
-	 * 删除发布
+	 * 鍒犻櫎鍙戝竷
 	 * @return
 	 */
 	@RequestMapping(value="deltete/{type}/{typeId}")
@@ -58,7 +58,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * 获取评论列表
+	 * 鑾峰彇璇勮鍒楄〃
 	 * @return
 	 */
 	@RequestMapping(value="getComment/{page}/{type}/{uid}")
@@ -66,7 +66,7 @@ public class CommonController {
 			@PathVariable Integer uid,HttpServletRequest request){
 		try {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
-			// 缓存中取用户信息
+			// 缂撳瓨涓彇鐢ㄦ埛淇℃伅
 			StUser stUser2 = userService.getUserByToken(token);
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			return sysService.getComment(type,uid,userId, page, 10);
@@ -76,7 +76,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * 获取评论回复列表
+	 * 鑾峰彇璇勮鍥炲鍒楄〃
 	 * @return
 	 */
 	@RequestMapping(value="getReply/{commentId}/{page}")
@@ -86,7 +86,7 @@ public class CommonController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser stUser2 = userService.getUserByToken(token);
 			if(stUser2==null){
-				return KePuResult.build(ResultConstant.code_yewu, "用户id错误", "");
+				return KePuResult.build(ResultConstant.code_yewu, "鐢ㄦ埛id閿欒", "");
 			}
 			int userId=stUser2==null?-1:stUser2.getUserid();
 			return sysService.getCommentReply(commentId, userId,page, 10);
@@ -96,7 +96,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * 发表评论
+	 * 鍙戣〃璇勮
 	 * @return
 	 */
 	@RequestMapping(value="sentComment")
@@ -106,7 +106,7 @@ public class CommonController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "用户id错误", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "鐢ㄦ埛id閿欒", "");
 			}
 			String comment=map.get("comment");
 			String type=map.get("type");
@@ -127,7 +127,7 @@ public class CommonController {
 				sb.append("type").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "以下参数不能为空"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "浠ヤ笅鍙傛暟涓嶈兘涓虹┖"+sb.toString(), "");
 			}
 			return sysService.sentComment(user,Integer.valueOf(uid),comment,Integer.valueOf(type));
 		} catch (Exception e) {
@@ -136,7 +136,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * 回复评论
+	 * 鍥炲璇勮
 	 * @return
 	 */
 	@RequestMapping(value="replyComment")
@@ -146,7 +146,7 @@ public class CommonController {
 			StUser user=userService.getUserByToken(token);
 			StringBuffer sb=new StringBuffer();
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "用户id错误", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "鐢ㄦ埛id閿欒", "");
 			}
 			String comment=map.get("comment");
 			String commentId=map.get("commentId");
@@ -161,7 +161,7 @@ public class CommonController {
 				sb.append("commentId").append(",");
 			}
 			if(sb.length()!=0){
-				return KePuResult.build(ResultConstant.code_param, "以下参数不能为空"+sb.toString(), "");
+				return KePuResult.build(ResultConstant.code_param, "浠ヤ笅鍙傛暟涓嶈兘涓虹┖"+sb.toString(), "");
 			}
 			return sysService.replyComment(user, Integer.valueOf(commentId), comment);
 		} catch (Exception e) {
@@ -170,7 +170,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * 评论/回复点赞
+	 * 璇勮/鍥炲鐐硅禐
 	 * @return
 	 */
 	@RequestMapping(value="praise/{type}/{typeId}")
@@ -180,7 +180,7 @@ public class CommonController {
 			String token=request.getHeader("baseParams")==null?"":request.getHeader("baseParams"); 
 			StUser user=userService.getUserByToken(token);
 			if(user==null){
-				return KePuResult.ok(ResultConstant.code_yewu, "用户ID错误", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "鐢ㄦ埛ID閿欒", "");
 			}
 			return sysService.praise(type,typeId,user.getUserid());
 		} catch (Exception e) {

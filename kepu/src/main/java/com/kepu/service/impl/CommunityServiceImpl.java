@@ -108,7 +108,7 @@ public class CommunityServiceImpl implements CommunityService {
 			temp.put("logo",community.getLogo());
 			temp.put("communityId",community.getUid()+"");
 			temp.put("type",community.getType()+"");
-			// 0:Î´¼ÓÈë 1:ÉêÇëÖĞ 2£ºÒÑ¼ÓÈë
+			// 0:æœªåŠ å…¥ 1:ç”³è¯·ä¸­ 2ï¼šå·²åŠ å…¥
 			int state=0;
 			StCommunityUserExample example2=new StCommunityUserExample();
 			StCommunityUserExample.Criteria criteria2=example2.createCriteria();
@@ -130,7 +130,7 @@ public class CommunityServiceImpl implements CommunityService {
 			temp.put("state",state+"");
 			data.add(temp);
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", data);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", data);
 	}
 	@Override
 	public KePuResult getAllCommunity(Integer userId,Integer page, Integer size,String query) {
@@ -151,7 +151,7 @@ public class CommunityServiceImpl implements CommunityService {
 			temp.put("logo",community.getLogo());
 			temp.put("communityId",community.getUid()+"");
 			temp.put("type",community.getType()+"");
-			// 0:Î´¼ÓÈë 1:ÉêÇëÖĞ 2£ºÒÑ¼ÓÈë
+			// 0:æœªåŠ å…¥ 1:ç”³è¯·ä¸­ 2ï¼šå·²åŠ å…¥
 			int state=0;
 			StCommunityUserExample example2=new StCommunityUserExample();
 			StCommunityUserExample.Criteria criteria2=example2.createCriteria();
@@ -180,14 +180,14 @@ public class CommunityServiceImpl implements CommunityService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult getMyCommunity(Integer userId,Long timestamp) {
 		List<Integer> r=getMyJoinCommunityId(userId);
 		if(r.size()==0){
 			List<Map<String,String>> communityList=new LinkedList<Map<String,String>>();
-			return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", communityList);
+			return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", communityList);
 		}
 		Map<String,Object> map=new HashMap<String, Object>();
 		List<Map<String,String>> communityList=new LinkedList<Map<String,String>>();
@@ -217,7 +217,7 @@ public class CommunityServiceImpl implements CommunityService {
 			}
 			communityList.add(temp);
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", communityList);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", communityList);
 	}
 	@Override
 	public List<Integer> getMyJoinCommunityId(Integer userId) {
@@ -235,13 +235,13 @@ public class CommunityServiceImpl implements CommunityService {
 	public KePuResult joinCommunity(Integer userId, Integer communityId) {
 		StCommunity community = communityMapper.selectByPrimaryKey(communityId);
 		if(community==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÉçÍÅ²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥ç¤¾å›¢ä¸å­˜åœ¨", "");
 		}
 		if(community.getType()==1){
-			return KePuResult.ok(ResultConstant.code_yewu, "¼ÓÈë¸ÃÉçÍÅĞèÒªÉóºË", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "åŠ å…¥è¯¥ç¤¾å›¢éœ€è¦å®¡æ ¸", "");
 		}
 		if(whetherMyJoin(userId,communityId)){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÇëÎğÖØ¸´ÉêÇë", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯·å‹¿é‡å¤ç”³è¯·", "");
 		}
 		StCommunityUser scu=new StCommunityUser();
 		scu.setCommunityid(communityId);
@@ -251,7 +251,7 @@ public class CommunityServiceImpl implements CommunityService {
 		communityUserMapper.insertSelective(scu);
 		community.setMembernum(community.getMembernum()+1);
 		communityMapper.updateByPrimaryKeySelective(community);
-		return KePuResult.ok(ResultConstant.code_ok, "¼ÓÈë³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "åŠ å…¥æˆåŠŸ", "");
 	}
 	@Override
 	public KePuResult applyCommunity(Integer userId, Integer communityId,
@@ -260,13 +260,13 @@ public class CommunityServiceImpl implements CommunityService {
 			String career,String positional,String education,String selfIntroduction,String IDcardZHold) {
 		StCommunity community = communityMapper.selectByPrimaryKey(communityId);
 		if(community==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÉçÍÅ²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥ç¤¾å›¢ä¸å­˜åœ¨", "");
 		}
 		if(whetherMyJoin(userId,communityId)){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÇëÎğÖØ¸´ÉêÇë", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯·å‹¿é‡å¤ç”³è¯·", "");
 		}
 		if(community.getType()==2){
-			return KePuResult.ok(ResultConstant.code_yewu, "ÆÕÍ¨ÉçÍÅÖ±½ÓÉêÇë¼ÓÈë", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "æ™®é€šç¤¾å›¢ç›´æ¥ç”³è¯·åŠ å…¥", "");
 		}
 		StCommunityApplyExample example=new StCommunityApplyExample();
 		example.setOrderByClause("createtime desc");
@@ -277,7 +277,7 @@ public class CommunityServiceImpl implements CommunityService {
 		if(r.size()!=0){
 			StCommunityApply a=r.get(0);
 			if(a.getState()==0)
-				return KePuResult.ok(ResultConstant.code_yewu, "ÉêÇëÕıÔÚ´¦ÀíÖĞ", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "ç”³è¯·æ­£åœ¨å¤„ç†ä¸­", "");
 		}
 		StCommunityApply apply=new StCommunityApply();
 		apply.setUserid(userId);
@@ -300,7 +300,7 @@ public class CommunityServiceImpl implements CommunityService {
 		communityApplyMapper.insertSelective(apply);
 		community.setApplynum(community.getApplynum()+1);
 		communityMapper.updateByPrimaryKeySelective(community);
-		return KePuResult.ok(ResultConstant.code_ok, "ÉêÇë³É¹¦,ÇëµÈ´ı¹ÜÀíÔ±ÉóºË", "");
+		return KePuResult.ok(ResultConstant.code_ok, "ç”³è¯·æˆåŠŸ,è¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸", "");
 	}
 	@Override
 	public Boolean whetherMyJoin(Integer userId, Integer communityId) {
@@ -329,15 +329,17 @@ public class CommunityServiceImpl implements CommunityService {
 		StActivityRecord arecord=new StActivityRecord();
 		arecord.setScore(1.0);
 		if(communityId<1000){
-			sysService.insertActivityRecord(user, arecord, 5, "·¢±íÈ¦×Ó¶¯Ì¬,Ìû×ÓID"+article.getUid());
-			// µ÷ÓÃ³é½±½Ó¿Ú
+			sysService.insertActivityRecord(user, arecord, 5, "å‘è¡¨åœˆå­åŠ¨æ€,å¸–å­ID"+article.getUid());
+			// è°ƒç”¨æŠ½å¥–æ¥å£
 			/*if(StringUtil.isNotEmpty(content))
 				LotteryUtil.getLottery(user.getNickname(), user.getMobile(), content, user.getAvatar());*/
 		}
 		else
-			sysService.insertActivityRecord(user, arecord, 51, "·¢±íÏçÕòÈ¦×Ó¶¯Ì¬,Ìû×ÓID"+article.getUid());
-		return KePuResult.ok(ResultConstant.code_ok, "·¢±í³É¹¦", map);
+			sysService.insertActivityRecord(user, arecord, 51, "å‘è¡¨ä¹¡é•‡åœˆå­åŠ¨æ€,å¸–å­ID"+article.getUid());
+		return KePuResult.ok(ResultConstant.code_ok, "å‘è¡¨æˆåŠŸ", map);
 	}
+	
+	
 	@Override
 	public KePuResult getArticle(Integer userId, Integer communityId,
 			Integer page, Integer size) {
@@ -369,7 +371,7 @@ public class CommunityServiceImpl implements CommunityService {
 			criteria2.andStateEqualTo(0);
 			List<StArticleVote> r = articleVoteMapper.selectByExample(example2);
 			temp.put("myPraise",r.size()==0?"0":"1");
-			// 2017-11-04  ¼ÓÔØÇ°10ÌõÆÀÂÛ begin
+			// 2017-11-04  åŠ è½½å‰10æ¡è¯„è®º begin
 			String version=SystemSession.get().getAppVersion();
 			if(StringUtil.isNotEmpty(version)&&version.compareTo("6.1.0")>0){
 				List<Map<String,Object>> commentList=new LinkedList<Map<String,Object>>();
@@ -422,14 +424,14 @@ public class CommunityServiceImpl implements CommunityService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult dpArticle(Integer articleId, Integer userId,
 			Integer operate) {
 		StCommunityArticle a = communityArticleMapper.selectByPrimaryKey(articleId);
 		if(a==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÌû×ÓÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å¸–å­å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		}
 		StArticleVoteExample example=new StArticleVoteExample();
 		StArticleVoteExample.Criteria criteria=example.createCriteria();
@@ -458,7 +460,7 @@ public class CommunityServiceImpl implements CommunityService {
 				communityArticleMapper.updateByPrimaryKeySelective(a);
 			}
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "²Ù×÷³É¹¦", "");
+		return KePuResult.ok(ResultConstant.code_ok, "æ“ä½œæˆåŠŸ", "");
 	}
 	@Override
 	public KePuResult getCommunityDetail(Integer userId, Integer communityId,Date timestamp) {
@@ -482,7 +484,7 @@ public class CommunityServiceImpl implements CommunityService {
 			List<RemindResult> myRemind = articleCommentMapper.getMyRemind(param);
 			data.put("remindNum", myRemind.size()+"");  
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", data);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", data);
 	}
 	@Override
 	public StCommunity getCommunityByArticleId(Integer articleId) {
@@ -497,7 +499,7 @@ public class CommunityServiceImpl implements CommunityService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		StCommunityArticle article = communityArticleMapper.selectByPrimaryKey(articleId);
 		if(article==null||article.getState()!=0)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÌû×ÓÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å¸–å­å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		map.put("nickName",article.getUsername());
 		map.put("userId",article.getUserid()+"");
 		map.put("avatar",article.getAvatar());
@@ -542,14 +544,14 @@ public class CommunityServiceImpl implements CommunityService {
 			commentList.add(t1);
 		}
 		map.put("commentList",commentList);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult sentComment(StUser user, Integer articleId, String comment) {
 		Map<String,String> data=new HashMap<String, String>();
 		StCommunityArticle article = communityArticleMapper.selectByPrimaryKey(articleId);
 		if(article==null||article.getState()!=0)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÌû×ÓÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å¸–å­å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		StUser u=userMapper.selectByPrimaryKey(user.getUserid());
 		StArticleComment stComment=new StArticleComment();
 		stComment.setUserid(u.getUserid());
@@ -568,21 +570,21 @@ public class CommunityServiceImpl implements CommunityService {
 		}else{
 			data.put("commentId", stComment.getUid()+"");
 		}
-		// µ÷ÓÃ³é½±½Ó¿Ú   Ìû×ÓÃûÒÔ@¿ªÍ·
+		// è°ƒç”¨æŠ½å¥–æ¥å£   å¸–å­åä»¥@å¼€å¤´
 		StCommunity community=getCommunityByArticleId(articleId);
 		if(community.getUid()<10000){
 			String content=article.getContent();
 			if(StringUtil.isNotEmpty(content)&&content.startsWith("@"))
 				LotteryUtil.getLottery(user.getNickname(),user.getMobile(),comment,user.getAvatar(),community.getName());
 		}
-		return KePuResult.ok(ResultConstant.code_ok, "·¢±í³É¹¦", data);
+		return KePuResult.ok(ResultConstant.code_ok, "å‘è¡¨æˆåŠŸ", data);
 	}
 	@Override
 	public KePuResult replyComment(StUser user, Integer commentId, String comment) {
 		Map<String,String> data=new HashMap<String, String>();
 		StArticleComment c=articleCommentMapper.selectByPrimaryKey(commentId);
 		if(c==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÆÀÂÛÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥è¯„è®ºå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		StUser u=userMapper.selectByPrimaryKey(user.getUserid());
 		StArticleComment stComment=new StArticleComment();
 		stComment.setUserid(u.getUserid());
@@ -598,7 +600,7 @@ public class CommunityServiceImpl implements CommunityService {
 			data=null;
 		}else
 			data.put("replyId", stComment.getUid()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»Ø¸´³É¹¦", data);
+		return KePuResult.ok(ResultConstant.code_ok, "å›å¤æˆåŠŸ", data);
 	}
 	@Override
 	public StCommunity getCommunityByCommentId(Integer commentId) {
@@ -638,7 +640,7 @@ public class CommunityServiceImpl implements CommunityService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult publishNotice(Integer userId, Integer communityId,
@@ -653,7 +655,7 @@ public class CommunityServiceImpl implements CommunityService {
 		communityNoticeMapper.insertSelective(notice);
 		Map<String,String> map=new HashMap<String, String>();
 		map.put("noticeId", notice.getUid()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "·¢±í³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "å‘è¡¨æˆåŠŸ", map);
 	}
 	@Override
 	public Boolean whetherAdmin(Integer userId, Integer communityId) {
@@ -677,13 +679,13 @@ public class CommunityServiceImpl implements CommunityService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		StCommunityNotice notice = communityNoticeMapper.selectByPrimaryKey(noticeId);
 		if(notice==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸Ã¹«¸æÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å…¬å‘Šå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		map.put("title",notice.getTitle());
 		map.put("noticeId",notice.getUid()+"");
 		map.put("content",notice.getContent());
 		map.put("author", notice.getAuchor());
 		map.put("publishTime",DateUtil.formatDate(notice.getCreatetime(), MyConstant.Team_date));
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult getTeachList(Integer communityId, Integer page,
@@ -723,19 +725,19 @@ public class CommunityServiceImpl implements CommunityService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult publishTeach(Integer userId, Integer communityId,
 			String title, List<TeachResult> teachList) {
-		//Ã¿ÌìÁ½´Î
+		//æ¯å¤©ä¸¤æ¬¡
 		StCommunityTeachExample example=new StCommunityTeachExample();
 		StCommunityTeachExample.Criteria criteria=example.createCriteria();
 		criteria.andCommunityidEqualTo(communityId);
 		criteria.andCreatetimeBetween(DateUtil.startOfTodDay(), DateUtil.endOfTodDay());
 		List<StCommunityTeach> list = communityTeachMapper.selectByExample(example);
 		if(list.size()>=2){
-			return KePuResult.ok(ResultConstant.code_yewu, "³¬³öÃ¿ÈÕ½ÌÑ§ÉÏ´«´ÎÊı", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¶…å‡ºæ¯æ—¥æ•™å­¦ä¸Šä¼ æ¬¡æ•°", "");
 		}
 		StCommunityTeach teach=new StCommunityTeach();
 		teach.setCommunityid(communityId);
@@ -755,7 +757,7 @@ public class CommunityServiceImpl implements CommunityService {
 		}
 		Map<String,String> map=new HashMap<String, String>();
 		map.put("teachId", teach.getUid()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "·¢±í³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "å‘è¡¨æˆåŠŸ", map);
 	}
 	@Override
 	public StCommunity getCommunityByTeachId(Integer teachId) {
@@ -770,7 +772,7 @@ public class CommunityServiceImpl implements CommunityService {
 		Map<String,Object> map=new HashMap<String, Object>();
 		StCommunityTeach c= communityTeachMapper.selectByPrimaryKey(teachId);
 		if(c==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸Ã¹«¸æÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å…¬å‘Šå·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		map.put("title",c.getTitle());
 		map.put("publishTime",DateUtil.formatDate(c.getCreatetime(), MyConstant.Team_date));
 		StCommunityTeachDetailExample example=new StCommunityTeachDetailExample();
@@ -787,11 +789,11 @@ public class CommunityServiceImpl implements CommunityService {
 			myList.add(temp);
 		}
 		map.put("contentList", myList);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult getMyRemind(Integer userId, Integer communityId,Date timestamp) {
-		// Ìû×Ó±»±ğÈËÆÀÂÛ  / ÆÀÂÛ±»±ğÈË»Ø¸´
+		// å¸–å­è¢«åˆ«äººè¯„è®º  / è¯„è®ºè¢«åˆ«äººå›å¤
 		Map<String,Object> map=new HashMap<String, Object>();
 		Map<String,Object> param=new HashMap<String, Object>();
 		param.put("userId", userId);
@@ -817,13 +819,13 @@ public class CommunityServiceImpl implements CommunityService {
 			myList.add(temp);
 		}
 		map.put("RemindList",myList);
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public KePuResult quitCommunity(Integer userId, Integer communityId) {
 		StCommunity community = communityMapper.selectByPrimaryKey(communityId);
 		if(community==null){
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÉçÍÅ²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥ç¤¾å›¢ä¸å­˜åœ¨", "");
 		}
 		StCommunityUserExample scu=new StCommunityUserExample();
 		StCommunityUserExample.Criteria sc=scu.createCriteria();
@@ -834,9 +836,9 @@ public class CommunityServiceImpl implements CommunityService {
 			communityUserMapper.deleteByExample(scu);
 			community.setMembernum(community.getMembernum()-1);
 			communityMapper.updateByPrimaryKeySelective(community);
-			return KePuResult.ok(ResultConstant.code_ok, "ÍË³ö³É¹¦", "");
+			return KePuResult.ok(ResultConstant.code_ok, "é€€å‡ºæˆåŠŸ", "");
 		}else{
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÓÃ»§Î´¼ÓÈë¸ÃÉçÍÅ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥ç”¨æˆ·æœªåŠ å…¥è¯¥ç¤¾å›¢", "");
 		}
 	}
 	@Override
@@ -885,7 +887,7 @@ public class CommunityServiceImpl implements CommunityService {
 		}
 		map.put("hotWords", r);
 		map.put("totalcount", r.size()+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	@Override
 	public Integer getCommunityIdByArticleId(Integer articleId) {
@@ -911,21 +913,21 @@ public class CommunityServiceImpl implements CommunityService {
 			String content, String detailPics) {
 		StCommunityArticle article = communityArticleMapper.selectByPrimaryKey(articleId);
 		if(article==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÌû×ÓÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å¸–å­å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		else{
 			if(article.getUserid().intValue()!=userId.intValue())
-				return KePuResult.ok(ResultConstant.code_yewu, "È¨ÏŞ²»×ã,ĞŞ¸ÄÊ§°Ü", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "æƒé™ä¸è¶³,ä¿®æ”¹å¤±è´¥", "");
 			else{
 				if(article.getCommunityid()<1000){
 					if(!whetherMyJoin(userId, article.getCommunityid()))
-						return KePuResult.ok(ResultConstant.code_yewu, "ÒÑÍË³öÉçÍÅ,½ö¿ÉÉ¾³ı²Ù×÷", "");
+						return KePuResult.ok(ResultConstant.code_yewu, "å·²é€€å‡ºç¤¾å›¢,ä»…å¯åˆ é™¤æ“ä½œ", "");
 				}	
 				article.setContent(content);
 				article.setDetailpics(detailPics);
 				communityArticleMapper.updateByPrimaryKeySelective(article);
 				Map<String,Object> map=new HashMap<String, Object>();
 				map.put("articleId", article.getUid()+"");
-				return KePuResult.ok(ResultConstant.code_ok, "ĞŞ¸Ä³É¹¦",map);
+				return KePuResult.ok(ResultConstant.code_ok, "ä¿®æ”¹æˆåŠŸ",map);
 			}
 		}
 	}
@@ -933,14 +935,14 @@ public class CommunityServiceImpl implements CommunityService {
 	public KePuResult deleteArticle(Integer userId,Integer articleId) {
 		StCommunityArticle article = communityArticleMapper.selectByPrimaryKey(articleId);
 		if(article==null)
-			return KePuResult.ok(ResultConstant.code_yewu, "¸ÃÌû×ÓÒÑ±»É¾³ı»ò²»´æÔÚ", "");
+			return KePuResult.ok(ResultConstant.code_yewu, "è¯¥å¸–å­å·²è¢«åˆ é™¤æˆ–ä¸å­˜åœ¨", "");
 		else{
 			if(article.getUserid().intValue()!=userId.intValue())
-				return KePuResult.ok(ResultConstant.code_yewu, "È¨ÏŞ²»×ã,É¾³ıÊ§°Ü", "");
+				return KePuResult.ok(ResultConstant.code_yewu, "æƒé™ä¸è¶³,åˆ é™¤å¤±è´¥", "");
 			else{
 				article.setState(1);
 				communityArticleMapper.updateByPrimaryKeySelective(article);
-				return KePuResult.ok(ResultConstant.code_ok, "É¾³ı³É¹¦", "");
+				return KePuResult.ok(ResultConstant.code_ok, "åˆ é™¤æˆåŠŸ", "");
 			}
 		}
 	}
@@ -986,9 +988,9 @@ public class CommunityServiceImpl implements CommunityService {
 			temp.put("praiseNum",article.getPraisenum()+"");
 			temp.put("replyNum",article.getReplynum()+"");
 			if(type==1)
-				temp.put("communityName",cMap.get(article.getCommunityid())); // ÉçÍÅÃû
+				temp.put("communityName",cMap.get(article.getCommunityid())); // ç¤¾å›¢å
 			else if(type==2)
-				temp.put("villageName",vMap.get(article.getCommunityid())); // ÏçÕòÃû
+				temp.put("villageName",vMap.get(article.getCommunityid())); // ä¹¡é•‡å
 			StArticleVoteExample example2=new StArticleVoteExample();
 			StArticleVoteExample.Criteria criteria2=example2.createCriteria();
 			criteria2.andArticleidEqualTo(article.getUid());
@@ -1005,7 +1007,7 @@ public class CommunityServiceImpl implements CommunityService {
 		map.put("pagesize", size+"");
 		map.put("totalpage", (total/size+1)+"");
 		map.put("currentpage", page+"");
-		return KePuResult.ok(ResultConstant.code_ok, "»ñÈ¡³É¹¦", map);
+		return KePuResult.ok(ResultConstant.code_ok, "è·å–æˆåŠŸ", map);
 	}
 	
 

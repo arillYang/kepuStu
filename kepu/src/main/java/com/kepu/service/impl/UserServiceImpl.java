@@ -195,13 +195,17 @@ public class UserServiceImpl implements UserService {
 			else{
 				String token=UUIDFactory.getUUID();
 				jedisClient.set("st_user_"+token, JsonUtils.objectToJson(user));
-				jedisClient.expire("st_user_"+token, 2592000);
+				jedisClient.expire("st_user_"+token, 31104000);
+				jedisClient.set("token", token);
+				jedisClient.expire(token, 31104000);
 				Map<String,String> map=new HashMap<String, String>();
 				map.put("token", token);
 				map.put("userId", user.getUserid()+"");
 				map.put("avatar", user.getAvatar());
 				map.put("nickName", user.getNickname());
+				map.put("score", sysService.getActivityScore(user.getUserid())+"");
 				// 6-30  新版本添加 
+				
 				if(StringUtil.isNotEmpty(appVersion)&&appVersion.compareTo("3.0.1")>=0){
 					map.put("villageId", user.getArea()+"");
 					StVillage v = villageMapper.selectByPrimaryKey(user.getArea());
@@ -520,7 +524,7 @@ public class UserServiceImpl implements UserService {
 						 news.getNewsstyle()+"", DateUtil.formatDate(news.getUpdatetime(),MyConstant.updatetime),
 						 news.getView()+"");
 				jedisClient.set("news_"+newsId, JsonUtils.objectToJson(t));
-				jedisClient.expire("news_"+newsId, 86400);
+				jedisClient.expire("news_"+newsId, 2592000);
 			}
 			collectionList.add(temp);
 		}

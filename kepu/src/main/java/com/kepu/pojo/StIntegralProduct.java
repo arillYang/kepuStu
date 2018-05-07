@@ -18,6 +18,16 @@ public class StIntegralProduct {
     private Integer userid;
 
     private String title;
+    
+    public Integer getNumbe() {
+		return numbe;
+	}
+
+	public void setNumbe(Integer numbe) {
+		this.numbe = numbe;
+	}
+
+	private Integer numbe;
 
     public Integer getId() {
         return id;

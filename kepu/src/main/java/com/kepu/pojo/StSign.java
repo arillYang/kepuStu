@@ -6,21 +6,31 @@ public class StSign {
     private Integer userid;
 
     private Date signdate;
+
+    private Integer score;
+
+    private Integer keysta;
+
+    private Integer days;
+
+    private Integer type;
     
-    private String  ajxsigndate;
     
-    private int  sqlsigndate;
+    private int sqlsigndate;
+    
+    private String ajxsigndate;
+    
+    
 
-
-
-
-	public int getSqlsigndate() {
+    public int getSqlsigndate() {
 		return sqlsigndate;
 	}
 
 	public void setSqlsigndate(int sqlsigndate) {
 		this.sqlsigndate = sqlsigndate;
 	}
+
+
 
 	public String getAjxsigndate() {
 		return ajxsigndate;
@@ -30,11 +40,7 @@ public class StSign {
 		this.ajxsigndate = ajxsigndate;
 	}
 
-	private Integer score;
-
-    private Integer keysta;
-
-    public Integer getUserid() {
+	public Integer getUserid() {
         return userid;
     }
 
@@ -64,5 +70,21 @@ public class StSign {
 
     public void setKeysta(Integer keysta) {
         this.keysta = keysta;
+    }
+
+    public Integer getDays() {
+        return days;
+    }
+
+    public void setDays(Integer days) {
+        this.days = days;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,10 +33,10 @@ import com.kepu.mapper.StUserMapper;
 import com.kepu.pojo.KePuResult;
 import com.kepu.pojo.OrderInfo;
 import com.kepu.pojo.OrderInfoExample;
-import com.kepu.pojo.ProportionSetting;
 import com.kepu.pojo.StProduct;
 import com.kepu.pojo.StUser;
 import com.kepu.util.LocalDateUtil;
+import com.kepu.util.StringUtil;
 
 @Controller
 @RequestMapping(value = "/alipay")
@@ -57,6 +56,7 @@ public class AlipayController {
 	@Autowired
 	private ProportionSettingMapper proportionSettingMapper;
 
+
 	/**
 	 * 预支付获取用户权限code
 	 * 
@@ -66,7 +66,6 @@ public class AlipayController {
 	 * @return ModelAndView
 	 * @throws IOException
 	 */
-
 	@RequestMapping(value = "/dopay")
 	public @ResponseBody Object getCode(@RequestBody Map<String, String> map, HttpServletRequest request1) {
 		String orderStr = null;// 返回参数
@@ -105,49 +104,63 @@ public class AlipayController {
 			List<OrderInfo> orderInfo2 = orderInfomapper.selectByExample(example);
 			OrderInfo orderInfo = orderInfo2.get(0);
 			if (null != orderInfo) {
-				if (orderInfo.getOrderStatu() == 0) {// 待付款才能进入
-					Integer buyUserId = orderInfo.getBuyUserId();// 下单人
+				if (orderInfo.getOrderStatu() == 0) {////orderStatu=0 待付款才能进入
+					Integer buyUserId = orderInfo.getBuyUserId();// 买家（客户）
+					if(orderInfo.getProductId()==null) return KePuResult.ok(ResultConstant.code_ok, "订单不存在产品", orderStr);
 					// 获得商家商品内容开始
-					Integer productId = Integer.valueOf(orderInfo.getProductId());// 商品id
-					Integer payType = Integer.valueOf(3);// 支付方式
-					StProduct stProduct = stProductMapper.selectByPrimaryKey(productId);// 获取该商品详情
-					BigDecimal money = stProduct.getMoney();// 获取商品价格
-					Integer sellUserId = stProduct.getUserid();// sellUserId
+					Integer productId = Integer.valueOf(orderInfo.getProductId());//  商品id
+					
+					// 获取该商品详情
+					StProduct stProduct = stProductMapper.selectByPrimaryKey(productId);
+					BigDecimal money = stProduct.getMoney();//获取商品价格
+					Integer sellUserId = stProduct.getUserid();// 卖家（店铺）
 					String introduce = stProduct.getIntroduce();// 商家说明
 					// 获得商家商品内容结束
+					
+					
 
-					// 获得用户详情开始
+					// ******获得用户（客户）详情开始
 					StUser stUser = stUserMapper.selectByPrimaryKey(buyUserId);
-					String nickName = stUser.getNickname();// 获取用户昵称
-					String mobile = stUser.getMobile();// 获取用户手机号
+					//订单用户不存自
+					if(stUser==null) return KePuResult.ok(ResultConstant.code_ok, "用户不存在", orderStr);
+					String nickName = StringUtil.isNotEmpty(stUser.getNickname())?stUser.getNickname():"";// 获取用户昵称
+					String mobile = stUser.getMobile();// 获取用户（客户）手机号
 					// 获得用户详情结束
 
+					
 					// 放入OrderInfo开始
-					Double num=Double.valueOf(orderInfo.getBillNum());
+					Double num=orderInfo.getBillNum()==null?1:Double.valueOf(orderInfo.getBillNum());// 商品数量默认为1
 					orderInfo.setBalance(0.00);// 默认积分抵扣数额为0.00
-					orderInfo.setBillDesc("无");// 默认发票备注为无
+					orderInfo.setBillDesc(StringUtil.isNotEmpty(stProduct.getTitle())?stProduct.getTitle():"无");// 默认发票备注为无
 					orderInfo.setBillNum(num);// 商品数量默认为1
 					orderInfo.setBillPrice(money.doubleValue()*num);
-					orderInfo.setBillTitle("无");// 默认发票抬头为无
+					orderInfo.setBillTitle(StringUtil.isNotEmpty(stProduct.getTitle())?stProduct.getTitle():"无");// 默认发票抬头为无
 					Date date = LocalDateUtil.getNow();
 					orderInfo.setCreateTime(date);
+					//积分抵扣数额
 					orderInfo.setCredit(0.00);
+					
 					orderInfo.setProductId(String.valueOf(productId));
+					//订单地址
 					orderInfo.setOrderAddress(address);
-					// String
-					// orderCode=String.valueOf(orderInfo.getOrderCode());
+					//订单号
 					orderInfo.setOrderCode(orderCode);
+					
 					orderInfo.setOrderDate(date);
-					orderInfo.setOrderDes(order_des);// 订单留言
+					// 订单留言
+					orderInfo.setOrderDes(order_des);
 					orderInfo.setOrderNote(introduce);
 					orderInfo.setOrderPhone(mobile);
 					orderInfo.setOrderStatu(6);// 增加订单状态:支付中
 					orderInfo.setOrderUser(nickName);
 					orderInfo.setBuyUserId(buyUserId);
-					orderInfo.setPayType(payType);
+					
+					//Integer payType = Integer.valueOf(3);//支付方式  1：普通支付\r\n            2：微信支付            3：支付宝
+					orderInfo.setPayType(3);
+					// 卖家（店铺）
 					orderInfo.setSellUserId(sellUserId);
-					ProportionSetting setting = proportionSettingMapper.selectByPrimaryKey(1);
-					orderInfo.setRatio(setting.getPresentProportion());
+					//ProportionSetting setting = proportionSettingMapper.selectByPrimaryKey(1);
+					//orderInfo.setRatio(setting.getPresentProportion());//提现比例
 					// 放入OrderInfo结束
 					// 更新订单
 					System.out.println(orderInfo.toString());
@@ -172,7 +185,9 @@ public class AlipayController {
 						// 可以直接给客户端请求，无需再做处理。
 					}
 				}
-			} 
+			} else {
+				return KePuResult.ok(ResultConstant.code_ok, "订单号不存在", orderStr);
+			}
 			if (null != orderStr && "" != orderStr) {
 				return KePuResult.ok(ResultConstant.code_ok, "支付宝返回成功", orderStr);
 			} else {
@@ -213,45 +228,45 @@ public class AlipayController {
 
 		}
 
-		// 获取返回数据
+		// 鑾峰彇杩斿洖鏁版嵁
 
-		String orderTitle = request.getParameter("subject");// 订单名称
+		String orderTitle = request.getParameter("subject");// 璁㈠崟鍚嶇О
 
-		String payType = request.getParameter("payment_type");// 支付类型
+		String payType = request.getParameter("payment_type");// 鏀粯绫诲瀷
 
-		String outTradeNo = request.getParameter("out_trade_no");// 订单号
+		String outTradeNo = request.getParameter("out_trade_no");// 璁㈠崟鍙�
 
-		String tradeNo = request.getParameter("trade_no");// 支付宝交易号
+		String tradeNo = request.getParameter("trade_no");// 鏀粯瀹濅氦鏄撳彿
 
-		String notifyId = request.getParameter("notify_id");// 支付校验id
+		String notifyId = request.getParameter("notify_id");// 鏀粯鏍￠獙id
 
-		String amount = request.getParameter("total_fee");// 交易金额
+		String amount = request.getParameter("total_fee");// 浜ゆ槗閲戦
 
-		String notifyTime = request.getParameter("notify_time");// 通知时间
+		String notifyTime = request.getParameter("notify_time");// 閫氱煡鏃堕棿
 
-		String tradeStatus = request.getParameter("trade_status");// 交易状态
+		String tradeStatus = request.getParameter("trade_status");// 浜ゆ槗鐘舵��
 
-		String returnId = request.getParameter("extra_common_param");// 项目id
+		String returnId = request.getParameter("extra_common_param");// 椤圭洰id
 
-		String payer = request.getParameter("buyer_email");// 支付者账号
+		String payer = request.getParameter("buyer_email");// 鏀粯鑰呰处鍙�
 
 		//
 
-		if (AlipayNotify.verify(params)) {// 验证成功
+		if (AlipayNotify.verify(params)) {// 楠岃瘉鎴愬姛
 
 			if (tradeStatus.equals("TRADE_FINISHED") || tradeStatus.equals("TRADE_SUCCESS")) {
 
-				// 要写的逻辑。自己按自己的要求写
+				// 瑕佸啓鐨勯�昏緫銆傝嚜宸辨寜鑷繁鐨勮姹傚啓
 
-				// 封装交易信息实体，存入数据库之类的
+				// 灏佽浜ゆ槗淇℃伅瀹炰綋锛屽瓨鍏ユ暟鎹簱涔嬬被鐨�
 
-				System.out.println(">>>>>异步返回:" + tradeNo);
+				System.out.println(">>>>>寮傛杩斿洖:" + tradeNo);
 
 			}
 
 			return "success/alipay-success";
 
-		} else {// 验证失败
+		} else {// 楠岃瘉澶辫触
 
 			return "success/alipay-fail";
 
@@ -284,23 +299,23 @@ public class AlipayController {
 
 		}
 
-		String tradeNo = request.getParameter("trade_no");// 支付宝交易号
+		String tradeNo = request.getParameter("trade_no");// 鏀粯瀹濅氦鏄撳彿
 
-		String tradeStatus = request.getParameter("trade_status");// 交易状态
+		String tradeStatus = request.getParameter("trade_status");// 浜ゆ槗鐘舵��
 
-		if (AlipayNotify.verify(params)) {// 验证成功
+		if (AlipayNotify.verify(params)) {// 楠岃瘉鎴愬姛
 
 			if (tradeStatus.equals("TRADE_FINISHED") || tradeStatus.equals("TRADE_SUCCESS")) {
 
-				// 要写的逻辑。自己按自己的要求写
+				// 瑕佸啓鐨勯�昏緫銆傝嚜宸辨寜鑷繁鐨勮姹傚啓
 
-				System.out.println(">>>>>充值成功" + tradeNo);
+				System.out.println(">>>>>鍏呭�兼垚鍔�" + tradeNo);
 
 			}
 
 			return "...";
 
-		} else {// 验证失败
+		} else {// 楠岃瘉澶辫触
 
 			return "success/fail";
 
