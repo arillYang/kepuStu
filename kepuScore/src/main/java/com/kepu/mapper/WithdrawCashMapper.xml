@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kepu.mapper.WithdrawCashMapper" >
+  <resultMap id="BaseResultMap" type="com.kepu.pojo.WithdrawCash" >
+    <id column="wc_id" property="wcId" jdbcType="INTEGER" />
+    <result column="buy_user_id" property="buyUserId" jdbcType="INTEGER" />
+    <result column="buy_user_phone" property="buyUserPhone" jdbcType="VARCHAR" />
+    <result column="consume_score" property="consumeScore" jdbcType="DOUBLE" />
+    <result column="wc_desc" property="wcDesc" jdbcType="VARCHAR" />
+    <result column="now_score" property="nowScore" jdbcType="DOUBLE" />
+    <result column="now_balance" property="nowBalance" jdbcType="DOUBLE" />
+    <result column="wc_time" property="wcTime" jdbcType="TIMESTAMP" />
+    <result column="before_score" property="beforeScore" jdbcType="DOUBLE" />
+    <result column="before_balance" property="beforeBalance" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    wc_id, buy_user_id, buy_user_phone, consume_score, wc_desc, now_score, now_balance, 
+    wc_time, before_score, before_balance
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kepu.pojo.WithdrawCashExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from st_withdraw_cash
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from st_withdraw_cash
+    where wc_id = #{wcId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from st_withdraw_cash
+    where wc_id = #{wcId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kepu.pojo.WithdrawCashExample" >
+    delete from st_withdraw_cash
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kepu.pojo.WithdrawCash" >
+    insert into st_withdraw_cash (wc_id, buy_user_id, buy_user_phone, 
+      consume_score, wc_desc, now_score, 
+      now_balance, wc_time, before_score, 
+      before_balance)
+    values (#{wcId,jdbcType=INTEGER}, #{buyUserId,jdbcType=INTEGER}, #{buyUserPhone,jdbcType=VARCHAR}, 
+      #{consumeScore,jdbcType=DOUBLE}, #{wcDesc,jdbcType=VARCHAR}, #{nowScore,jdbcType=DOUBLE}, 
+      #{nowBalance,jdbcType=DOUBLE}, #{wcTime,jdbcType=TIMESTAMP}, #{beforeScore,jdbcType=DOUBLE}, 
+      #{beforeBalance,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kepu.pojo.WithdrawCash" >
+    insert into st_withdraw_cash
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wcId != null" >
+        wc_id,
+      </if>
+      <if test="buyUserId != null" >
+        buy_user_id,
+      </if>
+      <if test="buyUserPhone != null" >
+        buy_user_phone,
+      </if>
+      <if test="consumeScore != null" >
+        consume_score,
+      </if>
+      <if test="wcDesc != null" >
+        wc_desc,
+      </if>
+      <if test="nowScore != null" >
+        now_score,
+      </if>
+      <if test="nowBalance != null" >
+        now_balance,
+      </if>
+      <if test="wcTime != null" >
+        wc_time,
+      </if>
+      <if test="beforeScore != null" >
+        before_score,
+      </if>
+      <if test="beforeBalance != null" >
+        before_balance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wcId != null" >
+        #{wcId,jdbcType=INTEGER},
+      </if>
+      <if test="buyUserId != null" >
+        #{buyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="buyUserPhone != null" >
+        #{buyUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="consumeScore != null" >
+        #{consumeScore,jdbcType=DOUBLE},
+      </if>
+      <if test="wcDesc != null" >
+        #{wcDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="nowScore != null" >
+        #{nowScore,jdbcType=DOUBLE},
+      </if>
+      <if test="nowBalance != null" >
+        #{nowBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="wcTime != null" >
+        #{wcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beforeScore != null" >
+        #{beforeScore,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeBalance != null" >
+        #{beforeBalance,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kepu.pojo.WithdrawCashExample" resultType="java.lang.Integer" >
+    select count(*) from st_withdraw_cash
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update st_withdraw_cash
+    <set >
+      <if test="record.wcId != null" >
+        wc_id = #{record.wcId,jdbcType=INTEGER},
+      </if>
+      <if test="record.buyUserId != null" >
+        buy_user_id = #{record.buyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.buyUserPhone != null" >
+        buy_user_phone = #{record.buyUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.consumeScore != null" >
+        consume_score = #{record.consumeScore,jdbcType=DOUBLE},
+      </if>
+      <if test="record.wcDesc != null" >
+        wc_desc = #{record.wcDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nowScore != null" >
+        now_score = #{record.nowScore,jdbcType=DOUBLE},
+      </if>
+      <if test="record.nowBalance != null" >
+        now_balance = #{record.nowBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.wcTime != null" >
+        wc_time = #{record.wcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.beforeScore != null" >
+        before_score = #{record.beforeScore,jdbcType=DOUBLE},
+      </if>
+      <if test="record.beforeBalance != null" >
+        before_balance = #{record.beforeBalance,jdbcType=DOUBLE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update st_withdraw_cash
+    set wc_id = #{record.wcId,jdbcType=INTEGER},
+      buy_user_id = #{record.buyUserId,jdbcType=INTEGER},
+      buy_user_phone = #{record.buyUserPhone,jdbcType=VARCHAR},
+      consume_score = #{record.consumeScore,jdbcType=DOUBLE},
+      wc_desc = #{record.wcDesc,jdbcType=VARCHAR},
+      now_score = #{record.nowScore,jdbcType=DOUBLE},
+      now_balance = #{record.nowBalance,jdbcType=DOUBLE},
+      wc_time = #{record.wcTime,jdbcType=TIMESTAMP},
+      before_score = #{record.beforeScore,jdbcType=DOUBLE},
+      before_balance = #{record.beforeBalance,jdbcType=DOUBLE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kepu.pojo.WithdrawCash" >
+    update st_withdraw_cash
+    <set >
+      <if test="buyUserId != null" >
+        buy_user_id = #{buyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="buyUserPhone != null" >
+        buy_user_phone = #{buyUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="consumeScore != null" >
+        consume_score = #{consumeScore,jdbcType=DOUBLE},
+      </if>
+      <if test="wcDesc != null" >
+        wc_desc = #{wcDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="nowScore != null" >
+        now_score = #{nowScore,jdbcType=DOUBLE},
+      </if>
+      <if test="nowBalance != null" >
+        now_balance = #{nowBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="wcTime != null" >
+        wc_time = #{wcTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beforeScore != null" >
+        before_score = #{beforeScore,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeBalance != null" >
+        before_balance = #{beforeBalance,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where wc_id = #{wcId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kepu.pojo.WithdrawCash" >
+    update st_withdraw_cash
+    set buy_user_id = #{buyUserId,jdbcType=INTEGER},
+      buy_user_phone = #{buyUserPhone,jdbcType=VARCHAR},
+      consume_score = #{consumeScore,jdbcType=DOUBLE},
+      wc_desc = #{wcDesc,jdbcType=VARCHAR},
+      now_score = #{nowScore,jdbcType=DOUBLE},
+      now_balance = #{nowBalance,jdbcType=DOUBLE},
+      wc_time = #{wcTime,jdbcType=TIMESTAMP},
+      before_score = #{beforeScore,jdbcType=DOUBLE},
+      before_balance = #{beforeBalance,jdbcType=DOUBLE}
+    where wc_id = #{wcId,jdbcType=INTEGER}
+  </update>
+</mapper>
